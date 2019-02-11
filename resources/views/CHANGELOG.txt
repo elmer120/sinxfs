@@ -5,3 +5,5 @@ npm run watch -- sta in ascolto di eventuali modifiche e compila realtime i pacc
 
 laravel preset uikit
 (a cause di un errore nei css di uikit ho dovuto aggiornato uikit 3.0.0rc-19 to 3.0.3)
+
+php artisan serve (esegue un server php locale)
