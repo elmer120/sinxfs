@@ -8,64 +8,53 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <!--link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css"-->
 
         <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <style>
-            html, body {
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-        </style>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet"> 
+        <script src="{{ asset('js/app.js') }}"></script>
+       
+        
     </head>
     <body>
-
-            <nav class="uk-navbar-container" uk-navbar>
-                    <div class="uk-navbar-left">
-
-                        <ul class="uk-navbar-nav">
-                            <li class="uk-active"><a href="#">Active</a></li>
-                            <li>
-                                <a href="#">Parent</a>
-                                <div class="uk-navbar-dropdown">
-                                    <ul class="uk-nav uk-navbar-dropdown-nav">
-                                        <li class="uk-active"><a href="#">Active</a></li>
-                                        <li><a href="#">Item</a></li>
-                                        <li><a href="#">Item</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li><a href="#">Item</a></li>
-                        </ul>
-
-                    </div>
-                </nav>
-
-
-        <div class="uk-flex uk-flex-center uk-flex-middle uk-position-relative uk-height-viewport uk-background-muted">
-
-                <div class="links uk-position-top-right uk-position-small">
-                    @guest
-                        <a href="" class="uk-text-bold uk-text-primary uk-button uk-button-default uk-box-shadow-small">Login</a>
-                        <a href="" class="uk-text-bold uk-text-primary uk-button uk-button-default uk-box-shadow-small">Register</a>
-                    @else
-                        <a href="" class="uk-text-bold uk-button uk-button-default uk-box-shadow-small">Home</a>
-                    @endguest
-                </div>
-
-
-            <div class="uk-align-center">
-                <div class="title uk-animation-slide-bottom uk-text-primary">
-                    {{ config('app.name', 'Laravel UIkit 3') }}
-                </div>
-            </div>
-
+    <div class="uk-grid" uk-grid> <!-- inizio griglia small gutter-->
+  <div class="uk-width-1-1">         <!-- inizio colonna -->  
+    <nav class="uk-background-primary" uk-navbar> <!-- navbar -->
+        <div class="uk-navbar-left">
+          <ul class="uk-navbar-nav">
+            <li> <!-- logo -->
+              <a href="" class="uk-navbar-item uk-logo">
+                <img class="uk-height-1-1" src="https://picsum.photos/75" alt="Sinx"/>
+              </a>
+            </li>
+            <li> <!-- versione -->
+            <span class="uk-label uk-label-success uk-text-lowercase"> 0.0.1 </span>
+            </li>
+          </ul>
         </div>
+        <div class="uk-navbar-center">
+          <div class="uk-navbar-item">
+            <!-- breve descrizione -->
+                <div class="uk-light uk-text-small uk-visible@m"> test progetto </div>
+          </div>
+        </div>
+        <div class="uk-navbar-right">
+          <div class="uk-navbar-item"> <!-- logout -->
+            <a uk-toggle="target: #logout" class="uk-button uk-button-secondary">Logout</a>
+          </div>
+        </div>
+        <!-- Finestra conferma logout-->
+        <div id="logout" uk-modal>
+          <div class="uk-modal-dialog uk-modal-body">
+            <h2 class="uk-modal-title">Conferma logout</h2>
+              <p>Sei sicuro di uscire dall'applicazione?</p>
+              <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <a href="" uk-toggle="target: #logout" class="uk-button uk-button-primary">Ok</a>
+        </p>
+        </div>
+</div>
+    </nav>
+  </div> <!--fine colonna -->
     </body>
 </html>
