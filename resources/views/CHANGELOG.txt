@@ -31,3 +31,5 @@ php artisan serve -- avvia server php in locale
 npm run watch -- sta in ascolto di eventuali modifiche e compila realtime i pacchetti
 
 link utili: https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
+
+per generare migrazioni da database già esistente: https://github.com/Xethron/migrations-generator
