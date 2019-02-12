@@ -1,9 +1,33 @@
-npm install
 
+x sviluppo 
+** Guida installazione **
+
+Clonare il repository (il commit "base")
+1 composer install
+2 npm install
+3 npm run dev 
+        se errore in uikit (es.3.0.3) è ancora presente:
+
+        in node_modules/uikit/dist/css/uikit.css
+        alla riga 5745 deve comparire cosi
+        :root {
+        --uk-leader-fill-content: '.';
+        }
+
+4 cp .env.example .env
+5 php artisan key:generate
+6 php artisan serve
+7 npm run watch
+
+** Descrizione comandi **
+
+composer install -- installa le dipendenze del progetto in presenza del file composer.json
+npm install -- installa le dipendenze del progetto in presenza del file package.json
 npm run dev -- compila i pacchetti da /resources a /public
+
+cp .env.example .env -- copia configurazione di default per laravel
+php artisan key:generate -- genera chiave id applicazione e la inserisce nel file .env
+php artisan serve -- avvia server php in locale
 npm run watch -- sta in ascolto di eventuali modifiche e compila realtime i pacchetti
 
-laravel preset uikit
-(a cause di un errore nei css di uikit ho dovuto aggiornato uikit 3.0.0rc-19 to 3.0.3)
-
-php artisan serve (esegue un server php locale)
+link utili: https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
