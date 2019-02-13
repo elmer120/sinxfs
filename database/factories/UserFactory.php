@@ -13,8 +13,8 @@ use Faker\Generator as Faker;
 | model instances for testing / seeding your application's database.
 |
 */
-
-$factory->define(App\User::class, function (Faker $faker) {
+/*
+$factory->define(App\Models\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
@@ -23,3 +23,5 @@ $factory->define(App\User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+*/

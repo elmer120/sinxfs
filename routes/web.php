@@ -1,6 +1,6 @@
 <?php
 
-use App\Associazione;
+use App\Models\Associazione;
 
 /*
 |--------------------------------------------------------------------------
