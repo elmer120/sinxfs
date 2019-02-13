@@ -1,5 +1,7 @@
 <?php
 
+use App\Associazione;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +15,8 @@
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/associazioni', function () {
+    return Associazione::all();
 });
