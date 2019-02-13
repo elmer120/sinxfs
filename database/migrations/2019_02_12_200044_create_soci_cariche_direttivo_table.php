@@ -19,7 +19,6 @@ class CreateSociCaricheDirettivoTable extends Migration {
 			$table->integer('fk_cariche_direttivo')->index('fk_cariche_direttivo_idx');
 			$table->date('carica_direttivo_dal')->nullable();
 			$table->date('carica_direttivo_al')->nullable();
-			$table->primary(['id','fk_soci','fk_cariche_direttivo']);
 		});
 	}
 
