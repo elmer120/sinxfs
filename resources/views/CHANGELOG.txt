@@ -33,3 +33,11 @@ npm run watch -- sta in ascolto di eventuali modifiche e compila realtime i pacc
 link utili: https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
 
 per generare migrazioni da database già esistente: https://github.com/Xethron/migrations-generator
+
+errore: 
+php artisan db:seed
+Seeding: SeedAssociazioneTable
+
+   ReflectionException  : Class SeedAssociazioneTable does not exist
+
+soluzione: composer dump-autoload
