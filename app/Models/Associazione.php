@@ -8,7 +8,7 @@ class Associazione extends Model
 {
     public $timestamps = false; //per Seed err: Column not found: 1054 Unknown column 'updated_at' in 'field list'"
     
-    protected $table  = "Associazioni";
+    protected $table  = "associazioni";
     
 
 }

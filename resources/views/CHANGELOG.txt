@@ -33,6 +33,8 @@ npm run watch -- sta in ascolto di eventuali modifiche e compila realtime i pacc
 link utili: https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
 
 per generare migrazioni da database già esistente: https://github.com/Xethron/migrations-generator
+per generare seed da database già esistente: https://github.com/orangehill/iseed
+per generare factory da model funziona solo con laravel<= 5.5: https://github.com/mpociot/laravel-test-factory-helper
 
 errore: 
 php artisan db:seed

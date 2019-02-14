@@ -14,7 +14,7 @@ class SeedAssociazioneTable extends Seeder //popola la tabella associazioni
     {
 
 
-        factory(App\Models\Associazione::class,30)->create();
+        factory(App\Models\Associazione::class,3)->create();
 
         /* METODO MANUALE
         $sql='INSERT INTO associazioni (nome, tipo, anno_fondazione, indirizzo, codice_fiscale, 

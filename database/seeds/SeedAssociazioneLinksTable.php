@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Utente;
+use App\Models\AssociazioneLinks;
 
-class SeedUtenteTable extends Seeder
+class SeedAssociazioneLinksTable extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class SeedUtenteTable extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Utente::class,5)->create();
+        factory(App\Models\AssociazioneLinks::class,3)->create();
     }
 }

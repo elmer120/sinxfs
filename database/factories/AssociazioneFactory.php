@@ -1,6 +1,8 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Models\Comune;
+use App\Models\AssociazioneLinks;
 
 $factory->define(App\Models\Associazione::class, function (Faker $faker) {
   
@@ -18,7 +20,7 @@ $factory->define(App\Models\Associazione::class, function (Faker $faker) {
                 'email_pec' =>  $faker->safeEmail,
                 'registration' =>  $faker->randomNumber('8'),
                 'partita_iva' =>  $faker->vatId,
-                'fk_comuni' => NULL,
-                'fk_associazioni_links' => NULL
+                'fk_comuni' => Comune::inRandomOrder()->first()->id,
+                'fk_associazioni_links' => AssociazioneLinks::inRandomOrder()->first()->id
     ];
 });

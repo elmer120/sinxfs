@@ -14,6 +14,6 @@ $factory->define(App\Models\Utente::class, function (Faker $faker) {
         "aggiornato_al" => $faker->datetime(),
         "remember_token" => $faker->md5,
         "ultimo_accesso" => $faker->datetime(),
-        "fk_associazioni" => Associazione::inRandomOrder()->id
+        "fk_associazioni" => Associazione::inRandomOrder()->first()->id
     ];
 });
