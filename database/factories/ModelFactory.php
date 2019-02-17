@@ -1,5 +1,5 @@
 <?php
-
+/*
 $factory->define(App\Models\Associazione::class, function (Faker\Generator $faker) {
     return [
         'nome' => $faker->word,
@@ -229,5 +229,5 @@ $factory->define(App\Models\VoceContoEconomico::class, function (Faker\Generator
         'importo' => $faker->randomFloat(),
         'fk_conti_economici' => $faker->randomNumber(),
     ];
-});
+});*/
 

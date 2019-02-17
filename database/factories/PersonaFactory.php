@@ -1,6 +1,9 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Models\Comune;
+use App\Models\Associazione;
+use App\Models\Socio;
 
 $factory->define(App\Models\Persona::class, function (Faker $faker) {
    
@@ -14,17 +17,17 @@ $factory->define(App\Models\Persona::class, function (Faker $faker) {
         'telefono_ext' => $faker->phoneNumber,
         'email' => $faker->email,
         'codice_fiscale' => $faker->TaxId,
-        'note' => $faker->word,
+        'note' => $faker->text(30),
         'fk_responsabile' => $faker->randomNumber(),
         'image' => $faker->word,
-        'fk_associazioni' => $faker->randomNumber(),
-        'fk_soci' => $faker->randomNumber(),
-        'iban' => $faker->word,
+        'fk_associazioni' => Associazione::inRandomOrder()->first()->id,
+        'fk_soci' => Socio::inRandomOrder()->first()->id,
+        'iban' => $faker->iban('IT'),
         'banca' => $faker->word,
-        'partita_iva' => $faker->word,
-        'fk_comuni' => $faker->randomNumber(),
-        'fk_comuni_nascita' => $faker->randomNumber(),
-        'privacy' => $faker->boolean,
+        'partita_iva' => $faker->vatId,
+        'fk_comuni' => Comune::inRandomOrder()->first()->id,
+        'fk_comuni_nascita' => Comune::inRandomOrder()->first()->id,
+        'privacy' => $faker->boolean
     ];
 
 });

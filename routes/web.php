@@ -17,6 +17,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/associazioni', function () {
-    return Associazione::all();
-});
+Route::get('/associazioni','AssociazioneController@index');
