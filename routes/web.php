@@ -13,8 +13,6 @@ use App\Models\Associazione;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'DashboardController@index')->name('Dashboard');
 
 Route::get('/associazioni','AssociazioneController@index');

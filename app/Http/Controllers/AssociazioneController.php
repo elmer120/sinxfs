@@ -15,6 +15,7 @@ class AssociazioneController extends Controller
             $sql .=' where id='.(int)$request->get('id');
         }
        
-        return DB::select($sql);
+       // return DB::table('associazioni')->get();
+        return Associazione::all('*');
     }
 }
