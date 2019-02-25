@@ -7,13 +7,14 @@ $factory->define(App\Models\Utente::class, function (Faker $faker) {
     return [
         "nome" => $faker->name,
         "password" => $faker->password,
-        "immagine" => $faker->imageUrl(640,400),
         "email" => $faker->email,
+        "email_verified_at" => null,
         "livello" => $faker->randomDigit,
-        "creato_al" => $faker->datetime(),
-        "aggiornato_al" => $faker->datetime(),
+        "immagine" => $faker->imageUrl(640,400),
+        "ultimo_accesso" => null,
         "remember_token" => $faker->md5,
-        "ultimo_accesso" => $faker->datetime(),
+        "created_at" => $faker->datetime(),
+        "updated_at" => $faker->datetime(),
         "fk_associazioni" => Associazione::inRandomOrder()->first()->id
     ];
 });
