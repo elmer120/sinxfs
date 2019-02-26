@@ -9,23 +9,14 @@ class AssociazioneController extends Controller
 {
     public function index(Request $request)
     {
-        $sql='SELECT * from associazioni';
-        if($request->has('id')){
-            $sql .=' where id='.(int)$request->get('id');
-        }
-       
-       // return DB::table('associazioni')->get();
+      
+      
         return Associazione::all('*');
     }
 
     public function DatiAssociazione(Request $request)
     {
-        $sql='SELECT * from associazioni';
-        if($request->has('id')){
-            $sql .=' where id='.(int)$request->get('id');
-        }
        
-       // return DB::table('associazioni')->get();
         return Associazione::all('*');
     }
 }

@@ -16,14 +16,20 @@ use App\Models\Associazione;
 
 Route::get('/','DashboardController@Home')->name('dashboard');
 
+Route::group(['middleware->auth'],function(){
+
+    Route::prefix('anagrafica')->group(function () {
+        Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
+        Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
+        Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
+    });
+
+});
+
 Route::prefix('associazione')->group(function () {
     Route::get('dati_associazione','AssociazioneController@DatiAssociazione')->name('dati_associazione')->middleware('auth');
 });
-Route::prefix('anagrafica')->group(function () {
-    Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
-    Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
-    Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
-});
+
 Route::prefix('contabilita')->group(function () {
     Route::get('dati_associazione','ContabilitaController@index')->name('');
 });
@@ -31,11 +37,10 @@ Route::prefix('gestione')->group(function () {
     Route::get('link_rapidi','GestioneController@LinkRapidi')->name('');
 });
 
-
 Route::get('/associazioni','AssociazioneController@index');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/home', 'HomeController@index')->name('home');
+

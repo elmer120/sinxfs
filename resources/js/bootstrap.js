@@ -1,7 +1,12 @@
 window._ = require("lodash");
 
+//importo uikit framework
 window.UIkit = require("uikit");
 window.Icons = require("uikit/dist/js/uikit-icons");
+
+//importo tabulator.js
+window.Tabulator = require('tabulator-tables');
+window.TabulatorCss = require('tabulator-tables/dist/css/semantic-ui/tabulator_semantic-ui.min.css');
 
 UIkit.use(window.Icons);
 /**

@@ -19,5 +19,8 @@
         "sass-loader": "^7.1.0",
         "uikit": "^3.0.3",
         "vue-template-compiler": "^2.6.5"
+    },
+    "dependencies": {
+        "tabulator-tables": "^4.2.1"
     }
 }
