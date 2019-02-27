@@ -9,7 +9,7 @@ class AnagraficaController extends Controller
 {
     public function Gestione()
     {
-        $sql = 'SELECT DISTINCT
+        /*$sql = 'SELECT DISTINCT
         persone.id,
         persone.nome,
         persone.cognome,
@@ -39,11 +39,11 @@ class AnagraficaController extends Controller
         LEFT JOIN cariche_direttivo
         ON cariche_direttivo.id = soci_cariche_direttivo.fk_cariche_direttivo
         ORDER BY persone.nome"';
-        return DB::select($sql);
+        return DB::select($sql);*/
 
-        /*return view('anagrafica.gestione',[
+        return view('anagrafica.gestione',[
         'tab_title' => 'Gestione anagrafica',
-        'page_title' => 'Gestione anagrafica']);*/
+        'page_title' => 'Gestione anagrafica']);
     }
 
     public function Rubrica()

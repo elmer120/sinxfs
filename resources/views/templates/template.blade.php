@@ -77,6 +77,8 @@
               <li>
                   <span uk-icon="bolt"></span>
                   <span class="uk-text-small uk-text-meta uk-text-capitalize"><?// //echo $_SESSION['user']['livello']; ?></span>
+
+
               </li>
           </ul>
           <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true">
@@ -173,15 +175,15 @@
           <ul class="uk-list">
               <li>
                   <span uk-icon="user"></span>
-                  <span class="uk-text-small uk-text-meta uk-text-capitalize"><?// echo $_SESSION['user']['nome'];?></span>
+                  <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->username }} </span>
               </li>
               <li>
                   <span uk-icon="info"></span>
-                  <span class="uk-text-small uk-text-meta uk-text-capitalize"><?// echo $_SESSION['user']['email'];?></span>
+                  <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->nome }} </span>
               </li>
               <li>
                   <span uk-icon="bolt"></span>
-                  <span class="uk-text-small uk-text-meta uk-text-capitalize"><?// echo $_SESSION['user']['livello']; ?></span>
+                  <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->livello }} </span>
               </li>
           </ul>
       </div>
@@ -248,7 +250,7 @@
                           <li><a class="item" href='<?// echo site_url("gestione/rapidi")?>'><span class="uk-margin-small-right" uk-icon="link"></span>Axxx - @lang('menu.rapidi')</a></li>     
                           <li><a class="item" href='<?// echo site_url("gestione/blocco_note")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Ao-a - @lang('menu.blocco_note')</a></li>
                           <li><a class="item" href='<?// echo site_url("gestione/e_mail")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.e_mail')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/utenti")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aola -@lang('menu.utenti')</a></li>
+                          <li><a class="item" href='{{ route("utenti") }}'><span class="uk-margin-small-right" uk-icon="italic"></span>Aola -@lang('menu.utenti')</a></li>
                           <li><a class="item" href='<?// echo site_url("gestione/files")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axx- -@lang('menu.files_immagini')</a></li>
                           <li><a class="item" href='<?// echo site_url("gestione/log")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.log')</a></li>
                           <li><a class="item" href='<?// echo site_url("gestione/backup")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx - @lang('menu.backup')</a></li>        
@@ -291,11 +293,11 @@
               <ul class="uk-list">
                   <li>
                       <span uk-icon="info"></span>
-                      <span class="uk-text-small uk-text-meta uk-text-capitalize"><?// echo $_SESSION['association']['nome'];?></span>
+                      <span class="uk-text-small uk-text-meta uk-text-capitalize"><??></span>
                   </li>
                   <li>
                       <span uk-icon="location"></span>
-                      <span class="uk-text-small uk-text-meta uk-text-capitalize"><?// echo $_SESSION['association']['indirizzo'].' - '.$_SESSION['association']['cap'].' - <br>'.$_SESSION['association']['c_nome'].' - '.$_SESSION['association']['p_sigla']; ?></span>
+                      <span class="uk-text-small uk-text-meta uk-text-capitalize"><? ?></span>
                   </li>
               </ul>
           <!-- link rapidi ai siti attinenti all'associazione -->

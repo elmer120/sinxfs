@@ -13,7 +13,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nome', 'email', 'password',
+        'nome','username', /*'email'*/ 'password','livello',
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -31,4 +31,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function isAdmin()
+    {
+        return $this->livello === 'admin';
+    }
+    public function isPowerUser()
+    {
+        return $this->livello === 'poweruser';
+    }
+    public function isUser()
+    {
+        return $this->livello === 'user';
+    }
+    public function isGuest()
+    {
+        return $this->livello === 'guest';
+    }
 }

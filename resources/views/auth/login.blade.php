@@ -1,73 +1,65 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+<div class="uk-grid-small" uk-grid> <!-- inizio griglia small gutter-->
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    <div class="uk-width-1-4"> 
+    </div>
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+    <div class="uk-width-1-2"> 
+    <img class="uk-background-contain uk-background-center-center" src="<? // echo base_url("assets/img/login_background.svg");?>" alt="Sinx"/>
+        <div class="uk-container uk-position-center">
+            <div class="uk-card uk-card-default ">
+                <div class="uk-card-badge uk-label uk-text-lowercase"><? //php echo lang('version');?></div>
+                <div class="uk-card-media-top">
+                    <img class="uk-height-small uk-height-max-small" src="<? // echo base_url("assets/img/logo.png");?>" alt="Sinx"/>
                 </div>
+                <div class="uk-card-body">
+                <form class="uk-form-horizontal" method="POST" action="{{ route('login') }}">
+                            @csrf
+
+                    <label class="uk-form-label">Username</label>
+
+                    <div class="uk-form-controls uk-margin">
+                        <input class="uk-input uk-form-width-medium {{ $errors->has('username') ? ' uk-form-danger' : '' }}" 
+                        type="text" name="username" value="{{ old('username') }}" required autofocus/>
+                        
+                        @if ($errors->has('username'))   
+                                    <strong>{{ $errors->first('username') }}</strong>
+                        @endif
+                    </div>
+                            
+                    
+                        <label class="uk-form-label">Password</label>
+
+                    <div class="uk-form-controls uk-margin">
+                        <input class="uk-input uk-form-width-medium {{ $errors->has('password') ? ' uk-form-danger' : '' }}"
+                        type="password" name="password" value="" required>
+
+                        @if ($errors->has('password'))
+                                    <strong>{{ $errors->first('password') }}</strong>
+                            @endif
+                    </div>
+                            
+
+                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                        <label>
+                            <input class="uk-checkbox" type="checkbox" {{ old('remember') ? 'checked' : '' }}>
+                            {{ __('Remember Me') }}
+                        </label>
+                    </div>
+                        
+                    <input  class="uk-button uk-button-default uk-width-1-1" type="submit" name="submit" value="Accedi" />
+                </form>
+                </div>
+                
             </div>
+            
         </div>
     </div>
+
+
+    <div class="uk-width-1-4"> 
+    </div>
+
 </div>
-@endsection

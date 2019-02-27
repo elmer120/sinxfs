@@ -16,15 +16,16 @@ class CreateUtentiTable extends Migration
         Schema::create('utenti', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome',100);
+            $table->string('username')->unique();
             $table->string('password',255);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->integer('livello');
+            //$table->string('email')->unique();
+            //$table->timestamp('email_verified_at')->nullable();
+            $table->string('livello',16);
             $table->string('immagine',255)->nullable();
             $table->timestamp('ultimo_accesso')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->integer('fk_associazioni')->index('fk_utenti_associazioni_idx');
+            $table->integer('fk_associazioni')->index('fk_utenti_associazioni_idx')->default(1);
         });
     }
 

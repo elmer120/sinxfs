@@ -30,20 +30,32 @@
                                 @endif
                             </div>
                         </div>
-
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                <input id="username" type="text" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" name="username" value="{{ old('username') }}" required autofocus>
+                                @if ($errors->has('username'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('username') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                             <label for="livello" class="col-md-4 col-form-label text-md-right">Livello</label>
+                                <input id="livello" type="text" class="form-control{{ $errors->has('livello') ? ' is-invalid' : '' }}" name="livello" value="{{ old('livello') }}"  autofocus>
+                        
+                                @if ($errors->has('livello'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('livello') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+
+                        </div>
+
 
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
