@@ -18,6 +18,7 @@
 
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script>
+create_table();
 function create_table(){
     //definisco la tabella
      table = new Tabulator("#table", {
@@ -52,6 +53,8 @@ function create_table(){
             { title:"Approvato", field:"approvazione_data"},
             { title:"Quota scadenza", field:"quota_scadenza"}]
     });
+    table.setData( {!! $lista !!} );
+    
 }
 </script>
 

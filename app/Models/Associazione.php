@@ -10,5 +10,10 @@ class Associazione extends Model
     
     protected $table  = "associazioni";
     
+    public function users(){
 
+        return $this->hasMany(Utente::class,'fk_associazioni');
+        
+    }
+            
 }

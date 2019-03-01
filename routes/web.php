@@ -17,7 +17,6 @@ use App\Models\Associazione;
 Auth::routes();
 
 
-
 Route::group(['middleware' => ['auth']],function(){
 
     Route::get('/','DashboardController@Home')->name('dashboard');
@@ -36,7 +35,7 @@ Route::group(['middleware' => ['auth']],function(){
     });
     
     Route::prefix('gestione')->group(function () {
-        Route::get('link_rapidi','GestioneController@LinkRapidi')->name('');
+        Route::get('link_rapidi','GestioneController@LinkRapidi')->name('link_rapidi');
         Route::get('utenti','GestioneController@LinkRapidi')->name('utenti');
     });
     
