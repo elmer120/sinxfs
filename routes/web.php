@@ -22,6 +22,15 @@ Route::group(['middleware' => ['auth']],function(){
     Route::get('/','DashboardController@Home')->name('dashboard');
     Route::prefix('anagrafica')->group(function () {
         Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
+        //chiamate ajax
+        Route::post('regioni','AnagraficaController@regioni');
+        Route::post('province','AnagraficaController@province');
+        Route::post('comuni','AnagraficaController@comuni');
+        Route::post('sociTipologie','AnagraficaController@sociTipologie');
+        Route::post('caricheDirettivo','AnagraficaController@caricheDirettivo');
+        Route::post('responsabili','AnagraficaController@responsabili');
+        Route::post('create','AnagraficaController@create');
+
         Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
         Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
     });

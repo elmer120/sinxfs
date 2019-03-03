@@ -6,9 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\Associazione;
 use DB;
+use App\Models\Regione;
+use App\Models\Provincia;
+use App\Models\Comune;
+use phpDocumentor\Reflection\Types\This;
+use App\Models\SocioTipologia;
+use App\Models\CaricaDirettivo;
+use Illuminate\Support\Carbon;
 class AnagraficaController extends Controller
 {
-    public function Gestione()
+    public function gestione()
     {
 
         $lista = DB::table('persone')
@@ -79,6 +86,118 @@ return $lista;*/
 
         //{{ dd(get_defined_vars()['__data']) }} x vedere var passate a view
     }
+
+    public function create(Request $request)
+    {
+        $validate_persona = $request->validate([
+            'nome' => 'required',
+            'cognome' => 'required',
+            'data_nascita' => 'nullable',
+            'fk_comuni_nascita' => 'required',
+            'codice_fiscale' => 'nullable',
+            'partita_iva' => 'nullable',
+            'fk_comuni' => 'required',
+            'indirizzo' => 'nullable',
+            'privacy' => 'nullable',
+            'telefono' => 'nullable',
+            'telefono_ext' => 'nullable',
+            'email' => 'nullable',
+            'fk_responsabile' => 'nullable',
+            'iban' => 'nullable',
+            'banca' => 'nullable',
+            'note' => 'nullable'
+        ]);
+
+        if($request->has('socio'))
+        {
+            $validate_socio = $request->validate([
+                'fk_soci_tipologie' => 'required',
+                'richiesta_data' => 'required',
+                'approvazione_data' => 'required',
+                'scadenza_data' => 'required',
+                'certificato_scadenza_al' => 'required'
+            ]);
+        }
+
+        if($request->has('carica_direttivo'))
+        {
+            $validate_carica_direttivo = $request->validate([
+                'fk_cariche_direttivo' => 'required',
+                'carica_direttivo_dal' => 'required',
+                'carica_direttivo_al' => 'required'
+            ]);
+        }
+        
+        if($request->has('tessere'))
+        {
+            $validate_tessere = $request->validate([
+                'numero' => 'required',
+                'tessere_dal' => 'required',
+                'tessere_al' => 'required',
+                'tessere_tipo'  => 'required'            
+            ]);
+        }
+        
+        
+       
+        
+        
+    }
+
+    public function regioni()
+    {
+        return Regione::all();
+    }
+    public function province(Request $request)
+    {
+        
+        if(!empty($request->input('region_select')))
+        {
+            $id_regione = $request->input('region_select');
+
+            return Regione::find($id_regione)->Province;
+
+        }
+        else{
+            
+            return Provincia::all();
+        }
+
+    }
+    public function comuni(Request $request)
+    {
+        if(!empty( $request->input('provincia_select')))
+        {
+            $id_provincia = $request->input('provincia_select');
+
+            return Provincia::find($id_provincia)->Comuni;
+
+        }
+        else{
+            return Comune::all();
+        }
+    }
+
+    public function sociTipologie()
+    {
+        return SocioTipologia::all();
+    }
+
+    public function caricheDirettivo()
+    {
+        return CaricaDirettivo::all();
+    }
+
+    public function responsabili()
+    {
+        
+       return  DB::table('persone')
+       ->select('id','nome','cognome')
+       ->whereRaw("DATEDIFF(CURDATE(),data_nascita)>=6575")->get();
+       
+        //SELECT persone.id,persone.nome,persone.cognome FROM persone WHERE (DATEDIFF(CURRENT_DATE,persone.data_nascita)) >= '1' ORDER BY persone.nome
+    }
+
 
     public function Rubrica()
     {

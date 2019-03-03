@@ -8,6 +8,9 @@ window.Icons = require("uikit/dist/js/uikit-icons");
 window.Tabulator = require('tabulator-tables');
 window.TabulatorCss = require('tabulator-tables/dist/css/semantic-ui/tabulator_semantic-ui.min.css');
 
+//importo jquery
+window.$ = window.jQuery = require('jquery');
+
 UIkit.use(window.Icons);
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
