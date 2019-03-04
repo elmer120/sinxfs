@@ -38,7 +38,7 @@
 						<div class="uk-width-1-6@m">
 							<label class="uk-form-label uk-text-danger">Cognome *</label>
 							<input class="uk-input uk-form-small" class="uk-input" type="text" name="cognome" pattern="[A-Za-z]+" value="<?php //echo set_value('cognome'); ?>" placeholder="Rossi">
-							<?php //echo form_error('cognome'); ?>
+							
 						</div>
 					
 					

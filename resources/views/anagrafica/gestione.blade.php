@@ -422,22 +422,14 @@ function submit_aggiungi()
 			 url: "create",
 			 data: data,
              success: function(data){
-								
-								var obj = JSON.parse(data);
-								if(obj.status != "success")
-									{UIkit.notification({
-									message: obj.message,
-									status: obj.status,
-									pos: 'bottom-center',
-									timeout: 3000
-									});
-									}else{ 
-									UIkit.notification({
-									message: obj.message,
-									status: obj.status,
-									pos: 'bottom-center',
-									timeout: 2000
-									});
+								data = data.responseJSON;
+								$(":input").removeClass('uk-form-danger');
+								UIkit.notification({
+											message: 'ok',
+											status: '',
+											pos: 'bottom-center',
+											timeout: 3000
+										});
 
 					setTimeout(() => {
 						UIkit.modal($('#modal')).hide();
@@ -445,23 +437,26 @@ function submit_aggiungi()
 					}, 2000);
 				  }
 			 },
-             error: function(data) { 
-									data = data.responseJSON;
-                 console.log(data);
-								 for (let i = 0; i < data.errors.length; i++) {
-									 const element = array[i];
-									 
-								 }
-
-								 UIkit.notification({
-									message: data.responseJSON.message,
-									status: '',
-									pos: 'bottom-center',
-									timeout: 3000
-									});
-
-             }
-		});
+             error: function(data) {
+							 //validazione fallita
+							if( data.status === 422 ) {
+										data = data.responseJSON;
+                    var errors = data.errors;
+										var message = data.message;
+										var messages = '';
+										$.each(errors, function (key, val) {
+											$(":input[name='"+key+"']").addClass('uk-form-danger');
+                        messages+="<p>"+val+"</p>";
+                    });
+										UIkit.notification({
+											message: messages,
+											status: '',
+											pos: 'bottom-center',
+											timeout: 3000
+										});
+							}
+						}
+		);
 }
 
 </script>
