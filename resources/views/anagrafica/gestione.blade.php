@@ -102,9 +102,16 @@ function create_table(){
 		{ title:"Approvato", field:"approvazione_data"},
 		{ title:"Quota scadenza", field:"quota_scadenza"}]
 });
-//carico i dati in tabella
-//table.setData(<? //echo(json_encode($lista));?>);
-table.setData( {!! $lista !!} );
+//carico i dati in tabella via ajax
+var ajaxConfig = {
+    method:"post", //set request type to Position
+    headers: {
+				'X-CSRF-Token': '{{ csrf_token() }}',
+    },
+};
+table.setData( "{{ route('getList') }}", {}, ajaxConfig);
+
+// variabile passata a view not trim table.setData( {//!! $lista !!} );
 }
 //---- EVENTI -----
 //alla selezione di un riga
@@ -421,21 +428,21 @@ function submit_aggiungi()
    $.ajax({
 			 url: "create",
 			 data: data,
-             success: function(data){
-								data = data.responseJSON;
+          success: function(data){
+								
 								$(":input").removeClass('uk-form-danger');
 								UIkit.notification({
-											message: 'ok',
+											message: data,
 											status: '',
 											pos: 'bottom-center',
 											timeout: 3000
 										});
 
 					setTimeout(() => {
-						UIkit.modal($('#modal')).hide();
+						UIkit.modal($('#modal_aggiungi')).hide();
 						table.setData();
 					}, 2000);
-				  }
+				  
 			 },
              error: function(data) {
 							 //validazione fallita
@@ -456,7 +463,7 @@ function submit_aggiungi()
 										});
 							}
 						}
-		);
+});
 }
 
 </script>

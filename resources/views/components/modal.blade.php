@@ -11,7 +11,7 @@
 		
 		<form id="form_aggiungi" class="uk-grid-small" enctype="multipart/form-data" uk-grid>
 						
-						<?php //echo form_open_multipart ('Anagrafica/create_associato','class="uk-grid-small"');?>
+						
 						
 						<!--div class="uk-width-auto">  
 							<img id="preview" class="uk-border-circle" style="display:block" width="75" height="75" src="<?php //echo base_url('assets/img/associati/default/avatar.png');?>">
@@ -109,7 +109,7 @@
 
 						<div class="uk-width-1-6@m uk-margin">
 							<label class="uk-form-label">Consenso privacy</label>
-							<input class="uk-checkbox" name="privacy" type="hidden" value="">
+							<input class="uk-checkbox" name="privacy" type="hidden" value="0">
 							<input class="uk-checkbox" name="privacy" type="checkbox" value="1">
 						</div>
 						
