@@ -85,6 +85,34 @@ class AnagraficaController extends Controller
             'persone.nome',
             'persone.cognome',
             'persone.data_nascita',
+            DB::raw("(SELECT DISTINCT province.nome 
+FROM regioni 
+INNER JOIN province 
+on province.fk_regioni = regioni.id
+INNER JOIN comuni
+on comuni.fk_province = province.id
+WHERE comuni.id = persone.fk_comuni_nascita) as provincia_nascita"),
+DB::raw("(SELECT DISTINCT province.id 
+FROM regioni 
+INNER JOIN province 
+on province.fk_regioni = regioni.id
+INNER JOIN comuni
+on comuni.fk_province = province.id
+WHERE comuni.id = persone.fk_comuni_nascita) as provincia_id_nascita"),
+DB::raw("(SELECT DISTINCT comuni.nome 
+FROM regioni 
+INNER JOIN province 
+on province.fk_regioni = regioni.id
+INNER JOIN comuni
+on comuni.fk_province = province.id
+WHERE comuni.id = persone.fk_comuni_nascita) as comune_nascita"),
+DB::raw("(SELECT DISTINCT province.id 
+FROM regioni 
+INNER JOIN province 
+on province.fk_regioni = regioni.id
+INNER JOIN comuni
+on comuni.fk_province = province.id
+WHERE comuni.id = persone.fk_comuni_nascita) as provincia_id_nascita"),
             'persone.fk_comuni_nascita',
             'persone.codice_fiscale',
             'persone.partita_iva',
@@ -122,6 +150,31 @@ class AnagraficaController extends Controller
         else{
             abort(403,'no id');
         }
+
+
+        /* 
+        
+        select distinct `persone`.`id`, `persone`.`nome`, `persone`.`cognome`, `persone`.`data_nascita`, `persone`.`fk_comuni_nascita`, `persone`.`codice_fiscale`, `persone`.`partita_iva`, 
+
+
+
+`persone`.`fk_comuni`,
+(SELECT DISTINCT province.nome 
+FROM regioni 
+INNER JOIN province 
+on province.fk_regioni = regioni.id
+INNER JOIN comuni
+on comuni.fk_province = province.id
+WHERE comuni.id = persone.fk_comuni_nascita),
+`persone`.`indirizzo`, `persone`.`privacy`, `persone`.`telefono`, `persone`.`telefono_ext`, `persone`.`email`, `persone`.`fk_responsabile`, `persone`.`iban`, `persone`.`banca`, `persone`.`note`, `soci`.`fk_soci_tipologie`, `soci`.`richiesta_data`, `soci`.`approvazione_data`, `soci`.`scadenza_data`, `soci`.`certificato_scadenza_al`, `soci_cariche_direttivo`.`fk_cariche_direttivo`, `soci_cariche_direttivo`.`carica_direttivo_dal`, `soci_cariche_direttivo`.`carica_direttivo_al`, `tessere`.`numero`, `tessere`.`tessere_dal`, `tessere`.`tessere_al`, `tessere`.`tessere_tipo` 
+
+
+
+
+
+from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inner join `province` on `comuni`.`fk_province` = `province`.`id` inner join `regioni` on `province`.`fk_regioni` = `regioni`.`id` left join `soci` on `persone`.`fk_soci` = `soci`.`id` left join `soci_tipologie` on `soci`.`fk_soci_tipologie` = `soci_tipologie`.`id` left join `tessere` on `tessere`.`fk_soci` = `soci`.`id` left join `soci_cariche_direttivo` on `soci_cariche_direttivo`.`fk_soci` = `soci`.`id` left join `cariche_direttivo` on `cariche_direttivo`.`id` = `soci_cariche_direttivo`.`fk_cariche_direttivo` where `persone`.`id` = 46
+        
+        */
 
     }
 
