@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Socio;
 use App\Models\SocioCaricaDirettivo;
 use App\Models\Tessera;
+use PHPUnit\Framework\Error\Error;
 class AnagraficaController extends Controller
 {
     public function gestione()
@@ -36,7 +37,7 @@ class AnagraficaController extends Controller
     //ajax
     public function getList(Request $request)
     {
-        $id = $request->input('id');
+        
          $lista = DB::table('persone')
         ->join('comuni', 'persone.fk_comuni', '=', 'comuni.id')
         ->join('province','comuni.fk_province','=','province.id')
@@ -46,9 +47,6 @@ class AnagraficaController extends Controller
         ->leftJoin('tessere','tessere.fk_soci','=','soci.id')
         ->leftJoin('soci_cariche_direttivo','soci_cariche_direttivo.fk_soci','=','soci.id')
         ->leftJoin('cariche_direttivo','cariche_direttivo.id','=','soci_cariche_direttivo.fk_cariche_direttivo')
-            ->when($id, function ($query, $id) {
-                return $query->where('persone.id','=',$id);
-            })
         ->select('persone.id','persone.nome','persone.cognome',
         'comuni.nome as comune_nascita',
        // 'comuni.nome as comune_residenza', serve sub-query
@@ -64,6 +62,67 @@ class AnagraficaController extends Controller
         ->get()->toJson(JSON_PRETTY_PRINT);
         return $lista;
         //dd($lista);
+    }
+
+    public function getPerson(Request $request)
+    {
+        
+        if($request->filled('id'))
+        {
+            $id = $request->input('id');
+            $person = DB::table('persone')
+            ->join('comuni', 'persone.fk_comuni', '=', 'comuni.id')
+            ->join('province','comuni.fk_province','=','province.id')
+            ->join('regioni','province.fk_regioni', '=', 'regioni.id')
+            ->leftJoin('soci','persone.fk_soci','=','soci.id')
+            ->leftJoin('soci_tipologie','soci.fk_soci_tipologie','=','soci_tipologie.id')
+            ->leftJoin('tessere','tessere.fk_soci','=','soci.id')
+            ->leftJoin('soci_cariche_direttivo','soci_cariche_direttivo.fk_soci','=','soci.id')
+            ->leftJoin('cariche_direttivo','cariche_direttivo.id','=','soci_cariche_direttivo.fk_cariche_direttivo')
+            ->where('persone.id','=',$id)
+            ->select(
+            'persone.id',
+            'persone.nome',
+            'persone.cognome',
+            'persone.data_nascita',
+            'persone.fk_comuni_nascita',
+            'persone.codice_fiscale',
+            'persone.partita_iva',
+            'comuni.nome as comune_nome',
+            'persone.fk_comuni',
+            'province.id as province_id',
+            'province.nome as province_nome',
+            'persone.indirizzo',
+            'persone.privacy',
+            'persone.telefono',
+            'persone.telefono_ext',
+            'persone.email',
+            'persone.fk_responsabile',
+            'persone.iban',
+            'persone.banca',
+            'persone.note',
+            'soci.fk_soci_tipologie',
+            'soci.richiesta_data',
+            'soci.approvazione_data',
+            'soci.scadenza_data',
+            'soci.certificato_scadenza_al',
+            'soci_cariche_direttivo.fk_cariche_direttivo',
+            'soci_cariche_direttivo.carica_direttivo_dal',
+            'soci_cariche_direttivo.carica_direttivo_al',
+            'tessere.numero',
+            'tessere.tessere_dal',
+            'tessere.tessere_al',
+            'tessere.tessere_tipo'
+            )
+            ->distinct()
+            ->get()->toJson(JSON_PRETTY_PRINT);
+
+            return $person;
+        }
+        else{
+            abort(403,'no id');
+        }
+
     }
 
     public function create(Request $request)

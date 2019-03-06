@@ -1,9 +1,9 @@
-<!-- Finestra modal aggiungi -->
-<div id="modal_aggiungi" class="uk-modal-container" uk-modal='{"bg-close":false}'>
+<!-- Finestra modal {{ $modal_id }}-->
+<div id="{{ $modal_id }}" class="uk-modal-container" uk-modal='{"bg-close":false}'>
     <div class="uk-modal-dialog" uk-overflow-auto>
 		<!-- header -->
 		<div class="uk-modal-header">
-        	<h2 class="uk-modal-title">Aggiungi persona/socio</h2>
+        	<h2 class="uk-modal-title">{{ $title }}</h2>
 			<span class="uk-text-danger">Richiesto *</span>
 		</div>
 		<!-- body -->  
@@ -252,7 +252,7 @@
 		<!-- footer -->
 		<div class="uk-modal-footer">
 			<button class="uk-button uk-button-default uk-modal-close" type="button">Annulla</button>
-         	<input class="uk-button uk-button-primary" type="submit" name="submit" value="Salva">
+         	<input class="uk-button uk-button-primary" type="submit" name="submit" value="{{ $btn_text }}">
 		</div>
 		</form>
 	</div>

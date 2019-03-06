@@ -12,7 +12,14 @@
 	<input id="input_search" class="uk-search-input" type="search" name="text_search" value="" placeholder="Cerca...">
 </div>
 
-@component('components.modal') @endcomponent
+@component('components.modal',
+	[
+	'modal_id' => 'modal_aggiungi',
+	'title' => "Aggiungi persona/socio",
+	'btn_text' => 'Inserisci'
+	]
+) 
+@endcomponent
 
 <!-- tabella-->
 <div id="table"></div>
@@ -228,18 +235,21 @@ else{
 });
 $('#btn_modifica').on('click',function()
 {
-	//popolo il select regioni con tutte
-	get_regioni('#select_regioni_mod');
+	//popolo il select tipo associato
+	get_persona(row_selected_id);
 	//popolo il select province di nascita con tutte
-	get_province(null,'#select_province_nascita_mod');
+	get_province(persona.fk_pro,'#select_province_nascita');
+	//popolo il select con tutti i comuni
+	get_comuni(null,'#select_comuni_nascita');
+	//popolo il select regioni con tutte
+	get_regioni('#select_regioni');
 	//popolo il select tipo associato
 	get_soci_tipologie('#select_tipo_mod');
 	//popolo il select carica direttivo
-	get_cariche_direttivo('#select_carica_mod');
+	get_cariche_direttivo('#select_carica');
 	//popolo il select responsabile
-	get_responsabili('#select_responsabile_mod');
-	//popolo il select tipo associato
-	get_persona(row_selected_id);
+	get_responsabili('#select_responsabile');
+	
 });
 //all submit del form aggiungi
 $('#form_aggiungi').on('submit',function(e){
@@ -391,29 +401,28 @@ function get_responsabili(id_element) {
 function get_persona(id)
 {
 	$.ajax({
-             type: 'POST',
-             url: controller_url+"get_person",
+             url: 'getPerson',
              data: {"id" : id},
              success: function(data){
-			  console.log(data);
-			  persona = JSON.parse(data)[0];
-			  $('input[name=nome]').val(persona.nome);
-			  $('input[name=cognome]').val(persona.cognome);
-			  $('input[name=data_nascita]').val(persona.data_nascita);
-			  $('input[name=codice_fiscale]').val(persona.codice_fiscale);
-			  $('input[name=partita_iva]').val(persona.partita_iva);
-			  $('input[name=indirizzo]').val(persona.indirizzo);
-			  //$('input[name=nome]').val(persona.nome);
-			  $('input[name=telefono]').val(persona.telefono);
-			  $('input[name=telefono_ext]').val(persona.telefono_ext);
-			  $('input[name=email]').val(persona.email);
-			  $('input[name=iban]').val(persona.iban);
-			  $('input[name=banca]').val(persona.banca);
-			  $('input[textarea=note]').val(persona.note);
-			  $('input[name=numero]').val(persona.numero);
-			  $('input[name=tessere_tipo]').val(persona.tessere_tipo);
-			  
-			},
+									console.log(data);
+									persona = JSON.parse(data)[0];
+									$('input[name=nome]').val(persona.nome);
+									$('input[name=cognome]').val(persona.cognome);
+									$('input[name=data_nascita]').val(persona.data_nascita.split("/").reverse().join("-"));
+									$('input[name=codice_fiscale]').val(persona.codice_fiscale);
+									$('input[name=partita_iva]').val(persona.partita_iva);
+									$('input[name=indirizzo]').val(persona.indirizzo);
+									//$('input[name=nome]').val(persona.nome);
+									$('input[name=telefono]').val(persona.telefono);
+									$('input[name=telefono_ext]').val(persona.telefono_ext);
+									$('input[name=email]').val(persona.email);
+									$('input[name=iban]').val(persona.iban);
+									$('input[name=banca]').val(persona.banca);
+									$('input[textarea=note]').val(persona.note);
+									$('input[name=numero]').val(persona.numero);
+									$('input[name=tessere_tipo]').val(persona.tessere_tipo);
+					
+				},
              error: function(data) { 
                   alert("get_persona: Errore nella chiamata ajax!");
              }
