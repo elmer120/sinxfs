@@ -82,7 +82,7 @@ function create_table(){
 	responsiveLayout:"collapse", //le colonne si impilano quando non c'è abb spazio
 	placeholder:"No Data Available", //quando non ci sono dati
 	pagination:"local", //imposto la paginazione
-	paginationSize:10, //per ogni pagina mostro n righe
+	paginationSize:20, //per ogni pagina mostro n righe
 	selectable:1, //righe selezionabili
 	rowSelected:row_selected, //callback riga selezionata
 	rowDeselected:row_deselected, //callback riga deselezionata
@@ -236,20 +236,18 @@ else{
 $('#btn_modifica').on('click',function()
 {
 	//popolo il select tipo associato
-	get_persona(row_selected_id);
-	//popolo il select province di nascita con tutte
-	get_province(persona.fk_pro,'#select_province_nascita');
-	//popolo il select con tutti i comuni
-	get_comuni(null,'#select_comuni_nascita');
-	//popolo il select regioni con tutte
-	get_regioni('#select_regioni');
-	//popolo il select tipo associato
 	get_soci_tipologie('#select_tipo_mod');
 	//popolo il select carica direttivo
 	get_cariche_direttivo('#select_carica');
 	//popolo il select responsabile
 	get_responsabili('#select_responsabile');
-	
+	//popolo il select regioni con tutte
+	get_regioni('#select_regioni');
+	//popolo il select province di nascita con tutte
+	get_province(null,'#select_province_nascita');
+	//popolo la persona
+	get_persona(row_selected_id);
+
 });
 //all submit del form aggiungi
 $('#form_aggiungi').on('submit',function(e){
@@ -300,6 +298,7 @@ function get_regioni(id_element) {
 }
 //chiamata ajax per popolare il select delle provincie
 function get_province(id_select,id_element) {
+	//console.log(id_select);
           $.ajax({
              url: 'province',
               data: {"region_select" : id_select},
@@ -319,6 +318,7 @@ function get_province(id_select,id_element) {
 }
  //chiamata ajax per popolare il select dei comuni
 function get_comuni(id_select,id_element){
+//console.log(id_select);
             $.ajax({
                 url: 'comuni',
                 data: {"provincia_select" : id_select},
@@ -406,21 +406,54 @@ function get_persona(id)
              success: function(data){
 									console.log(data);
 									persona = JSON.parse(data)[0];
+									//--persona
 									$('input[name=nome]').val(persona.nome);
 									$('input[name=cognome]').val(persona.cognome);
-									$('input[name=data_nascita]').val(persona.data_nascita.split("/").reverse().join("-"));
+									$('input[name=data_nascita]').val(persona.data_nascita);
+									//nascita
+									setTimeout(function(){$('#select_province_nascita').val(persona.fk_provincia_nascita).change();},500);
+									setTimeout(function(){$('#select_comuni_nascita').val(persona.fk_comuni_nascita);},1000);
 									$('input[name=codice_fiscale]').val(persona.codice_fiscale);
 									$('input[name=partita_iva]').val(persona.partita_iva);
+									//residenza
+									setTimeout(function(){$('#select_regioni').val(persona.fk_regioni).change();},500);
+									setTimeout(function(){$('#select_province').val(persona.fk_province).change();},1000);
+									setTimeout(function(){$('#select_comuni').val(persona.fk_comuni);},2000);
 									$('input[name=indirizzo]').val(persona.indirizzo);
-									//$('input[name=nome]').val(persona.nome);
+									//$('input[name=privacy]').val(persona.nome);
 									$('input[name=telefono]').val(persona.telefono);
 									$('input[name=telefono_ext]').val(persona.telefono_ext);
 									$('input[name=email]').val(persona.email);
 									$('input[name=iban]').val(persona.iban);
 									$('input[name=banca]').val(persona.banca);
-									$('input[textarea=note]').val(persona.note);
-									$('input[name=numero]').val(persona.numero);
-									$('input[name=tessere_tipo]').val(persona.tessere_tipo);
+									$('textarea[name=note]').val(persona.note)
+									//--socio
+									if(persona.fk_soci_tipologie != null)
+									{
+										$('input[name=socio]')[0].checked = true;
+										$('#select_tipo').val(persona.fk_soci_tipologie);
+										$('input[name=richiesta_data]').val(persona.richiesta_data);
+										$('input[name=approvazione_data]').val(persona.approvazione_data);
+										$('input[name=scadenza_data]').val(persona.scadenza_data);
+										$('input[name=certificato_scadenza_al]').val(persona.certificato_scadenza_al);
+									}
+									//--carica direttivo
+									if(persona.fk_cariche_direttivo != null)
+									{
+										$('input[name=carica_direttivo]')[0].checked = true;
+										$('#select_carica').val(persona.fk_cariche_direttivo);
+										$('input[name=carica_direttivo_dal]').val(persona.carica_direttivo_dal);
+										$('input[name=carica_direttivo_al]').val(persona.carica_direttivo_al);
+									}
+									//--tessera
+									if(persona.numero != null)
+									{
+										$('input[name=tessere]')[0].checked = true;
+										$('input[name=numero]').val(persona.numero);
+										$('input[name=tessere_dal]').val(persona.tessere_dal);
+										$('input[name=tessere_al]').val(persona.tessere_al);
+										$('input[name=tessere_tipo]').val(persona.tessere_tipo);
+									}
 					
 				},
              error: function(data) { 
@@ -438,8 +471,14 @@ function submit_aggiungi()
 			 url: "create",
 			 data: data,
           success: function(data){
-								
+								//dopo l'inserimento rimuovo i danger
 								$(":input").removeClass('uk-form-danger');
+								//pulisco gli input del form
+								$('#form_aggiungi').find("input[type=text], textarea").val("");
+								//metto a default i checkbox
+								$('input[name=socio]')[0].checked = $('input[name=socio]')[0].defaultChecked;
+								$('input[name=carica_direttivo]')[0].checked = $('input[name=carica_direttivo]')[0].defaultChecked
+								$('input[name=tessere]')[0].checked = $('input[name=tessere]')[0].defaultChecked
 								UIkit.notification({
 											message: data,
 											status: '',

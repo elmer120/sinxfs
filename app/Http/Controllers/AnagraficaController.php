@@ -48,8 +48,14 @@ class AnagraficaController extends Controller
         ->leftJoin('soci_cariche_direttivo','soci_cariche_direttivo.fk_soci','=','soci.id')
         ->leftJoin('cariche_direttivo','cariche_direttivo.id','=','soci_cariche_direttivo.fk_cariche_direttivo')
         ->select('persone.id','persone.nome','persone.cognome',
-        'comuni.nome as comune_nascita',
-       // 'comuni.nome as comune_residenza', serve sub-query
+        'comuni.nome as comune_residenza',
+        DB::raw("(SELECT DISTINCT comuni.nome 
+                FROM regioni 
+                INNER JOIN province 
+                on province.fk_regioni = regioni.id
+                INNER JOIN comuni
+                on comuni.fk_province = province.id
+                WHERE comuni.id = persone.fk_comuni_nascita) as comune_nascita"),
         DB::raw('DATE_FORMAT(persone.data_nascita, "%d/%m/%Y") as data_nascita'),
         'soci_tipologie.nome as soci_tipologia',
         'cariche_direttivo.nome as carica_direttivo',
@@ -85,41 +91,21 @@ class AnagraficaController extends Controller
             'persone.nome',
             'persone.cognome',
             'persone.data_nascita',
-            DB::raw("(SELECT DISTINCT province.nome 
-FROM regioni 
-INNER JOIN province 
-on province.fk_regioni = regioni.id
-INNER JOIN comuni
-on comuni.fk_province = province.id
-WHERE comuni.id = persone.fk_comuni_nascita) as provincia_nascita"),
-DB::raw("(SELECT DISTINCT province.id 
-FROM regioni 
-INNER JOIN province 
-on province.fk_regioni = regioni.id
-INNER JOIN comuni
-on comuni.fk_province = province.id
-WHERE comuni.id = persone.fk_comuni_nascita) as provincia_id_nascita"),
-DB::raw("(SELECT DISTINCT comuni.nome 
-FROM regioni 
-INNER JOIN province 
-on province.fk_regioni = regioni.id
-INNER JOIN comuni
-on comuni.fk_province = province.id
-WHERE comuni.id = persone.fk_comuni_nascita) as comune_nascita"),
-DB::raw("(SELECT DISTINCT province.id 
-FROM regioni 
-INNER JOIN province 
-on province.fk_regioni = regioni.id
-INNER JOIN comuni
-on comuni.fk_province = province.id
-WHERE comuni.id = persone.fk_comuni_nascita) as provincia_id_nascita"),
+            //nascita
+            DB::raw("(SELECT DISTINCT province.id 
+                    FROM regioni 
+                    INNER JOIN province 
+                    on province.fk_regioni = regioni.id
+                    INNER JOIN comuni
+                    on comuni.fk_province = province.id
+                    WHERE comuni.id = persone.fk_comuni_nascita) as fk_provincia_nascita"),
             'persone.fk_comuni_nascita',
+            //residenza
+            'regioni.id as fk_regioni',
+            'province.id as fk_province',
+            'persone.fk_comuni',
             'persone.codice_fiscale',
             'persone.partita_iva',
-            'comuni.nome as comune_nome',
-            'persone.fk_comuni',
-            'province.id as province_id',
-            'province.nome as province_nome',
             'persone.indirizzo',
             'persone.privacy',
             'persone.telefono',
@@ -129,14 +115,17 @@ WHERE comuni.id = persone.fk_comuni_nascita) as provincia_id_nascita"),
             'persone.iban',
             'persone.banca',
             'persone.note',
+            //socio
             'soci.fk_soci_tipologie',
             'soci.richiesta_data',
             'soci.approvazione_data',
             'soci.scadenza_data',
             'soci.certificato_scadenza_al',
+            //carica direttivo
             'soci_cariche_direttivo.fk_cariche_direttivo',
             'soci_cariche_direttivo.carica_direttivo_dal',
             'soci_cariche_direttivo.carica_direttivo_al',
+            //tessera
             'tessere.numero',
             'tessere.tessere_dal',
             'tessere.tessere_al',

@@ -51,6 +51,7 @@
 						<div class="uk-width-1-6@m">
 							<label class="uk-form-label">Provincia di nascita</label>
 							<select class="uk-select uk-form-small" id="select_province_nascita">
+									<option value="" selected>Scegli la provincia</option>
 						</select>
 						</div>
 
@@ -80,6 +81,7 @@
 						<div class="uk-width-1-6@m">
 							<label class="uk-form-label">Regione di residenza</label>
 							<select class="uk-select uk-form-small" id="select_regioni" >
+									<option value="" selected>Scegli la regione</option>
 						</select>
 						</div>
 
