@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth']],function(){
         Route::post('caricheDirettivo','AnagraficaController@caricheDirettivo');
         Route::post('responsabili','AnagraficaController@responsabili');
         Route::post('create','AnagraficaController@create');
+        Route::put('create','AnagraficaController@create');
         Route::post('getList','AnagraficaController@getList')->name('getList');
         Route::get('getList','AnagraficaController@getList')->name('getList');
         Route::post('getPerson','AnagraficaController@getPerson')->name('getPerson');

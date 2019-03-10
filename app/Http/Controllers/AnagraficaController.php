@@ -69,7 +69,7 @@ class AnagraficaController extends Controller
         return $lista;
         //dd($lista);
     }
-
+    //ritorna via ajax persona selezionata per la modifica
     public function getPerson(Request $request)
     {
         
@@ -116,16 +116,19 @@ class AnagraficaController extends Controller
             'persone.banca',
             'persone.note',
             //socio
+            'soci.id as socio_id',
             'soci.fk_soci_tipologie',
             'soci.richiesta_data',
             'soci.approvazione_data',
             'soci.scadenza_data',
             'soci.certificato_scadenza_al',
             //carica direttivo
+            'soci_cariche_direttivo.id as soci_cariche_direttivo_id',
             'soci_cariche_direttivo.fk_cariche_direttivo',
             'soci_cariche_direttivo.carica_direttivo_dal',
             'soci_cariche_direttivo.carica_direttivo_al',
             //tessera
+            'tessere.id as tessere_id',
             'tessere.numero',
             'tessere.tessere_dal',
             'tessere.tessere_al',
@@ -169,6 +172,7 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
 
     public function create(Request $request)
     {
+        
         //validazione
         $validate_persona = $request->validate([
             'nome' => 'required',
@@ -221,71 +225,249 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
             ]);
         }
 
-        //inserimento
-        if($request->has('socio'))
-        {
-            $socio = new Socio([
-                'fk_soci_tipologie' => $request->fk_soci_tipologie,
-                'richiesta_data' => $request->richiesta_data,
-                'approvazione_data' => $request->approvazione_data,
-                'scadenza_data' => $request->scadenza_data,
-                //quota_scadenza_al
-                'certificato_scadenza_al' => $request->certificato_scadenza_al
-            ]);
-            $socio->save();
-        }
 
-        if($request->has('tessere'))
+        //------- inserimento o update
+
+        //---------------------------SOCIO
+        //se è un inserimento
+        if($request->isMethod('POST') )
         {
-            $tessere = new Tessera([
-                'numero' => $request->numero,
-                'tessere_dal' => $request->tessere_dal,
-                'tessere_al' => $request->tessere_al,
-                'tessere_tipo'  => $request->tessere_tipo,
-                'fk_soci' => $request->has('socio')? $socio->id : NULL        
-            ]);
-            $tessere->save();
+            if($request->has('socio'))
+            {   //recupero i valori
+                $socio_values = [
+                    'fk_soci_tipologie' => $request->fk_soci_tipologie,
+                    'richiesta_data' => $request->richiesta_data,
+                    'approvazione_data' => $request->approvazione_data,
+                    'scadenza_data' => $request->scadenza_data,
+                    //quota_scadenza_al
+                    'certificato_scadenza_al' => $request->certificato_scadenza_al
+                ];
+                // inserisco
+                $socio = new Socio($socio_values);
+                $socio->save();
+            }
+        } //se è un update
+        elseif($request->isMethod('PUT'))
+        {
+            //se la richiesta ha il socio id significa che è anche un socio
+            if($request->filled('socio_id'))
+            {   
+                //quindi recupero il model
+                $socio = Socio::find($request->socio_id);
+                if($request->has('socio')) //devo aggiornare solo i valori
+                {
+                    //recupero i valori
+                    $socio_values = [
+                    'fk_soci_tipologie' => $request->fk_soci_tipologie,
+                    'richiesta_data' => $request->richiesta_data,
+                    'approvazione_data' => $request->approvazione_data,
+                    'scadenza_data' => $request->scadenza_data,
+                    //quota_scadenza_al
+                    'certificato_scadenza_al' => $request->certificato_scadenza_al
+                    ];
+                    // aggiorno
+                    $socio->fill($socio_values);
+                    $socio->save();
+                }else //cancello il socio
+                {
+                    $socio->delete();
+                }
+            }else
+            {
+                if($request->has('socio'))
+                {  
+                    //recupero i valori
+                    $socio_values = [
+                        'fk_soci_tipologie' => $request->fk_soci_tipologie,
+                        'richiesta_data' => $request->richiesta_data,
+                        'approvazione_data' => $request->approvazione_data,
+                        'scadenza_data' => $request->scadenza_data,
+                        //quota_scadenza_al
+                        'certificato_scadenza_al' => $request->certificato_scadenza_al
+                    ];
+                    // inserisco
+                    $socio = new Socio($socio_values);
+                    $socio->save();
+                }
+            }
         }
-        
-        if($request->has('carica_direttivo'))
+        //-------------------------------------TESSERA
+        //se inserimento
+        if($request->isMethod('POST') )
         {
-            $socio_carica_direttivo = new SocioCaricaDirettivo([
+            if($request->has('tessere'))
+            {
+                $tessere_values= [
+                    'numero' => $request->numero,
+                    'tessere_dal' => $request->tessere_dal,
+                    'tessere_al' => $request->tessere_al,
+                    'tessere_tipo'  => $request->tessere_tipo,
+                    'fk_soci' => $request->has('socio')? $socio->id : NULL        
+                ];
+                $tessere = new Tessera($tessere_values);
+                $tessere->save();
+            }
+        }elseif($request->isMethod('PUT')) //se è update
+        {
+            //se la richiesta ha il tessere_id significa che è ha una tessera
+            if($request->filled('tessere_id'))
+            {   
+                //quindi recupero il model
+                $tessere = Tessera::find($request->tessere_id);
+                if($request->has('tessere')) //devo aggiornare solo i valori
+                {
+                    //recupero i valori
+                    $tessere_values= [
+                        'numero' => $request->numero,
+                        'tessere_dal' => $request->tessere_dal,
+                        'tessere_al' => $request->tessere_al,
+                        'tessere_tipo'  => $request->tessere_tipo,
+                        'fk_soci' => $request->has('socio')? $socio->id : NULL        
+                    ];
+                    // aggiorno
+                    $tessere->fill($tessere_values);
+                    $tessere->save();
+                }else //cancello la tessera
+                {
+                    $tessere->delete();
+                }
+            }
+            else
+            {
+                if($request->has('tessere'))
+                {
+                    // se la tessera non l'aveva l'aggiungo
+                    $tessere_values= [
+                        'numero' => $request->numero,
+                        'tessere_dal' => $request->tessere_dal,
+                        'tessere_al' => $request->tessere_al,
+                        'tessere_tipo'  => $request->tessere_tipo,
+                        'fk_soci' => $request->has('socio')? $socio->id : NULL        
+                    ];
+                    $tessere = new Tessera($tessere_values);
+                    $tessere->save();
+                }
+            }
+        }
+        //CARICA DIRETTIVO
+        if($request->isMethod('POST'))
+        {
+            if($request->has('carica_direttivo'))
+            {
+                $socio_carica_direttivo_values = [
                     'fk_soci' => $request->has('socio')? $socio->id : NULL,
                     'fk_cariche_direttivo' => $request->fk_cariche_direttivo,
                     'carica_direttivo_dal' => $request->carica_direttivo_dal,
                     'carica_direttivo_al' => $request->carica_direttivo_al
-                    ]);
-            $socio_carica_direttivo->save();
+                ];
+                $socio_carica_direttivo = new SocioCaricaDirettivo($socio_carica_direttivo_values);
+                $socio_carica_direttivo->save();
+            }
+        }elseif($request->method('PUT'))
+        {
+            //se la richiesta ha il soci_cariche_direttivo_id significa che è un comp del direttivo
+            if($request->filled('soci_cariche_direttivo_id'))
+            {
+                //quindi recupero il model
+                $socio_carica_direttivo = SocioCaricaDirettivo::find($request->soci_cariche_direttivo_id);
+                if($request->has('carica_direttivo')) //devo aggiornare solo i valori
+                {
+                    $socio_carica_direttivo_values = [
+                        'fk_soci' => $request->has('socio')? $socio->id : NULL,
+                        'fk_cariche_direttivo' => $request->fk_cariche_direttivo,
+                        'carica_direttivo_dal' => $request->carica_direttivo_dal,
+                        'carica_direttivo_al' => $request->carica_direttivo_al
+                    ];
+                    // aggiorno
+                    $socio_carica_direttivo->fill($socio_carica_direttivo_values);
+                    $socio_carica_direttivo->save();
+                }
+                else //cancello
+                {
+                    $socio_carica_direttivo->delete();
+                }
+            }
+            else{
+                //se non ha carica l'aggiungo
+                if($request->has('carica_direttivo'))
+                {
+                        $socio_carica_direttivo_values = [
+                            'fk_soci' => $request->has('socio')? $socio->id : NULL,
+                            'fk_cariche_direttivo' => $request->fk_cariche_direttivo,
+                            'carica_direttivo_dal' => $request->carica_direttivo_dal,
+                            'carica_direttivo_al' => $request->carica_direttivo_al
+                        ];
+                        $socio_carica_direttivo = new SocioCaricaDirettivo($socio_carica_direttivo_values);
+                        $socio_carica_direttivo->save();
+                }
+            }
         }
 
-        
-        
-        $persona = new Persona([
-            "nome" => $request->nome,
-            "cognome" => $request->cognome,
-            "data_nascita" => $request->data_nascita,
-            "indirizzo" => $request->indirizzo,
-            "telefono" => $request->telefono,
-            "telefono_ext" => $request->telefono_ext,
-            "email" => $request->email,
-            "codice_fiscale" => $request->codice_fiscale,
-            "note" => $request->note,
-            "fk_responsabile" => $request->fk_responsabile,
-            //image => ???
-            "fk_associazioni" => Auth::user()->fk_associazioni,
-            'fk_soci' => $request->has('socio')? $socio->id : NULL, 
-            "iban" => $request->iban,
-            "banca" => $request->banca,
-            "partita_iva" => $request->partita_iva,
-            "fk_comuni" => $request->fk_comuni,
-            "fk_comuni_nascita" => $request->fk_comuni_nascita,
-            "privacy" => $request->privacy
-            ]);
+        if($request->isMethod('POST'))
+        {
+            $persona_values = [
+                "nome" => $request->nome,
+                "cognome" => $request->cognome,
+                "data_nascita" => $request->data_nascita,
+                "indirizzo" => $request->indirizzo,
+                "telefono" => $request->telefono,
+                "telefono_ext" => $request->telefono_ext,
+                "privacy" => $request->privacy,
+                "email" => $request->email,
+                "codice_fiscale" => $request->codice_fiscale,
+                "note" => $request->note,
+                "fk_responsabile" => $request->fk_responsabile,
+                //image => ???
+                "fk_associazioni" => Auth::user()->fk_associazioni,
+                'fk_soci' => $request->has('socio')? $socio->id : NULL, 
+                "iban" => $request->iban,
+                "banca" => $request->banca,
+                "partita_iva" => $request->partita_iva,
+                "fk_comuni" => $request->fk_comuni,
+                "fk_comuni_nascita" => $request->fk_comuni_nascita,
+                "privacy" => $request->privacy
+            ];
+            
+            $persona = new Persona($persona_values);
 
             if($persona->save())
             {
                 return "Inserimento avvenuto con successo!";
             }
+
+        }elseif($request->method('PUT'))
+        {
+            //quindi recupero il model
+            $persona = Persona::find($request->persona_id);
+            $persona_values = [
+                "nome" => $request->nome,
+                "cognome" => $request->cognome,
+                "data_nascita" => $request->data_nascita,
+                "indirizzo" => $request->indirizzo,
+                "telefono" => $request->telefono,
+                "telefono_ext" => $request->telefono_ext,
+                "privacy" => $request->privacy,
+                "email" => $request->email,
+                "codice_fiscale" => $request->codice_fiscale,
+                "note" => $request->note,
+                "fk_responsabile" => $request->fk_responsabile,
+                //image => ???
+                "fk_associazioni" => Auth::user()->fk_associazioni,
+                'fk_soci' => $request->has('socio')? $socio->id : NULL, 
+                "iban" => $request->iban,
+                "banca" => $request->banca,
+                "partita_iva" => $request->partita_iva,
+                "fk_comuni" => $request->fk_comuni,
+                "fk_comuni_nascita" => $request->fk_comuni_nascita,
+                "privacy" => $request->privacy
+            ];
+             // aggiorno
+             $persona->fill($persona_values);
+             if($persona->save())
+             {
+                 return "Aggiornamento avvenuto con successo";
+             }
+        }
 
 
     }
@@ -323,7 +505,7 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
 
         }
         else{
-            return Comune::all();
+            return "non posso ritorna tutti i comuni";
         }
     }
 
