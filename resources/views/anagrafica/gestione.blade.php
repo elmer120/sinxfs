@@ -201,10 +201,11 @@ $('#socio_checkbox').on('click',function(){
 		//se sono in modifica
 		if(persona != null)
 		{	//aggiungo gli id nascosti
-			$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+persona.socio_id+'">');
-			$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+persona.soci_cariche_direttivo_id+'">');
-			$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+persona.tessere_id+'">');
-			console.log('campi nascosti eliminati');
+		if($('input[name="socio_id"]').length == 0)
+		{
+			$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+((persona.socio_id==null) ? "": persona.socio_id)+'">');
+		}
+			console.log('campi nascosti aggiunti');
 		}
 	}
 	else{
@@ -238,6 +239,7 @@ $('#socio_checkbox').on('click',function(){
 		$('#socio_id').remove();
 		$('#soci_cariche_direttivo_id').remove();
 		$('#tessere_id').remove(); 
+		console.log('campi nascosti 2 eliminati');
 	}
 });
 $('#carica_direttivo_checkbox').on('click',function(){
@@ -249,7 +251,10 @@ $('#carica_direttivo_checkbox').on('click',function(){
 		//se sono in modifica
 		if(persona!=null)
 		{	//aggiungo gli id nascosti
-			$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+persona.soci_cariche_direttivo_id+'">');
+			if($('input[name="soci_cariche_direttivo_id"]').length == 0)
+			{ 
+				$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+((persona.soci_cariche_direttivo_id==null) ? "": persona.soci_cariche_direttivo_id)+'">');
+			}
 		}
 	}
 	else{
@@ -276,7 +281,10 @@ if(this.checked)//se checkbox tessere è abilitato
 	//se sono in modifica
 	if(persona!=null)
 	{	//aggiungo gli id nascosti
-			$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+persona.tessere_id+'">');
+		if($('input[name="tessere_id"]').length == 0)
+			{
+				$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+((persona.tessere_id==null) ? "": persona.tessere_id)+'">');
+			}
 	}
 }
 else{
@@ -516,7 +524,7 @@ function get_persona(id)
 									if(persona.socio_id != null)
 									{
 										//aggiungo l'id socio
-										$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+persona.socio_id+'">');
+										$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+((persona.socio_id==null) ? "": persona.socio_id)+'">');
 										$('input[name=socio]')[0].click();
 										$('#select_tipo').val(persona.fk_soci_tipologie);
 										$('input[name=richiesta_data]').val(persona.richiesta_data);
@@ -528,7 +536,7 @@ function get_persona(id)
 									if(persona.soci_cariche_direttivo_id != null)
 									{
 										//aggiungo l'id soci_cariche_direttivo
-										$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+persona.soci_cariche_direttivo_id+'">');
+										$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+((persona.soci_cariche_direttivo_id==null) ? "": persona.soci_cariche_direttivo_id)+'">');
 										$('input[name=carica_direttivo]')[0].click();
 										$('#select_carica').val(persona.fk_cariche_direttivo);
 										$('input[name=carica_direttivo_dal]').val(persona.carica_direttivo_dal);
@@ -538,7 +546,7 @@ function get_persona(id)
 									if(persona.tessere_id != null)
 									{
 										//aggiungo l'id tessera
-										$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+persona.tessere_id+'">');
+										$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+((persona.tessere_id==null) ? "": persona.tessere_id)+'">');
 										$('input[name=tessere]')[0].click();
 										$('input[name=numero]').val(persona.numero);
 										$('input[name=tessere_dal]').val(persona.tessere_dal);

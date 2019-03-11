@@ -249,29 +249,30 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
         } //se è un update
         elseif($request->isMethod('PUT'))
         {
-            //se la richiesta ha il socio id significa che è anche un socio
+            //se la richiesta ha il socio id e non è null, significa che era anche un socio 
             if($request->filled('socio_id'))
             {   
-                //quindi recupero il model
-                $socio = Socio::find($request->socio_id);
-                if($request->has('socio')) //devo aggiornare solo i valori
-                {
-                    //recupero i valori
-                    $socio_values = [
-                    'fk_soci_tipologie' => $request->fk_soci_tipologie,
-                    'richiesta_data' => $request->richiesta_data,
-                    'approvazione_data' => $request->approvazione_data,
-                    'scadenza_data' => $request->scadenza_data,
-                    //quota_scadenza_al
-                    'certificato_scadenza_al' => $request->certificato_scadenza_al
-                    ];
-                    // aggiorno
-                    $socio->fill($socio_values);
-                    $socio->save();
-                }else //cancello il socio
-                {
-                    $socio->delete();
-                }
+                    //quindi recupero il model
+                    $socio = Socio::find($request->socio_id);
+                    if($request->has('socio')) //devo aggiornare solo i valori
+                    {
+                        //recupero i valori
+                        $socio_values = [
+                        'fk_soci_tipologie' => $request->fk_soci_tipologie,
+                        'richiesta_data' => $request->richiesta_data,
+                        'approvazione_data' => $request->approvazione_data,
+                        'scadenza_data' => $request->scadenza_data,
+                        //quota_scadenza_al
+                        'certificato_scadenza_al' => $request->certificato_scadenza_al
+                        ];
+                        // aggiorno
+                        $socio->fill($socio_values);
+                        $socio->save();
+                    }else //cancello il socio
+                    {
+                        $socio->delete();
+                    }
+
             }else
             {
                 if($request->has('socio'))
@@ -309,6 +310,8 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
             }
         }elseif($request->isMethod('PUT')) //se è update
         {
+            
+
             //se la richiesta ha il tessere_id significa che è ha una tessera
             if($request->filled('tessere_id'))
             {   
@@ -365,7 +368,7 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
             }
         }elseif($request->method('PUT'))
         {
-            //se la richiesta ha il soci_cariche_direttivo_id significa che è un comp del direttivo
+            //se la richiesta ha il soci_cariche_direttivo_id e non è null significa che è era componente del direttivo
             if($request->filled('soci_cariche_direttivo_id'))
             {
                 //quindi recupero il model
@@ -387,7 +390,8 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
                     $socio_carica_direttivo->delete();
                 }
             }
-            else{
+            else
+            {
                 //se non ha carica l'aggiungo
                 if($request->has('carica_direttivo'))
                 {
