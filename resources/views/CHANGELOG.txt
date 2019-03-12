@@ -43,3 +43,6 @@ Seeding: SeedAssociazioneTable
    ReflectionException  : Class SeedAssociazioneTable does not exist
 
 soluzione: composer dump-autoload
+
+
+elimina persona (deve eliminare anche socio carica e tessera)

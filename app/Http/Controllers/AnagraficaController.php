@@ -270,7 +270,9 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
                         $socio->save();
                     }else //cancello il socio
                     {
+                        
                         $socio->delete();
+                        
                     }
 
             }else
@@ -311,8 +313,7 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
         }elseif($request->isMethod('PUT')) //se è update
         {
             
-
-            //se la richiesta ha il tessere_id significa che è ha una tessera
+            //se la richiesta ha il tessere_id significa che aveva una tessera
             if($request->filled('tessere_id'))
             {   
                 //quindi recupero il model
@@ -332,7 +333,10 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
                     $tessere->save();
                 }else //cancello la tessera
                 {
-                    $tessere->delete();
+                    if($tessere!=null)
+                    {
+                        $tessere->delete();
+                    }
                 }
             }
             else
@@ -386,8 +390,11 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
                     $socio_carica_direttivo->save();
                 }
                 else //cancello
-                {
-                    $socio_carica_direttivo->delete();
+                {   
+                    if($socio_carica_direttivo != null)
+                    {
+                        $socio_carica_direttivo->delete();
+                    }
                 }
             }
             else
@@ -474,6 +481,23 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
         }
 
 
+    }
+
+    public function deletePerson(Request $request)
+    {
+        if($request->filled('id'))
+        {
+            $id=$request->input('id');
+            $persona = Persona::find($id);
+            if($persona->delete())
+            {
+                return "Eliminazione effettuata";
+            }
+        }
+        else{
+            return "Errore nel eliminazione!";
+        }
+        
     }
 
      //ajax

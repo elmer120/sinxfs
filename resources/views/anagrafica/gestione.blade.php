@@ -199,14 +199,14 @@ $('#socio_checkbox').on('click',function(){
 		$( "input[name='scadenza_data']" ).attr('disabled',false);
 		$( "input[name='certificato_scadenza_al']" ).attr('disabled',false);
 		//se sono in modifica
-		if(persona != null)
+		/*if(persona != null)
 		{	//aggiungo gli id nascosti
 		if($('input[name="socio_id"]').length == 0)
 		{
 			$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+((persona.socio_id==null) ? "": persona.socio_id)+'">');
 		}
 			console.log('campi nascosti aggiunti');
-		}
+		}*/
 	}
 	else{
 		//disabilito i legend di socio
@@ -236,10 +236,10 @@ $('#socio_checkbox').on('click',function(){
 		$( "input[name='certificato_scadenza_al']" ).val('');
 
 		//rimuovo gli i campi nascosti di id
-		$('#socio_id').remove();
+		/*$('#socio_id').remove();
 		$('#soci_cariche_direttivo_id').remove();
 		$('#tessere_id').remove(); 
-		console.log('campi nascosti 2 eliminati');
+		console.log('campi nascosti 2 eliminati');*/
 	}
 });
 $('#carica_direttivo_checkbox').on('click',function(){
@@ -249,13 +249,13 @@ $('#carica_direttivo_checkbox').on('click',function(){
 		$( "input[name='carica_direttivo_dal']" ).attr('disabled',false);
 		$( "input[name='carica_direttivo_al']" ).attr('disabled',false);
 		//se sono in modifica
-		if(persona!=null)
+		/*if(persona!=null)
 		{	//aggiungo gli id nascosti
 			if($('input[name="soci_cariche_direttivo_id"]').length == 0)
 			{ 
 				$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+((persona.soci_cariche_direttivo_id==null) ? "": persona.soci_cariche_direttivo_id)+'">');
 			}
-		}
+		}*/
 	}
 	else{
 		//disabilito gli input di carica direttivo e faccio clear dei valori
@@ -266,7 +266,7 @@ $('#carica_direttivo_checkbox').on('click',function(){
 		$( "input[name='carica_direttivo_al']" ).attr('disabled',true);
 		$( "input[name='carica_direttivo_al']" ).val('');
 		//rimuovo il campo nascosto di id
-		$('#soci_cariche_direttivo_id').remove();
+		/*$('#soci_cariche_direttivo_id').remove();*/
 	}
 });
 
@@ -279,13 +279,13 @@ if(this.checked)//se checkbox tessere è abilitato
 	$( "input[name='tessere_al']" ).attr('disabled',false);
 	$( "input[name='tessere_tipo']" ).attr('disabled',false);
 	//se sono in modifica
-	if(persona!=null)
+	/*if(persona!=null)
 	{	//aggiungo gli id nascosti
 		if($('input[name="tessere_id"]').length == 0)
 			{
 				$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+((persona.tessere_id==null) ? "": persona.tessere_id)+'">');
 			}
-	}
+	}*/
 }
 else{
 	//disabilito gli input di tessere e faccio clear dei valori
@@ -298,7 +298,7 @@ else{
 	$( "input[name='tessere_tipo']" ).attr('disabled',true);
 	$( "input[name='tessere_tipo']" ).val('');
 	//rimuovo il campo nascosto di id
-	$('#tessere_id').remove(); 
+	/*$('#tessere_id').remove(); */
 }
 });
 $('#privacy_checkbox').on('click',function(e){
@@ -330,6 +330,10 @@ $('#btn_modifica').on('click',function()
 	//popolo la persona
 	get_persona(row_selected_id);
 
+});
+$('#btn_elimina').on('click',function()
+{
+		delete_persona(row_selected_id);
 });
 //all submit del form
 $('#form_persona').on('submit',function(e){
@@ -610,6 +614,26 @@ function submit(method)
 							}
 						}
 });
+}
+
+//chiamata ajax per popolare il modifica
+function delete_persona(id)
+{
+	$.ajax({
+             url: 'deletePerson',
+						 method : "DELETE",
+             data: {"id" : id},
+             success: function(data){
+							 	//stampo messaggio 
+								 UIkit.notification({
+											message: data,
+											status: '',
+											pos: 'bottom-center',
+											timeout: 3000
+										});
+						 },
+						 error:function (data) { alert('delete_persona errore chiamata ajax!');}
+	});
 }
 
 </script>
