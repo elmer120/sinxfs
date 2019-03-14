@@ -17,15 +17,16 @@
         <!-- <script type="text/javascript" src="<?//php //echo base_url('assets/jsCalendar/source/jsCalendar.lang.it.js');?>"></script> -->
         <title>@yield('tab_title','No tab_title!')</title>
 </head>
-<body>
-<div class="uk-grid" uk-grid> <!-- inizio griglia small gutter-->
+
+<body style="background-image:url({{ asset('storage/images/trianglify.png') }})">
+<div class="uk-grid" uk-grid> <!-- inizio griglia-->
   <div class="uk-width-1-1">         <!-- inizio colonna -->  
     <nav class="uk-background-primary" uk-navbar> <!-- navbar -->
         <div class="uk-navbar-left">
           <ul class="uk-navbar-nav">
             <li> <!-- logo -->
               <a href="" class="uk-navbar-item uk-logo">
-                <img class="uk-height-1-1" src="https://picsum.photos/75" alt="Sinx"/>
+                <img class="uk-height-1-1" src="{{ asset('storage/images/logo.png') }}" style="width: 75px" alt="Sinx"/>
               </a>
             </li>
             <li> <!-- versione -->
@@ -39,10 +40,172 @@
                 <div class="uk-light uk-text-small uk-visible@m">@lang('navbar.presentation_sw') </div>
           </div>
         </div>
-        <div class="uk-navbar-right">
-          <div class="uk-navbar-item"> <!-- logout -->
-            <a uk-toggle="target: #logout" class="uk-button uk-button-secondary">@lang('navbar.logout')</a>
-          </div>
+        <div class="uk-navbar-right uk-width-auto">
+            <!-- Menu principale -->
+            <ul class="uk-navbar-nav ">
+                        <li>
+                            <!-- pulsante -->
+                            <div class="uk-navbar-item">
+                                    <a href="" class="uk-light" uk-icon="icon: grid; ratio: 3;"></a>
+                            </div>
+                            <!-- dropdown-->
+                            <div class="uk-navbar-dropdown uk-width-large" uk-drop="mode: click">
+                        
+                                <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                                        <li class="uk-nav-header">Utente</li>
+                                      <!-- dati utente -->
+                                    
+                                      <ul class="uk-list">
+                                          <li>
+                                              <span uk-icon="user"></span>
+                                              <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->username }} </span>
+                                          </li>
+                                          <li>
+                                              <span uk-icon="info"></span>
+                                              <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->nome }} </span>
+                                          </li>
+                                          <li>
+                                              <span uk-icon="bolt"></span>
+                                              <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->livello }} </span>
+                                          </li>
+                                      </ul>
+                            
+                                      <li class="uk-nav-divider"></li>
+                                  
+                                          <li class="uk-parent">
+                                              <!--Associazione-->
+                                              <a href="#"> 
+                                                  <span class="uk-margin-small-right" uk-icon="bookmark"></span> <!-- icona -->
+                                                   @lang('menu.associazione')
+                                              </a>
+                                                  <ul class="uk-nav-sub">
+                                                      <li><a class="item" href='{{ route("dati_associazione") }}' title="Per gestire l'Associazione">
+                                                        <span class="uk-margin-small-right" uk-icon="italic"></span>A--- @lang('menu.dati_associazione') </a></li>
+                                                  </ul>
+                                          </li>
+                            
+                                          <li class="uk-parent"> 
+                                              <!-- anagrafica -->
+                                              <a href="#">
+                                                  <span class="uk-margin-small-right" uk-icon="users"></span> <!-- icona -->
+                                                  @lang('menu.anagrafica')
+                                              </a>
+                                                <ul class="uk-nav-sub">
+                                                    <li><a class="item" href='<?// echo site_url("anagrafica/associati")?>'><span class="uk-margin-small-right" uk-icon="users"></span>Axxx -@lang('menu.associati')</a></li>
+                                                    <li><a class="item" href='<?// echo site_url("anagrafica/collaboratori")?>'><span class="uk-margin-small-right" uk-icon="user"></span>Axxx -@lang('menu.altri')</a></li>
+                                                    <li><a class="item" href='<?// echo site_url("anagrafica/csv")?>'><span class="uk-margin-small-right" uk-icon="copy"></span>Axxx -@lang('menu.importa_csv')</a></li>
+                                                    <li><a class="item" href='{{ route("gestione") }}'><span class="uk-margin-small-right" uk-icon="search"></span>Aox- -@lang('menu.cerca')</a></li>
+                                                    <li><a class="item" href='{{ route("rubrica") }}'><span class="uk-margin-small-right" uk-icon="list"></span>Aola -@lang('menu.rubrica')</a></li>
+                                                    <li><a class="item" href='{{ route("libro_soci") }}'><span class="uk-margin-small-right" uk-icon="push"></span>Aola -@lang('menu.libro_soci')</a></li>     
+                                                </ul>
+                                          </li>
+                                              
+                            
+                                          <li class="uk-parent"> 
+                                            <!--contabilitĂ -->
+                                            <a href="#">
+                                                <span class="uk-margin-small-right" uk-icon="album"></span> <!-- icona -->
+                                                @lang('menu.contabilita')
+                                            </a>
+                                              
+                                                  <ul class="uk-nav-sub">
+                                                      <li><a class="item" href='./InsPrimanota.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.prima_nota')</a></li>
+                                                      <li><a class="item" href='./InsRicFisc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.ricevuta')</a></li>
+                                                      <li><a class="item" href='./InsFattura.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.fattura')</a></li>
+                                                      <li><a class="item" href='./InsContoEconomico.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.conto_economico')</a></li>
+                                                      <li><a class="item" href='./InsStatoPatrimoniale.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.stato_patrimoniale')</a></li>
+                                                      <li><a class="item" href='./Rendiconto.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.rendiconto')</a></li>
+                                                      <li><a class="item" href='./Nuovo_Anno_soc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.nuovo_anno_sociale')</a></li> 
+                                                  </ul>
+                                          </li>
+                                              
+                            
+                                          <li class="uk-parent"> 
+                                               <!--gestione-->
+                                            <a href="#">
+                                                <span class="uk-margin-small-right" uk-icon="cog"></span> <!-- icona -->
+                                                @lang('menu.gestione')
+                                            </a>         
+                                                  
+                                                  <ul class="uk-nav-sub">
+                                                      <li><a class="item" href='<?// echo site_url("gestione/moduli")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxa -@lang('menu.moduli')</a></li>
+                                                      <li><a class="item" href='<?// echo site_url("gestione/calendario")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.calendario')</a></li>
+                                                      <li><a class="item" href='<?// echo site_url("gestione/rapidi")?>'><span class="uk-margin-small-right" uk-icon="link"></span>Axxx - @lang('menu.rapidi')</a></li>     
+                                                      <li><a class="item" href='<?// echo site_url("gestione/blocco_note")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Ao-a - @lang('menu.blocco_note')</a></li>
+                                                      <li><a class="item" href='<?// echo site_url("gestione/e_mail")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.e_mail')</a></li>
+                                                      <li><a class="item" href='{{ route("utenti") }}'><span class="uk-margin-small-right" uk-icon="italic"></span>Aola -@lang('menu.utenti')</a></li>
+                                                      <li><a class="item" href='<?// echo site_url("gestione/files")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axx- -@lang('menu.files_immagini')</a></li>
+                                                      <li><a class="item" href='<?// echo site_url("gestione/log")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.log')</a></li>
+                                                      <li><a class="item" href='<?// echo site_url("gestione/backup")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx - @lang('menu.backup')</a></li>        
+                                                  </ul>
+                                          </li>
+                            
+                                          <li class="uk-parent"> 
+                                            <!--specifiche-->
+                                            <a href="#">
+                                                <span class="uk-margin-small-right" uk-icon="info"></span> <!-- icona -->
+                                                @lang('menu.specifiche')
+                                            </a>
+                                                  
+                                                  <ul class="uk-nav-sub">
+                                                      <li><a class="item" href='./Scheda_regioni.php'><span class="uk-margin-small-right" uk-icon="italic"></span>A-x- -Regioni Province e Comuni</a></li>
+                                                      <li><a class="item" href='./nclasse.php'><span class="uk-margin-small-right" uk-icon="italic"></span>A-x- -@lang('menu.funzioni_associati')</a></li>
+                                                      <li><a class="item" href='./nmateria.php'><span class="uk-margin-small-right" uk-icon="italic"></span>A-x- -@lang('menu.tipologia_associati')</a></li>
+                                                      <li><a class="item" href='./Licenza.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aola -@lang('menu.licenza')</a></li>        
+                                                  </ul>
+                                          </li>
+                            
+                                              <li>
+                                                  <a class="item" href='./Manuale.php'>
+                                                  <span class="uk-margin-small-right" uk-icon="question"></span> <!-- icona -->
+                                                  @lang('menu.manuale')
+                                                  </a>
+                                              </li>
+                            
+                                              <li>
+                                                    
+                                                  <a uk-toggle="target: #logout" class="item" href='./logout.php'>
+                                                  <span class="uk-margin-small-right" uk-icon="sign-out"></span> <!-- icona -->
+                                                    @lang('navbar.logout')
+                                                  </a>
+                                              </li>
+                            
+                                            <li class="uk-nav-divider"></li>
+                                                <!--dati associazione-->
+                                                    <ul class="uk-list">
+                                                        <li>
+                                                            <span uk-icon="info"></span>
+                                                            <span class="uk-text-small uk-text-meta uk-text-capitalize">{{ $associazione->nome }}</span>
+                                                        </li>
+                                                        <li>
+                                                            <div uk-icon="location"></div>
+                                                            <div class="uk-text-small uk-text-meta uk-text-break">{{ $associazione->indirizzo }}</div>
+                                                        </li>
+                                                    </ul>
+                                                <!-- link rapidi ai siti attinenti all'associazione -->
+                                            <?// $links=quick_links(); //var_dump($links);
+                                            ?>
+                                                <h6 class="uk-heading-line uk-text-center"><span>Link rapidi</span></h6>
+                                                <ul class="uk-iconnav">
+                                                    <li uk-tooltip="title:@lang('menu.sito_web'); pos: bottom"><a href="<?(!empty($links['web_site']))? $links['web_site'] : '' ?>" target="_blank" uk-icon="icon: world"></a></li>
+                                                    <li uk-tooltip="title:@lang('menu.web_mail'); pos: bottom"><a href="<?(!empty($links['web_mail'])) ? $links['web_mail'] : '' ?>" target="_blank" uk-icon="icon: mail"></a></li>
+                                                    <li uk-tooltip="title:@lang('menu.web_mail_pec'); pos: bottom"><a href="<?(!empty($links['web_mail_pec'])) ? $links['web_mail_pec'] : '' ?>" target="_blank" uk-icon="icon: mail"></a></li>
+                                                    <li uk-tooltip="title:@lang('menu.facebook'); pos: bottom"><a href="<?(!empty($links['facebook'])) ? $links['facebook'] : '' ?>" target="_blank" uk-icon="icon: facebook"></a></li>
+                                                    <li uk-tooltip="title:@lang('menu.instagram'); pos: bottom"><a href="<?(!empty($links['instagram'])) ? $links['instagram'] : '' ?>" target="_blank" uk-icon="icon: instagram"></a></li>
+                                                    <li uk-tooltip="title:@lang('menu.youtube'); pos: bottom"><a href="<?(!empty($links['youtube'])) ? $links['youtube'] : '' ?>" target="_blank" uk-icon="icon: youtube"></a></li>
+                                                </ul>
+                                                <ul class="uk-iconnav">
+                                                    <li uk-tooltip="title:<?// echo lang('twitter'); ?>; pos: bottom"><a href="@(!empty($links['twitter'])) ? $links['twitter'] : '' ?>" target="_blank" uk-icon="icon: twitter"></a></li>
+                                                    <li uk-tooltip="title:<?// echo lang('home_banking'); ?>; pos: bottom"><a href="@(!empty($links['home_banking'])) ? $links['home_banking'] : '' ?>" target="_blank" uk-icon="icon: home"></a></li>
+                                                </ul>
+                                </ul>      
+
+                            </div>
+
+                        </li>
+                </ul>
+
+          
         </div>
 
 
@@ -166,159 +329,10 @@
 </div>
 
 <!--colonna menu desktop (mostrata > 960px)-->
-<div class="uk-width-auto uk-visible@m" style="min-width: 250px">   <!-- inizio colonna 1/6 -->
+<!--div class="uk-width-1-6 uk-visible@m" style=""-->   <!-- inizio colonna 1/6 -->
+    
 
-  <div class="uk-card uk-card-default uk-card-small uk-card-hover">
-      <div class="uk-card-header">
-          <!-- dati utente -->
-        
-          <ul class="uk-list">
-              <li>
-                  <span uk-icon="user"></span>
-                  <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->username }} </span>
-              </li>
-              <li>
-                  <span uk-icon="info"></span>
-                  <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->nome }} </span>
-              </li>
-              <li>
-                  <span uk-icon="bolt"></span>
-                  <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->livello }} </span>
-              </li>
-          </ul>
-      </div>
-      <div class="uk-card-body uk-link-reset">
-          <ul class="uk-nav uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true">
-              <li class="uk-parent">
-                  <!--Associazione-->
-                  <a href="#"> 
-                      <span class="uk-margin-small-right" uk-icon="bookmark"></span> <!-- icona -->
-                       @lang('menu.associazione')
-                  </a>
-                      <ul class="uk-nav-sub">
-                          <li><a class="item" href='{{ route("dati_associazione") }}' title="Per gestire l'Associazione">
-                            <span class="uk-margin-small-right" uk-icon="italic"></span>A--- @lang('menu.dati_associazione') </a></li>
-                      </ul>
-              </li>
 
-              <li class="uk-parent"> 
-                  <!-- anagrafica -->
-                  <a href="#">
-                      <span class="uk-margin-small-right" uk-icon="users"></span> <!-- icona -->
-                      @lang('menu.anagrafica')
-                  </a>
-                  <ul class="uk-nav-sub">
-                      <li><a class="item" href='<?// echo site_url("anagrafica/associati")?>'><span class="uk-margin-small-right" uk-icon="users"></span>Axxx -@lang('menu.associati')</a></li>
-                      <li><a class="item" href='<?// echo site_url("anagrafica/collaboratori")?>'><span class="uk-margin-small-right" uk-icon="user"></span>Axxx -@lang('menu.altri')</a></li>
-                      <li><a class="item" href='<?// echo site_url("anagrafica/csv")?>'><span class="uk-margin-small-right" uk-icon="copy"></span>Axxx -@lang('menu.importa_csv')</a></li>
-                      <li><a class="item" href='{{ route("gestione") }}'><span class="uk-margin-small-right" uk-icon="search"></span>Aox- -@lang('menu.cerca')</a></li>
-                      <li><a class="item" href='{{ route("rubrica") }}'><span class="uk-margin-small-right" uk-icon="list"></span>Aola -@lang('menu.rubrica')</a></li>
-                      <li><a class="item" href='{{ route("libro_soci") }}'><span class="uk-margin-small-right" uk-icon="push"></span>Aola -@lang('menu.libro_soci')</a></li>     
-                  </ul>
-              </li>
-                  
-
-              <li class="uk-parent"> 
-                <!--contabilitĂ -->
-          <a href="#">
-            <span class="uk-margin-small-right" uk-icon="album"></span> <!-- icona -->
-            @lang('menu.contabilita')
-          </a>
-                  
-                      <ul class="uk-nav-sub">
-                          <li><a class="item" href='./InsPrimanota.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.prima_nota')</a></li>
-                          <li><a class="item" href='./InsRicFisc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.ricevuta')</a></li>
-                          <li><a class="item" href='./InsFattura.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.fattura')</a></li>
-                          <li><a class="item" href='./InsContoEconomico.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.conto_economico')</a></li>
-                          <li><a class="item" href='./InsStatoPatrimoniale.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.stato_patrimoniale')</a></li>
-                          <li><a class="item" href='./Rendiconto.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.rendiconto')</a></li>
-                          <li><a class="item" href='./Nuovo_Anno_soc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.nuovo_anno_sociale')</a></li> 
-                      </ul>
-              </li>
-                  
-
-              <li class="uk-parent"> 
-                   <!--gestione-->
-          <a href="#">
-            <span class="uk-margin-small-right" uk-icon="cog"></span> <!-- icona -->
-            @lang('menu.gestione')
-          </a>         
-                      
-                      <ul class="uk-nav-sub">
-                          <li><a class="item" href='<?// echo site_url("gestione/moduli")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxa -@lang('menu.moduli')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/calendario")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.calendario')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/rapidi")?>'><span class="uk-margin-small-right" uk-icon="link"></span>Axxx - @lang('menu.rapidi')</a></li>     
-                          <li><a class="item" href='<?// echo site_url("gestione/blocco_note")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Ao-a - @lang('menu.blocco_note')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/e_mail")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.e_mail')</a></li>
-                          <li><a class="item" href='{{ route("utenti") }}'><span class="uk-margin-small-right" uk-icon="italic"></span>Aola -@lang('menu.utenti')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/files")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axx- -@lang('menu.files_immagini')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/log")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.log')</a></li>
-                          <li><a class="item" href='<?// echo site_url("gestione/backup")?>'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx - @lang('menu.backup')</a></li>        
-                      </ul>
-              </li>
-
-              <li class="uk-parent"> 
-          <!--specifiche-->
-          <a href="#">
-            <span class="uk-margin-small-right" uk-icon="info"></span> <!-- icona -->
-            @lang('menu.specifiche')
-          </a>
-                      
-                      <ul class="uk-nav-sub">
-                          <li><a class="item" href='./Scheda_regioni.php'><span class="uk-margin-small-right" uk-icon="italic"></span>A-x- -Regioni Province e Comuni</a></li>
-                          <li><a class="item" href='./nclasse.php'><span class="uk-margin-small-right" uk-icon="italic"></span>A-x- -@lang('menu.funzioni_associati')</a></li>
-                          <li><a class="item" href='./nmateria.php'><span class="uk-margin-small-right" uk-icon="italic"></span>A-x- -@lang('menu.tipologia_associati')</a></li>
-                          <li><a class="item" href='./Licenza.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aola -@lang('menu.licenza')</a></li>        
-                      </ul>
-              </li>
-
-                  <li>
-                      <a class="item" href='./Manuale.php'>
-                      <span class="uk-margin-small-right" uk-icon="question"></span> <!-- icona -->
-                      @lang('menu.manuale')
-                      </a>
-                  </li>
-
-                  <li>
-                      <a class="item"href='./logout.php'>
-                      <span class="uk-margin-small-right" uk-icon="sign-out"></span> <!-- icona -->
-                      @lang('menu.uscita')
-                      </a>
-                  </li>
-
-          </ul>
-      </div>
-      <div class="uk-card-footer">
-          <!--dati associazione-->
-              <ul class="uk-list">
-                  <li>
-                      <span uk-icon="info"></span>
-                      <span class="uk-text-small uk-text-meta uk-text-capitalize"><??></span>
-                  </li>
-                  <li>
-                      <span uk-icon="location"></span>
-                      <span class="uk-text-small uk-text-meta uk-text-capitalize"><? ?></span>
-                  </li>
-              </ul>
-          <!-- link rapidi ai siti attinenti all'associazione -->
-    <?// $links=quick_links(); //var_dump($links);
-    ?>
-          <h6 class="uk-heading-line uk-text-center"><span>Link rapidi</span></h6>
-          <ul class="uk-iconnav">
-      <li uk-tooltip="title:@lang('menu.sito_web'); pos: bottom"><a href="<?(!empty($links['web_site']))? $links['web_site'] : '' ?>" target="_blank" uk-icon="icon: world"></a></li>
-      <li uk-tooltip="title:@lang('menu.web_mail'); pos: bottom"><a href="<?(!empty($links['web_mail'])) ? $links['web_mail'] : '' ?>" target="_blank" uk-icon="icon: mail"></a></li>
-      <li uk-tooltip="title:@lang('menu.web_mail_pec'); pos: bottom"><a href="<?(!empty($links['web_mail_pec'])) ? $links['web_mail_pec'] : '' ?>" target="_blank" uk-icon="icon: mail"></a></li>
-      <li uk-tooltip="title:@lang('menu.facebook'); pos: bottom"><a href="<?(!empty($links['facebook'])) ? $links['facebook'] : '' ?>" target="_blank" uk-icon="icon: facebook"></a></li>
-      <li uk-tooltip="title:@lang('menu.instagram'); pos: bottom"><a href="<?(!empty($links['instagram'])) ? $links['instagram'] : '' ?>" target="_blank" uk-icon="icon: instagram"></a></li>
-      <li uk-tooltip="title:@lang('menu.youtube'); pos: bottom"><a href="<?(!empty($links['youtube'])) ? $links['youtube'] : '' ?>" target="_blank" uk-icon="icon: youtube"></a></li>
-    </ul>
-    <ul class="uk-iconnav">
-          <li uk-tooltip="title:<?// echo lang('twitter'); ?>; pos: bottom"><a href="@(!empty($links['twitter'])) ? $links['twitter'] : '' ?>" target="_blank" uk-icon="icon: twitter"></a></li>
-            <li uk-tooltip="title:<?// echo lang('home_banking'); ?>; pos: bottom"><a href="@(!empty($links['home_banking'])) ? $links['home_banking'] : '' ?>" target="_blank" uk-icon="icon: home"></a></li>
-          </ul>
-          
-      </div>
-  </div>
 </div> <!--fine colonna -->
 
 <div class="uk-width-expand@m">   <!-- inizio colonna (prende il posto che rimane della "riga")  -->
@@ -327,7 +341,7 @@
 
   <div class="uk-section"> <!-- sezione -->
         
-        <div class="uk-container uk-container-expand uk-padding-remove"> <!-- container (padding) -->
+        <div class="uk-container uk-container-expand"> <!-- container (padding) -->
             
             <h3 class="uk-text-center uk-heading-line"> <!-- titolo pagina -->
                     <span>@yield('page_title','No title page!')</span>

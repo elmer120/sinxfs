@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth']],function(){
     });
     
     Route::prefix('associazione')->group(function () {
-        Route::get('dati_associazione','AssociazioneController@DatiAssociazione')->name('dati_associazione');
+        Route::get('dati_associazione','AssociazioneController@edit')->name('dati_associazione');
     });
     
     Route::prefix('contabilita')->group(function () {

@@ -44,5 +44,6 @@ Seeding: SeedAssociazioneTable
 
 soluzione: composer dump-autoload
 
-
-elimina persona (deve eliminare anche socio carica e tessera)
+gestion anagrafica:
+        ottimizzare modifica lato server
+        elimina persona (deve eliminare anche socio carica e tessera)
