@@ -18,10 +18,10 @@
         <title>@yield('tab_title','No tab_title!')</title>
 </head>
 
-<body style="background-image:url({{ asset('storage/images/trianglify.png') }})">
+<body class="uk-background-muted">
 <div class="uk-grid" uk-grid> <!-- inizio griglia-->
   <div class="uk-width-1-1">         <!-- inizio colonna -->  
-    <nav class="uk-background-primary" uk-navbar> <!-- navbar -->
+    <nav class="uk-background-primary uk-box-shadow-medium" uk-navbar> <!-- navbar -->
         <div class="uk-navbar-left">
           <ul class="uk-navbar-nav">
             <li> <!-- logo -->
@@ -40,38 +40,20 @@
                 <div class="uk-light uk-text-small uk-visible@m">@lang('navbar.presentation_sw') </div>
           </div>
         </div>
-        <div class="uk-navbar-right uk-width-auto">
+        <div class="uk-navbar-right uk-width-auto uk-margin-small-right">
             <!-- Menu principale -->
             <ul class="uk-navbar-nav ">
                         <li>
                             <!-- pulsante -->
                             <div class="uk-navbar-item">
-                                    <a href="" class="uk-light" uk-icon="icon: grid; ratio: 3;"></a>
+                                    <a href="" class="uk-light" uk-icon="icon: grid; ratio: 2;"></a>
+                                    
                             </div>
                             <!-- dropdown-->
                             <div class="uk-navbar-dropdown uk-width-large" uk-drop="mode: click">
                         
-                                <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
-                                        <li class="uk-nav-header">Utente</li>
-                                      <!-- dati utente -->
-                                    
-                                      <ul class="uk-list">
-                                          <li>
-                                              <span uk-icon="user"></span>
-                                              <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->username }} </span>
-                                          </li>
-                                          <li>
-                                              <span uk-icon="info"></span>
-                                              <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->nome }} </span>
-                                          </li>
-                                          <li>
-                                              <span uk-icon="bolt"></span>
-                                              <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->livello }} </span>
-                                          </li>
-                                      </ul>
-                            
-                                      <li class="uk-nav-divider"></li>
-                                  
+                                <ul class="uk-nav-primary uk-nav-parent-icon" uk-nav>
+
                                           <li class="uk-parent">
                                               <!--Associazione-->
                                               <a href="#"> 
@@ -100,7 +82,6 @@
                                                 </ul>
                                           </li>
                                               
-                            
                                           <li class="uk-parent"> 
                                             <!--contabilitĂ -->
                                             <a href="#">
@@ -118,8 +99,7 @@
                                                       <li><a class="item" href='./Nuovo_Anno_soc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.nuovo_anno_sociale')</a></li> 
                                                   </ul>
                                           </li>
-                                              
-                            
+                                                     
                                           <li class="uk-parent"> 
                                                <!--gestione-->
                                             <a href="#">
@@ -155,20 +135,12 @@
                                                   </ul>
                                           </li>
                             
-                                              <li>
-                                                  <a class="item" href='./Manuale.php'>
-                                                  <span class="uk-margin-small-right" uk-icon="question"></span> <!-- icona -->
-                                                  @lang('menu.manuale')
-                                                  </a>
-                                              </li>
-                            
-                                              <li>
-                                                    
-                                                  <a uk-toggle="target: #logout" class="item" href='./logout.php'>
-                                                  <span class="uk-margin-small-right" uk-icon="sign-out"></span> <!-- icona -->
-                                                    @lang('navbar.logout')
-                                                  </a>
-                                              </li>
+                                            <li>
+                                                <a class="item" href='./Manuale.php'>
+                                                    <span class="uk-margin-small-right" uk-icon="question"></span> <!-- icona -->
+                                                    @lang('menu.manuale')
+                                                </a>
+                                            </li>
                             
                                             <li class="uk-nav-divider"></li>
                                                 <!--dati associazione-->
@@ -178,14 +150,14 @@
                                                             <span class="uk-text-small uk-text-meta uk-text-capitalize">{{ $associazione->nome }}</span>
                                                         </li>
                                                         <li>
-                                                            <div uk-icon="location"></div>
-                                                            <div class="uk-text-small uk-text-meta uk-text-break">{{ $associazione->indirizzo }}</div>
+                                                            <span uk-icon="location"></span>
+                                                            <span class="uk-text-small uk-text-meta uk-text-capitalize">{{ $associazione->indirizzo }}</span>
                                                         </li>
                                                     </ul>
                                                 <!-- link rapidi ai siti attinenti all'associazione -->
                                             <?// $links=quick_links(); //var_dump($links);
                                             ?>
-                                                <h6 class="uk-heading-line uk-text-center"><span>Link rapidi</span></h6>
+                                                <h6 class="uk-heading-line uk-text-center uk-margin-remove-top"><span>Link rapidi</span></h6>
                                                 <ul class="uk-iconnav">
                                                     <li uk-tooltip="title:@lang('menu.sito_web'); pos: bottom"><a href="<?(!empty($links['web_site']))? $links['web_site'] : '' ?>" target="_blank" uk-icon="icon: world"></a></li>
                                                     <li uk-tooltip="title:@lang('menu.web_mail'); pos: bottom"><a href="<?(!empty($links['web_mail'])) ? $links['web_mail'] : '' ?>" target="_blank" uk-icon="icon: mail"></a></li>
@@ -193,8 +165,6 @@
                                                     <li uk-tooltip="title:@lang('menu.facebook'); pos: bottom"><a href="<?(!empty($links['facebook'])) ? $links['facebook'] : '' ?>" target="_blank" uk-icon="icon: facebook"></a></li>
                                                     <li uk-tooltip="title:@lang('menu.instagram'); pos: bottom"><a href="<?(!empty($links['instagram'])) ? $links['instagram'] : '' ?>" target="_blank" uk-icon="icon: instagram"></a></li>
                                                     <li uk-tooltip="title:@lang('menu.youtube'); pos: bottom"><a href="<?(!empty($links['youtube'])) ? $links['youtube'] : '' ?>" target="_blank" uk-icon="icon: youtube"></a></li>
-                                                </ul>
-                                                <ul class="uk-iconnav">
                                                     <li uk-tooltip="title:<?// echo lang('twitter'); ?>; pos: bottom"><a href="@(!empty($links['twitter'])) ? $links['twitter'] : '' ?>" target="_blank" uk-icon="icon: twitter"></a></li>
                                                     <li uk-tooltip="title:<?// echo lang('home_banking'); ?>; pos: bottom"><a href="@(!empty($links['home_banking'])) ? $links['home_banking'] : '' ?>" target="_blank" uk-icon="icon: home"></a></li>
                                                 </ul>
@@ -203,9 +173,68 @@
                             </div>
 
                         </li>
-                </ul>
+            </ul>
+            <!-- Menu utente -->
+            <ul class="uk-navbar-nav ">
+                        <li>
+                            <!-- pulsante utente -->
+                            <div class="uk-navbar-item">
+                                    <a href="">
+                                            <img class="uk-border-circle" src="http://i.pravatar.cc/50" width="50" height="50" alt="Border circle">
+                                    </a>
+                            </div>
+                            <!-- dropdown -->
+                            <div class="uk-navbar-dropdown uk-width-medium uk-padding-remove" uk-drop="mode: click; pos: bottom-left;">
+                        
+                                    <ul class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                                        <!-- dati utente -->
+                                            <!-- card -->
+                                            <div class="uk-card uk-card-default">
+                                                    <div class="uk-card-header">
+                                                            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                                                                    <div class="uk-width-auto">
+                                                                        <img class="uk-border-circle" width="75" height="75" src="http://i.pravatar.cc/75">
+                                                                    </div>
+                                                                    <div class="uk-width-expand">
+                                                                        <h3 class="uk-card-title uk-margin-remove-bottom">{{ Auth::user()->username }}</h3>
+                                                                        <p class="uk-text-meta uk-margin-remove-top">{{ Auth::user()->livello }}</p>
+                                                                    </div>
+                                                                </div>
+                                                    </div>
+                                                    <div class="uk-card-body">
+                                                            <!-- list -->
+                                                        <ul class="uk-list">
+                                                            <li>
+                                                                <span uk-icon="user"></span>
+                                                                <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->username }} </span>
+                                                            </li>
+                                                            <li>
+                                                                <span uk-icon="info"></span>
+                                                                <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->nome }} </span>
+                                                            </li>
+                                                            <li>
+                                                                <span uk-icon="bolt"></span>
+                                                                <span class="uk-text-small uk-text-meta uk-text-capitalize"> {{ Auth::user()->livello }} </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="uk-card-footer">
+                                                            <li>
+                                                                    <a uk-toggle="target: #logout" class="uk-button uk-button-primary" href='./logout.php'>
+                                                                    <span class="uk-margin-small-right" uk-icon="sign-out"></span> <!-- icona -->
+                                                                        @lang('navbar.logout')
+                                                                    </a>
+                                                            </li>
+                                                    </div>
+                                            
+                                        </div>
+                                          
 
-          
+                                    </ul>      
+    
+                            </div>
+                        </li>
+            </ul>
         </div>
 
 
@@ -339,7 +368,7 @@
 
    @component('components.breadcrumb') @endcomponent
 
-  <div class="uk-section"> <!-- sezione -->
+  <div class="uk-section uk-padding-small"> <!-- sezione -->
         
         <div class="uk-container uk-container-expand"> <!-- container (padding) -->
             

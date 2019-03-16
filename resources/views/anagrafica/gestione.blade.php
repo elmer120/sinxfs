@@ -101,8 +101,8 @@ function create_table(){
 	tooltips:true,
  	columns:[ //definisco le colonne
 		//title = titolo , field = chiave array
-		{ title:"#", formatter:"rownum"},
-		{ title:"Azioni", width:110, resizable:false },
+		{ title:"N°", width:"15",formatter:"rownum"},
+		//{ title:"Azioni", width:110, resizable:false },
 		{	//creo gruppo persona
 			title: 'Persona',
 			columns:[
