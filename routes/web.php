@@ -20,8 +20,10 @@ Auth::routes();
 Route::group(['middleware' => ['auth']],function(){
 
     Route::get('/','DashboardController@Home')->name('dashboard');
+
     Route::prefix('anagrafica')->group(function () {
         Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
+
         //chiamate ajax
         Route::post('regioni','AnagraficaController@regioni');
         Route::post('province','AnagraficaController@province');
@@ -43,6 +45,11 @@ Route::group(['middleware' => ['auth']],function(){
     
     Route::prefix('associazione')->group(function () {
         Route::get('dati_associazione','AssociazioneController@edit')->name('dati_associazione');
+         //chiamate ajax
+        Route::post('regioni','AssociazioneController@regioni');
+        Route::post('province','AssociazioneController@province');
+        Route::post('comuni','AssociazioneController@comuni');
+
     });
     
     Route::prefix('contabilita')->group(function () {

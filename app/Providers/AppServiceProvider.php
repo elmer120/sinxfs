@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 
 use App\Models\Associazione;
+use App\Models\Regione;
+use App\Models\Provincia;
+use App\Models\Comune;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +36,13 @@ class AppServiceProvider extends ServiceProvider
 
         //dati condivisi in tutte le view
         $associazione = Associazione::find(1);
+        $comune = Comune::find($associazione->fk_comuni,['fk_province']);
+        $provincia = Provincia::find($comune,['fk_regioni']);
+        $associazione->fk_province = $comune['fk_province'];
+        $associazione->fk_regioni = $provincia[0]['fk_regioni'];
+        
         View::share('associazione',$associazione);
+     
+       
     }
 }

@@ -121,5 +121,106 @@
 
 </div> <!--fine colonna -->
 
+<script>
+
+//al caricamento della pagina
+$(document).ready(function(){
+	//setto le impostazioni ajax comuni
+	$.ajaxSetup({
+	type: 'POST',
+    cache: false,  
+    headers: {
+    'X-CSRF-Token': '{{ csrf_token() }}',
+     }
+		//dataType: 'text', //Tipo di dato che si riceve di ritorno
+    //contentType : 'application/json', //tipo di contenuto inviato al serve
+	});
+	//popolo il select regioni con tutte
+	get_regioni('#select_regioni');
+	//popolo il select province di nascita con tutte
+	get_province('{{ $associazione->fk_province }}','#select_province');
+   // get_province(null,'#select_province');
+});
+// ---- EVENTI ----
+//alla selezione della regione di residenza carico le corrispondenti province
+$('#select_regioni').on('change',function(){
+	get_province(this.value,'#select_province');
+});
+
+//alla selezione della provincia di nascita carico i corrispondenti comuni
+$('#select_province').on('change',function(){
+	get_comuni(this.value,'#select_comuni_nascita');
+});
+
+//alla selezione della provincia di residenza carico i corrispondenti comuni
+$('#select_comuni').on('change',function(){
+	get_comuni(this.value,'#select_comuni');
+});
+
+
+
+//-- CHIAMATE AJAX ------
+//chiamata ajax per popolare il select delle regioni
+function get_regioni(id_element) {
+    $.ajax({
+        url: 'regioni',
+        data: '',
+        success: function(data){
+		 $(id_element).html('<option value="" disabled selected>Scegli la regione</option>');
+          for (let i = 0; i < data.length; i++) {
+            var id = data[i].id;
+            var name = data[i].nome;
+            var option = "<option value='"+id+"'>"+name+"</option>"; 
+            $(id_element).append(option);
+          }
+        },
+        error: function(data) { 
+             alert(" Regioni: Errore nella chiamata ajax!");
+        }
+   });
+}
+//chiamata ajax per popolare il select delle provincie
+function get_province(id_select,id_element) {
+	//console.log(id_select);
+          $.ajax({
+             url: 'province',
+              data: {"region_select" : id_select},
+              success: function(data){
+									$(id_element).html('<option value="" disabled selected>Scegli la provincia</option>');
+                  //popolo le province
+                  for (let i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].nome;
+                    var option = "<option value='"+id+"'>"+name+"</option>"; 
+                    $(id_element).append(option);
+                  }
+              },
+              error: function(data) { 
+                alert("Province: Errore nella chiamata ajax!");
+              }
+         });
+}
+ //chiamata ajax per popolare il select dei comuni
+function get_comuni(id_select,id_element){
+            $.ajax({
+                url: 'comuni',
+                data: {"provincia_select" : id_select},
+                success: function(data){
+									$(id_element).html('<option value="" disabled selected>Scegli il comune</option>');
+                  //popolo i comuni
+                  for (let i = 0; i < data.length; i++) {
+                    var id = data[i].id;
+                    var name = data[i].nome;
+                    var option = "<option value='"+id+"'>"+name+"</option>"; 
+                    $(id_element).append(option);
+                  }
+                },
+                error: function(data) { 
+                    alert("Comuni: Errore nella chiamata ajax!");
+                }
+           });
+}
+
+</script>
 
 @endsection

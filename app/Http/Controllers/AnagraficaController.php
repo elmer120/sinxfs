@@ -500,12 +500,12 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
         
     }
 
-     //ajax
+    //ajax
     public function regioni()
     {
         return Regione::all();
     }
-     //ajax
+    //ajax
     public function province(Request $request)
     {
         
@@ -522,7 +522,7 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
         }
 
     }
-     //ajax
+    //ajax
     public function comuni(Request $request)
     {
         if(!empty( $request->input('provincia_select')))
