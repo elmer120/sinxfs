@@ -73,10 +73,8 @@
                                                   @lang('menu.anagrafica')
                                               </a>
                                                 <ul class="uk-nav-sub">
-                                                    <li><a class="item" href='<?// echo site_url("anagrafica/associati")?>'><span class="uk-margin-small-right" uk-icon="users"></span>Axxx -@lang('menu.associati')</a></li>
-                                                    <li><a class="item" href='<?// echo site_url("anagrafica/collaboratori")?>'><span class="uk-margin-small-right" uk-icon="user"></span>Axxx -@lang('menu.altri')</a></li>
+                                                    <li><a class="item" href='{{ route("gestione") }}'><span class="uk-margin-small-right" uk-icon="users"></span>Aox- -@lang('menu.gestione')</a></li>
                                                     <li><a class="item" href='<?// echo site_url("anagrafica/csv")?>'><span class="uk-margin-small-right" uk-icon="copy"></span>Axxx -@lang('menu.importa_csv')</a></li>
-                                                    <li><a class="item" href='{{ route("gestione") }}'><span class="uk-margin-small-right" uk-icon="search"></span>Aox- -@lang('menu.cerca')</a></li>
                                                     <li><a class="item" href='{{ route("rubrica") }}'><span class="uk-margin-small-right" uk-icon="list"></span>Aola -@lang('menu.rubrica')</a></li>
                                                     <li><a class="item" href='{{ route("libro_soci") }}'><span class="uk-margin-small-right" uk-icon="push"></span>Aola -@lang('menu.libro_soci')</a></li>     
                                                 </ul>

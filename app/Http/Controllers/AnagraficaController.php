@@ -35,7 +35,7 @@ class AnagraficaController extends Controller
     }
 
     //ajax
-    public function getList(Request $request)
+    public function getList()
     {
         
          $lista = DB::table('persone')
@@ -49,6 +49,7 @@ class AnagraficaController extends Controller
         ->leftJoin('cariche_direttivo','cariche_direttivo.id','=','soci_cariche_direttivo.fk_cariche_direttivo')
         ->select('persone.id','persone.nome','persone.cognome',
         'comuni.nome as comune_residenza',
+        //comune nascita
         DB::raw("(SELECT DISTINCT comuni.nome 
                 FROM regioni 
                 INNER JOIN province 
@@ -142,32 +143,6 @@ class AnagraficaController extends Controller
         else{
             abort(403,'no id');
         }
-
-
-        /* 
-        
-        select distinct `persone`.`id`, `persone`.`nome`, `persone`.`cognome`, `persone`.`data_nascita`, `persone`.`fk_comuni_nascita`, `persone`.`codice_fiscale`, `persone`.`partita_iva`, 
-
-
-
-`persone`.`fk_comuni`,
-(SELECT DISTINCT province.nome 
-FROM regioni 
-INNER JOIN province 
-on province.fk_regioni = regioni.id
-INNER JOIN comuni
-on comuni.fk_province = province.id
-WHERE comuni.id = persone.fk_comuni_nascita),
-`persone`.`indirizzo`, `persone`.`privacy`, `persone`.`telefono`, `persone`.`telefono_ext`, `persone`.`email`, `persone`.`fk_responsabile`, `persone`.`iban`, `persone`.`banca`, `persone`.`note`, `soci`.`fk_soci_tipologie`, `soci`.`richiesta_data`, `soci`.`approvazione_data`, `soci`.`scadenza_data`, `soci`.`certificato_scadenza_al`, `soci_cariche_direttivo`.`fk_cariche_direttivo`, `soci_cariche_direttivo`.`carica_direttivo_dal`, `soci_cariche_direttivo`.`carica_direttivo_al`, `tessere`.`numero`, `tessere`.`tessere_dal`, `tessere`.`tessere_al`, `tessere`.`tessere_tipo` 
-
-
-
-
-
-from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inner join `province` on `comuni`.`fk_province` = `province`.`id` inner join `regioni` on `province`.`fk_regioni` = `regioni`.`id` left join `soci` on `persone`.`fk_soci` = `soci`.`id` left join `soci_tipologie` on `soci`.`fk_soci_tipologie` = `soci_tipologie`.`id` left join `tessere` on `tessere`.`fk_soci` = `soci`.`id` left join `soci_cariche_direttivo` on `soci_cariche_direttivo`.`fk_soci` = `soci`.`id` left join `cariche_direttivo` on `cariche_direttivo`.`id` = `soci_cariche_direttivo`.`fk_cariche_direttivo` where `persone`.`id` = 46
-        
-        */
-
     }
 
     public function create(Request $request)
@@ -479,10 +454,49 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
                  return "Aggiornamento avvenuto con successo";
              }
         }
-
-
     }
 
+    public function Rubrica()
+    {
+        return view('anagrafica.rubrica')
+            ->with('tab_title',"Rubrica")
+            ->with('page_title' , "Rubrica");
+
+        //{{ dd(get_defined_vars()['__data']) }} x vedere var passate a view
+    }
+
+    public function getListRubrica()
+    {
+        $lista = DB::table('persone')
+        ->join('comuni', 'persone.fk_comuni', '=', 'comuni.id')
+        ->join('province','comuni.fk_province','=','province.id')
+        ->join('regioni','province.fk_regioni', '=', 'regioni.id')
+        ->leftJoin('soci','persone.fk_soci','=','soci.id')
+        ->leftJoin('soci_tipologie','soci.fk_soci_tipologie','=','soci_tipologie.id')
+        ->leftJoin('tessere','tessere.fk_soci','=','soci.id')
+        ->leftJoin('soci_cariche_direttivo','soci_cariche_direttivo.fk_soci','=','soci.id')
+        ->leftJoin('cariche_direttivo','cariche_direttivo.id','=','soci_cariche_direttivo.fk_cariche_direttivo')
+        ->select(   
+                    'persone.id','persone.nome','persone.cognome','persone.indirizzo',
+                    'comuni.nome as comune_residenza','province.sigla as provincia_sigla_residenza',
+                    'persone.email','persone.telefono','persone.telefono_ext','persone.codice_fiscale',
+                    'persone.partita_iva','persone.data_nascita'
+        )
+        ->orderBy('nome','asc')
+        ->distinct()
+        ->get()->toJson(JSON_PRETTY_PRINT);
+        return $lista;
+        //dd($lista);
+    }
+
+    public function LibroSoci()
+    {
+        return view('anagrafica.libro_soci')
+            ->with('tab_title',"Stampa: Libro soci")
+            ->with('page_title' , "Stampa: Libro soci");
+    }
+
+    //ajax
     public function deletePerson(Request $request)
     {
         if($request->filled('id'))
@@ -536,19 +550,16 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
             return "non posso ritorna tutti i comuni";
         }
     }
-
      //ajax
     public function sociTipologie()
     {
         return SocioTipologia::all();
     }
-
      //ajax
     public function caricheDirettivo()
     {
         return CaricaDirettivo::all();
     }
-
      //ajax
     public function responsabili()
     {
@@ -560,14 +571,4 @@ from `persone` inner join `comuni` on `persone`.`fk_comuni` = `comuni`.`id` inne
         //SELECT persone.id,persone.nome,persone.cognome FROM persone WHERE (DATEDIFF(CURRENT_DATE,persone.data_nascita)) >= '1' ORDER BY persone.nome
     }
 
-
-    public function Rubrica()
-    {
-        
-    }
-
-    public function LibroSoci()
-    {
-        
-    }
 }

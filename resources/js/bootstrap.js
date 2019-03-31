@@ -8,6 +8,10 @@ window.Icons = require("uikit/dist/js/uikit-icons");
 window.Tabulator = require('tabulator-tables');
 window.TabulatorCss = require('tabulator-tables/dist/css/semantic-ui/tabulator_semantic-ui.min.css');
 
+//importo print.js
+window.printJS = require("print-js");
+
+
 //importo jquery
 window.$ = window.jQuery = require('jquery');
 

@@ -36,10 +36,16 @@ class AppServiceProvider extends ServiceProvider
 
         //dati condivisi in tutte le view
         $associazione = Associazione::find(1);
-        $comune = Comune::find($associazione->fk_comuni,['fk_province']);
-        $provincia = Provincia::find($comune,['fk_regioni']);
+        $comune = Comune::find($associazione->fk_comuni);
+        $provincia = Provincia::find($comune);
+
         $associazione->fk_province = $comune['fk_province'];
         $associazione->fk_regioni = $provincia[0]['fk_regioni'];
+        $associazione->comune = $comune['nome'];
+        $associazione->provincia = $provincia[0]['nome'];
+        $associazione->provincia_sigla = $provincia[0]['sigla'];
+        $associazione->cap = $comune['cap'];
+        
         
         View::share('associazione',$associazione);
      

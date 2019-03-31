@@ -44,6 +44,13 @@ Seeding: SeedAssociazioneTable
 
 soluzione: composer dump-autoload
 
+
+
+da fare:
+
 gestion anagrafica:
+        Manca anche visuallizza al doppio click
         ottimizzare modifica lato server
-        elimina persona (deve eliminare anche socio carica e tessera)
+        elimina persona (deve eliminare anche socio carica e tessera) -- FATTO
+ridurre indirizzo in tabella associazioni
+stampa libro soci controllare ordinamento codice tessera.

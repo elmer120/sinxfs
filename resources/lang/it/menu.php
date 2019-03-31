@@ -7,6 +7,7 @@ return[
 'anagrafica' => "Anagrafica",
 'direttivo' => " Direttivo",
 'associati' => " Associati",
+'gestione' => " Gestione",
 'importa_csv' => " Importa da csv",
 'altri' => " Altri/Collaboratori",
 'cerca' => " Ricerca",

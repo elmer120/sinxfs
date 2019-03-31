@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth']],function(){
 
     Route::get('/','DashboardController@Home')->name('dashboard');
 
+    //------------ ANAGRAFICA ---------------------------
     Route::prefix('anagrafica')->group(function () {
         Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
 
@@ -35,12 +36,24 @@ Route::group(['middleware' => ['auth']],function(){
         Route::put('create','AnagraficaController@create');
         Route::delete('deletePerson','AnagraficaController@deletePerson');
         Route::post('getList','AnagraficaController@getList')->name('getList');
-        Route::get('getList','AnagraficaController@getList')->name('getList');
+        //Route::get('getList','AnagraficaController@getList')->name('getList');
+        
         Route::post('getPerson','AnagraficaController@getPerson')->name('getPerson');
         Route::get('getPerson','AnagraficaController@getPerson')->name('getPerson');
 
         Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
+        //chiamate ajax
+        Route::post('getListRubrica','AnagraficaController@getListRubrica')->name('getListRubrica');
+        //Route::get('getListRubrica','AnagraficaController@getListRubrica')->name('getListRubrica');
+
+       
         Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
+    });
+    //------------ STAMPA ---------------------------
+    Route::prefix('stampa')->group(function () {
+        Route::get('libro_soci','StampaController@libro_soci')->name('libro_soci_stampa');
+        //chiamate ajax
+        Route::post('getListLibroSoci','StampaController@getListLibroSoci')->name('getListLibroSoci');
     });
     
     Route::prefix('associazione')->group(function () {
