@@ -503,7 +503,7 @@ class AnagraficaController extends Controller
         {
             $id=$request->input('id');
             $persona = Persona::find($id);
-            if($persona->delete())
+            if($persona->delete()) //on Cascade delete!
             {
                 return "Eliminazione effettuata";
             }

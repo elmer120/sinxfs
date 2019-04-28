@@ -3,105 +3,33 @@
 @section('page_title',$page_title) <!-- titolo pagina/sezione -->
 @section('page_content')
 
-  <!-- barra azioni -->
-<button class="uk-button uk-button-primary uk-button-small" uk-toggle="target: #modal" type="button" >Aggiungi</button>
-<button id="btn_modifica" class="uk-button uk-button-primary uk-button-small" uk-toggle="target: #modal" type="button" disabled>Modifica</button>
-<button id="btn_elimina" class="uk-button uk-button-primary uk-button-small" disabled>Elimina</button>
-<div class="uk-form-custom uk-search uk-search-default">
-	<a href="#" id="a_search" class="uk-search-icon-flip uk-search-icon uk-icon" uk-search-icon=""></a>
-	<input id="input_search" class="uk-search-input" type="search" name="text_search" value="" placeholder="Cerca...">
-</div>
+@component('components.actions_bar')		
+@endcomponent
 
-@component('components.modal',
-	[
+@component('components.modal',[
 	'modal_id' => 'modal',
-	'form_id' => 'form_persona',
 	'title' => "Aggiungi persona/socio",
-	'btn_text' => 'Inserisci',
-	'select_province_nascita_id' => 'select_province_nascita',
-	'select_comuni_nascita_id' => 'select_comuni_nascita',
-	'select_regioni_id' => 'select_regioni',
-	'select_province_id' => 'select_province',
-	'select_comuni_id' => 'select_comuni',
-	'select_responsabile_id' => 'select_responsabile',
-	'select_tipo_id' => 'select_tipo',
-	'select_carica_id' => 'select_carica'
-	]
-) 
+	'btn_text' => 'Inserisci'
+]) 
+	@component('components.forms.anagrafica_gestione')
+	@endcomponent
 @endcomponent
 
 <!-- tabella-->
 <div id="table"></div>
 
-
+<a href="#" class="uk-float-right uk-display-inline-block"  uk-icon="icon: triangle-up; ratio: 4" uk-scroll></a>
+<script type="text/javascript" src="{{ URL::asset('js/table_form.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script>
-
-//al cambio nella select filtro i dati in tabella
-$('#select_type').on('change', function() {
-	if(this.value!="T")
-	{ table.setFilter("type","=",this.value);}
-	else{
-	  table.clearFilter();
-	}
-});
-//al click su cerca
-var last_value_search;
-$('#a_search').on('click', function() {
-	if(typeof last_value_search !== 'undefined')
-	{
-		table.removeFilter("name", "=", last_value_search);
-	}
-	table.addFilter("name","like",$('#input_search').val());
-	last_value_search = $('#input_search').val();
-});
-//al caricamento della pagina
-$(document).ready(function(){
-	//creo la tabella
-	create_table();
-	//setto le impostazioni ajax comuni
-	$.ajaxSetup({
-		type: 'POST',
-    cache: false,  
-    headers: {
-    'X-CSRF-Token': '{{ csrf_token() }}',
-     }
-		//dataType: 'text', //Tipo di dato che si riceve di ritorno
-    //contentType : 'application/json', //tipo di contenuto inviato al serve
-	});
-	//popolo il select regioni con tutte
-	get_regioni('#select_regioni');
-	//popolo il select province di nascita con tutte
-	get_province(null,'#select_province_nascita');
-	//popolo il select tipo associato
-	get_soci_tipologie('#select_tipo');
-	//popolo il select carica direttivo
-	get_cariche_direttivo('#select_carica');
-	//popolo il select responsabile
-	get_responsabili('#select_responsabile');
-	
-});
-// ---- FUNZIONI ----
+//var globali
+var token = '{{ csrf_token() }}';
 var table;
 var row_selected_id;
-
-function create_table(){
- 
- 	//definisco la tabella
- table = new Tabulator("#table", {
-	layout:"fitColumns", //colonne si restringono attorno ai dati, il restante spazio è vuoto ma sempre una "tabella"
-	responsiveLayout:"collapse", //le colonne si impilano quando non c'è abb spazio
-	placeholder:"No Data Available", //quando non ci sono dati
-	pagination:"local", //imposto la paginazione
-	paginationSize:20, //per ogni pagina mostro n righe
-	selectable:1, //righe selezionabili
-	rowSelected:row_selected, //callback riga selezionata
-	rowDeselected:row_deselected, //callback riga deselezionata
-	rowSelectionChanged: row_selection_changed, //callback al cambio selezione riga
-	tooltips:true,
- 	columns:[ //definisco le colonne
+var data_obj;
+var columns_config = [ 
 		//title = titolo , field = chiave array
-		{ title:"N°", width:"15",formatter:"rownum"},
+		{ title:"N°",width:"15",formatter:"rownum"},
 		//{ title:"Azioni", width:110, resizable:false },
 		{	//creo gruppo persona
 			title: 'Persona',
@@ -118,18 +46,38 @@ function create_table(){
 		{ title:"Tessera n°", field:"tessera_numero"},
 		{ title:"Certificato scadenza", field:"certificato_scadenza_al"},
 		{ title:"Approvato", field:"approvazione_data"},
-		{ title:"Quota scadenza", field:"quota_scadenza"}]
+		{ title:"Quota scadenza", field:"quota_scadenza"}];
+
+
+
+//al caricamento della pagina
+$(document).ready(function(){
+	//creo la tabella
+	create_table(columns_config);
+	//carica i dati
+	load_table( '{{ route('getList') }}',token);
+	//setto le impostazioni ajax comuni
+	$.ajaxSetup({
+		type: 'POST',
+    cache: false,  
+    headers: { 'X-CSRF-Token': token,}
+	});
+
+	//popolo il select regioni con tutte
+	get_regioni('#select_regioni');
+	//popolo il select province di nascita con tutte
+	get_province(null,'#select_province_nascita');
+	//popolo il select tipo associato
+	get_soci_tipologie('#select_tipo');
+	//popolo il select carica direttivo
+	get_cariche_direttivo('#select_carica');
+	//popolo il select responsabile
+	get_responsabili('#select_responsabile');
+	
 });
-//carico i dati in tabella via ajax
-var ajaxConfig = {
-    method:"post", //set request type to Position
-    headers: {
-				'X-CSRF-Token': '{{ csrf_token() }}',
-    },
-};
-table.setData( "{{ route('getList') }}", {}, ajaxConfig);
-// variabile passata a view not trim table.setData( {//!! $lista !!} );
-}
+// ---- FUNZIONI ----
+
+
 
 function form_reset() {
 	//pulisco gli input del form
@@ -180,6 +128,26 @@ function row_selection_changed(data, rows){
 		$('#btn_elimina').attr('disabled',false);
 	}
 }
+
+//ricerca istantanea
+$("#input_search").keyup(function(){
+    var filters = [];
+    var columns = table.getColumns();
+    var search = this.value;
+
+    columns.forEach(function(column){
+			if(column.getField() != undefined)
+			{
+        filters.push({
+            field:column.getField(),
+            type:"like",
+            value:search,
+				});
+			}
+    });
+
+    table.setFilter([filters]);
+});
 
 $('#socio_checkbox').on('click',function(){
 	if(this.checked) //se checkbox socio è abilitato
@@ -335,6 +303,20 @@ $('#btn_elimina').on('click',function()
 {
 		delete_persona(row_selected_id);
 });
+$('#btn_stampa_lista').on('click',function(){
+	table.download("pdf", "lista_ricevute.pdf", {
+        orientation:"landscape", //set page orientation to portrait
+				title:"Lista Ricevute", //add title to report
+				autoTable:function(doc){
+        //doc - the jsPDF document object
+
+        //add some text to the top left corner of the PDF
+        doc.text("SOME TEXT", 35, 35);
+    	}
+    });
+});
+$('#btn_stampa').on('click',function(){});
+
 //all submit del form
 $('#form_persona').on('submit',function(e){
 	e.preventDefault(); //blocco il comportamento di default

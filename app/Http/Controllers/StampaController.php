@@ -7,15 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class StampaController extends Controller
 {
-    public function libro_soci()
-    {
-        //dd($this->getListLibroSoci());
-        return view('stampa.libro_soci')
-        ->with('tab_title',"Stampa Libro soci")
-        ->with('page_title' , "Stampa Libro soci");
-        
-    }
+  
+    
     //ajax
+    //ritorna lista ordinata per stampa librosoci
     public function getListLibroSoci(Request $request){
         $order = $request->input('ordinamento');
         $lista = DB::table('persone')

@@ -12,17 +12,19 @@
     "devDependencies": {
         "axios": "^0.18",
         "cross-env": "^5.1",
-        "laravel-mix": "^4.0.7",
+        "laravel-mix": "^4.0.15",
         "lodash": "^4.17.5",
-        "resolve-url-loader": "^2.3.1",
-        "sass": "^1.15.2",
+        "resolve-url-loader": "^2.3.2",
+        "sass": "^1.18.0",
         "sass-loader": "^7.1.0",
-        "uikit": "^3.0.3",
-        "vue-template-compiler": "^2.6.5"
+        "uikit": "^3.1.0",
+        "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "jquery": "^3.3.1",
-        "print-js": "^1.0.54",
-        "tabulator-tables": "^4.2.1"
+        "jquery": "^3.4.0",
+        "jspdf": "^1.5.3",
+        "jspdf-autotable": "^3.1.1",
+        "print-js": "^1.0.55",
+        "tabulator-tables": "^4.2.5"
     }
 }

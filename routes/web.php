@@ -23,7 +23,10 @@ Route::group(['middleware' => ['auth']],function(){
 
     //------------ ANAGRAFICA ---------------------------
     Route::prefix('anagrafica')->group(function () {
+        //pagine
         Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
+        Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
+        Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
 
         //chiamate ajax
         Route::post('regioni','AnagraficaController@regioni');
@@ -36,22 +39,16 @@ Route::group(['middleware' => ['auth']],function(){
         Route::put('create','AnagraficaController@create');
         Route::delete('deletePerson','AnagraficaController@deletePerson');
         Route::post('getList','AnagraficaController@getList')->name('getList');
-        //Route::get('getList','AnagraficaController@getList')->name('getList');
-        
         Route::post('getPerson','AnagraficaController@getPerson')->name('getPerson');
         Route::get('getPerson','AnagraficaController@getPerson')->name('getPerson');
 
-        Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
-        //chiamate ajax
         Route::post('getListRubrica','AnagraficaController@getListRubrica')->name('getListRubrica');
-        //Route::get('getListRubrica','AnagraficaController@getListRubrica')->name('getListRubrica');
-
-       
-        Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
+        
+        
     });
     //------------ STAMPA ---------------------------
     Route::prefix('stampa')->group(function () {
-        Route::get('libro_soci','StampaController@libro_soci')->name('libro_soci_stampa');
+        
         //chiamate ajax
         Route::post('getListLibroSoci','StampaController@getListLibroSoci')->name('getListLibroSoci');
     });
@@ -66,7 +63,20 @@ Route::group(['middleware' => ['auth']],function(){
     });
     
     Route::prefix('contabilita')->group(function () {
-        Route::get('dati_associazione','ContabilitaController@index')->name('');
+    
+        Route::get('ricevuta','RicevutaController@ricevuta')->name('ricevuta');
+
+        //chiamate ajax ricevuta
+        //Route::post('getList','RicevutaController@getList')->name('getList');
+        Route::post('persone','RicevutaController@persone');
+        Route::post('fondi','RicevutaController@fondi');
+        Route::post('vociContoEconomico','RicevutaController@vociContoEconomico');
+        Route::post('numero','RicevutaController@numero');
+        Route::post('create','RicevutaController@create');
+        Route::put('update','RicevutaController@update');
+        Route::delete('delete','RicevutaController@delete');
+        Route::post('get','RicevutaController@get');
+        
     });
     
     Route::prefix('gestione')->group(function () {

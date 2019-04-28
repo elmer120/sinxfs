@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="{{ asset('storage/images/favicon.ico') }}" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <link href="{{ asset('css/app.css') }}" rel="stylesheet"> 
         <script src="{{ asset('js/app.js') }}"></script>
@@ -25,7 +26,7 @@
         <div class="uk-navbar-left">
           <ul class="uk-navbar-nav">
             <li> <!-- logo -->
-              <a href="" class="uk-navbar-item uk-logo">
+              <a href='{{ route("dashboard") }}' class="uk-navbar-item uk-logo">
                 <img class="uk-height-1-1" src="{{ asset('storage/images/logo.png') }}" style="width: 75px" alt="Sinx"/>
               </a>
             </li>
@@ -89,7 +90,7 @@
                                               
                                                   <ul class="uk-nav-sub">
                                                       <li><a class="item" href='./InsPrimanota.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.prima_nota')</a></li>
-                                                      <li><a class="item" href='./InsRicFisc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.ricevuta')</a></li>
+                                                      <li><a class="item" href='{{ route("ricevuta") }}'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.ricevuta')</a></li>
                                                       <li><a class="item" href='./InsFattura.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.fattura')</a></li>
                                                       <li><a class="item" href='./InsContoEconomico.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.conto_economico')</a></li>
                                                       <li><a class="item" href='./InsStatoPatrimoniale.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.stato_patrimoniale')</a></li>

@@ -11,6 +11,11 @@ window.TabulatorCss = require('tabulator-tables/dist/css/semantic-ui/tabulator_s
 //importo print.js
 window.printJS = require("print-js");
 
+//importo jsPdf
+window.jsPDF = require("jspdf");
+
+//importo jsPdf autotable
+import 'jspdf-autotable';
 
 //importo jquery
 window.$ = window.jQuery = require('jquery');

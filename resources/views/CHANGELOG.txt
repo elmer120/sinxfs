@@ -36,6 +36,10 @@ per generare migrazioni da database già esistente: https://github.com/Xethron/m
 per generare seed da database già esistente: https://github.com/orangehill/iseed
 per generare factory da model funziona solo con laravel<= 5.5: https://github.com/mpociot/laravel-test-factory-helper
 
+stampa printjs https://printjs.crabbly.com/
+generazione pdf jsPDF https://rawgit.com/MrRio/jsPDF/master/docs/
+generazione pdf auto table https://github.com/simonbengtsson/jsPDF-AutoTable
+
 errore: 
 php artisan db:seed
 Seeding: SeedAssociazioneTable
@@ -48,9 +52,18 @@ soluzione: composer dump-autoload
 
 da fare:
 
-gestion anagrafica:
+gestione anagrafica:
         Manca anche visuallizza al doppio click
         ottimizzare modifica lato server
         elimina persona (deve eliminare anche socio carica e tessera) -- FATTO
+        messaggi errore cambiare fk_xxx
+        elimina chiedere conferma
 ridurre indirizzo in tabella associazioni
-stampa libro soci controllare ordinamento codice tessera.
+creare component barra azioni e aggiungere visuallizza a barra azioni
+
+ricevute numero caricare con ajax -- FATTO
+
+ricevute: stampa singola ricevuta + aggiungere header stampa lista
+gestione anagrafica: riordinare il codice con script esterno 
+libro soci: stampa con jsPDF
+fare fatture
