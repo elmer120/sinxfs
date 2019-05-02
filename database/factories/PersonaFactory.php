@@ -12,7 +12,7 @@ $factory->define(App\Models\Persona::class, function (Faker $faker) {
         'nome' => $faker->firstName,
         'cognome' => $faker->lastName,
         'data_nascita' => $faker->date(),
-        'indirizzo' => $faker->address,
+        'indirizzo' => $faker->streetAddress,
         'telefono' => $faker->phoneNumber,
         'telefono_ext' => $faker->phoneNumber,
         'email' => $faker->email,
