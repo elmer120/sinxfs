@@ -66916,8 +66916,8 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\xammp7.2\htdocs\app\sinxfs\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\xammp7.2\htdocs\app\sinxfs\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\Xampp3.2.2\htdocs\sinxfs\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Xampp3.2.2\htdocs\sinxfs\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -327,7 +327,7 @@ window.remove = function remove(id, url) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\xammp7.2\htdocs\app\sinxfs\resources\js\table_form.js */"./resources/js/table_form.js");
+module.exports = __webpack_require__(/*! D:\Xampp3.2.2\htdocs\sinxfs\resources\js\table_form.js */"./resources/js/table_form.js");
 
 
 /***/ })

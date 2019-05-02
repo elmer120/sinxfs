@@ -9,7 +9,7 @@ Clonare il repository (il commit "base")
         se errore in uikit (es.3.0.3) è ancora presente:
 
         in node_modules/uikit/dist/css/uikit.css
-        alla riga 5745 deve comparire cosi
+        alla riga 5845 deve comparire cosi
         :root {
         --uk-leader-fill-content: '.';
         }
