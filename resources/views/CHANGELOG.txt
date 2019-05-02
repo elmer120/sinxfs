@@ -1,6 +1,6 @@
 
 x sviluppo 
-** Guida installazione **
+** GUIDA INSTALLAZIONE **
 
 Clonare il repository (il commit "base")
 1 composer install
@@ -19,7 +19,7 @@ Clonare il repository (il commit "base")
 6 php artisan serve
 7 npm run watch
 
-** Descrizione comandi **
+** DESCRIZIONE COMANDI DA TERMINALE **
 
 composer install -- installa le dipendenze del progetto in presenza del file composer.json
 npm install -- installa le dipendenze del progetto in presenza del file package.json
@@ -30,7 +30,11 @@ php artisan key:generate -- genera chiave id applicazione e la inserisce nel fil
 php artisan serve -- avvia server php in locale
 npm run watch -- sta in ascolto di eventuali modifiche e compila realtime i pacchetti
 
-link utili: https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
+** LINK UTILI: ** 
+
+https://devmarketer.io/learn/setup-laravel-project-cloned-github-com/
+
+** LIBRERIE ESTERNE UTILIZZATE: **
 
 per generare migrazioni da database già esistente: https://github.com/Xethron/migrations-generator
 per generare seed da database già esistente: https://github.com/orangehill/iseed
@@ -40,7 +44,7 @@ stampa printjs https://printjs.crabbly.com/
 generazione pdf jsPDF https://rawgit.com/MrRio/jsPDF/master/docs/
 generazione pdf auto table https://github.com/simonbengtsson/jsPDF-AutoTable
 
-errore: 
+** SOLUZIONE ERRORI: ** 
 php artisan db:seed
 Seeding: SeedAssociazioneTable
 
@@ -50,20 +54,27 @@ soluzione: composer dump-autoload
 
 
 
-da fare:
+** DA FARE: **
 
 gestione anagrafica:
         Manca anche visuallizza al doppio click
         ottimizzare modifica lato server
         elimina persona (deve eliminare anche socio carica e tessera) -- FATTO
-        messaggi errore cambiare fk_xxx
-        elimina chiedere conferma
+        messaggi errore cambiare fk_xxx 
+        elimina chiedere conferma --FATTO
+        riordinare il codice con script esterno 
+        eliminazione persona con pagamenti?!?
 ridurre indirizzo in tabella associazioni
-creare component barra azioni e aggiungere visuallizza a barra azioni
+creare component barra azioni e aggiungere visuallizza a barra azioni --FATTO
 
 ricevute numero caricare con ajax -- FATTO
+auth: 
+        login -- FATTO
+        logout -- FATTO 
+        registrazione nuovi utenti
 
-ricevute: stampa singola ricevuta + aggiungere header stampa lista
-gestione anagrafica: riordinare il codice con script esterno 
+ricevute: stampa singola ricevuta + aggiungere header stampa lista esempio generazione pdf da html = http://jsfiddle.net/xzZ7n/4861/ | https://stackoverflow.com/questions/16858954/how-to-properly-use-jspdf-library
 libro soci: stampa con jsPDF
 fare fatture
+
+

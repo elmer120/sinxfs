@@ -11,8 +11,7 @@ class StampaController extends Controller
     
     //ajax
     //ritorna lista ordinata per stampa librosoci
-    public function getListLibroSoci(Request $request){
-        $order = $request->input('ordinamento');
+    public function getListLibroSoci(){
         $lista = DB::table('persone')
         ->join('comuni', 'persone.fk_comuni', '=', 'comuni.id')
         ->join('province','comuni.fk_province','=','province.id')
@@ -39,7 +38,6 @@ class StampaController extends Controller
                     'persone.email','persone.telefono',
                     DB::raw('DATE_FORMAT(soci.approvazione_data, "%d/%m/%Y") as socio_approvazione_data'),'soci_tipologie.nome as soci_tipologia','cariche_direttivo.nome as carica_direttivo'
         )
-        ->orderBy($order,'asc')
         ->distinct()
         ->get()
         ->toJson(JSON_PRETTY_PRINT);

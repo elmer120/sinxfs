@@ -89,13 +89,13 @@
                                             </a>
                                               
                                                   <ul class="uk-nav-sub">
-                                                      <li><a class="item" href='./InsPrimanota.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.prima_nota')</a></li>
+                                                      <li><a class="item" href=''><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.prima_nota')</a></li>
                                                       <li><a class="item" href='{{ route("ricevuta") }}'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.ricevuta')</a></li>
-                                                      <li><a class="item" href='./InsFattura.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.fattura')</a></li>
-                                                      <li><a class="item" href='./InsContoEconomico.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.conto_economico')</a></li>
-                                                      <li><a class="item" href='./InsStatoPatrimoniale.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.stato_patrimoniale')</a></li>
-                                                      <li><a class="item" href='./Rendiconto.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.rendiconto')</a></li>
-                                                      <li><a class="item" href='./Nuovo_Anno_soc.php'><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.nuovo_anno_sociale')</a></li> 
+                                                      <li><a class="item" href='{{ route("fattura") }}'><span class="uk-margin-small-right" uk-icon="italic"></span>Aoxx -@lang('menu.fattura')</a></li>
+                                                      <li><a class="item" href=''><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.conto_economico')</a></li>
+                                                      <li><a class="item" href=''><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.stato_patrimoniale')</a></li>
+                                                      <li><a class="item" href=''><span class="uk-margin-small-right" uk-icon="italic"></span>Aox- -@lang('menu.rendiconto')</a></li>
+                                                      <li><a class="item" href=''><span class="uk-margin-small-right" uk-icon="italic"></span>Axxx -@lang('menu.nuovo_anno_sociale')</a></li> 
                                                   </ul>
                                           </li>
                                                      
@@ -243,8 +243,8 @@
             <h2 class="uk-modal-title">Conferma logout</h2>
               <p>Sei sicuro di uscire dall applicazione?</p>
               <p class="uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <a href="" uk-toggle="target: #logout" class="uk-button uk-button-primary">Ok</a>
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Annulla</button>
+            <a href="{{ Route("logout") }}" uk-toggle="target: #logout" class="uk-button uk-button-primary">Ok</a>
         </p>
         </div>
         

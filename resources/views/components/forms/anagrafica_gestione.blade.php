@@ -1,4 +1,4 @@
-<form id="form_persona" class="uk-grid-small" enctype="multipart/form-data" uk-grid>
+<form id="form" class="uk-grid-small" enctype="multipart/form-data" uk-grid>
 										
     <!--div class="uk-width-auto">  
         <img id="preview" class="uk-border-circle" style="display:block" width="75" height="75" src="<?php //echo base_url('assets/img/associati/default/avatar.png');?>">

@@ -22,6 +22,8 @@
 <script type="text/javascript" src="{{ URL::asset('js/table_form.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
 <script>
+
+
 //var globali
 var token = '{{ csrf_token() }}';
 var table;
@@ -55,98 +57,21 @@ $(document).ready(function(){
 	//creo la tabella
 	create_table(columns_config);
 	//carica i dati
-	load_table( '{{ route('getList') }}',token);
+	load_table( '{{ route('getListAnagrafica') }}',token);
 	//setto le impostazioni ajax comuni
 	$.ajaxSetup({
 		type: 'POST',
     cache: false,  
     headers: { 'X-CSRF-Token': token,}
 	});
-
-	//popolo il select regioni con tutte
-	get_regioni('#select_regioni');
-	//popolo il select province di nascita con tutte
-	get_province(null,'#select_province_nascita');
-	//popolo il select tipo associato
-	get_soci_tipologie('#select_tipo');
-	//popolo il select carica direttivo
-	get_cariche_direttivo('#select_carica');
-	//popolo il select responsabile
-	get_responsabili('#select_responsabile');
-	
 });
 // ---- FUNZIONI ----
 
-
-
-function form_reset() {
-	//pulisco gli input del form
-	$('#form_persona').find(":input, textarea").val("");
-	//rimuovo gli eventuali campi nascosti degli id
-	$('#persona_id').remove();
-	$('#socio_id').remove();
-	$('#soci_cariche_direttivo_id').remove();
-	$('#tessere_id').remove(); 
-	//rimuovo i danger
-	$(":input").removeClass('uk-form-danger');
-	//metto a default i checkbox
-	if($('#privacy_checkbox')[0].checked){
-	$('#privacy_checkbox').click();}
-	if($('input[name=socio]')[0].checked){
-	$('input[name=socio]')[0].click();}
-	if($('input[name=carica_direttivo]')[0].checked)
-	{$('input[name=carica_direttivo]')[0].click();}
-	if($('input[name=tessere]')[0].checked)
-	{$('input[name=tessere]')[0].click();}
-	console.log('Reset form ok');														
-}
-
 //---- EVENTI -----
-//alla selezione di un riga
-function row_selected(row){
-	//recupero l'id (del database)
-	row_selected_id = row.getData()['id'];
-	if(row_selected_id != null)
-	{	//abilito i pulsanti
-		$('#btn_modifica').attr('disabled',false);
-		$('#btn_elimina').attr('disabled',false);
-	}
-};
-// alla deselezione metto a null l'id precedente
-function row_deselected(row){
-	row_selected_id = null;
-	//disabilito i pulsanti
-	$('#btn_modifica').attr('disabled',true);
-	$('#btn_elimina').attr('disabled',true);
-}
-function row_selection_changed(data, rows){
-	if(data.length > 0)
-	{
-		row_selected_id = data[0].id;
-		//abilito i pulsanti
-		$('#btn_modifica').attr('disabled',false);
-		$('#btn_elimina').attr('disabled',false);
-	}
-}
 
 //ricerca istantanea
 $("#input_search").keyup(function(){
-    var filters = [];
-    var columns = table.getColumns();
-    var search = this.value;
-
-    columns.forEach(function(column){
-			if(column.getField() != undefined)
-			{
-        filters.push({
-            field:column.getField(),
-            type:"like",
-            value:search,
-				});
-			}
-    });
-
-    table.setFilter([filters]);
+	search(this.value);
 });
 
 $('#socio_checkbox').on('click',function(){
@@ -166,17 +91,9 @@ $('#socio_checkbox').on('click',function(){
 		$( "input[name='approvazione_data']" ).attr('disabled',false);
 		$( "input[name='scadenza_data']" ).attr('disabled',false);
 		$( "input[name='certificato_scadenza_al']" ).attr('disabled',false);
-		//se sono in modifica
-		/*if(persona != null)
-		{	//aggiungo gli id nascosti
-		if($('input[name="socio_id"]').length == 0)
-		{
-			$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+((persona.socio_id==null) ? "": persona.socio_id)+'">');
-		}
-			console.log('campi nascosti aggiunti');
-		}*/
 	}
 	else{
+		console.log('socio_disabilitato');
 		//disabilito i legend di socio
 		$('#socio_legend').addClass("uk-text-muted");
 		$('#certificato_medico_legend').addClass("uk-text-muted");
@@ -202,30 +119,19 @@ $('#socio_checkbox').on('click',function(){
 		$( "input[name='scadenza_data']" ).val('');
 		$( "input[name='certificato_scadenza_al']" ).attr('disabled',true);
 		$( "input[name='certificato_scadenza_al']" ).val('');
-
-		//rimuovo gli i campi nascosti di id
-		/*$('#socio_id').remove();
-		$('#soci_cariche_direttivo_id').remove();
-		$('#tessere_id').remove(); 
-		console.log('campi nascosti 2 eliminati');*/
 	}
 });
+
 $('#carica_direttivo_checkbox').on('click',function(){
 	if(this.checked) //se checkbox carica direttivo è abilitato
 	{
+		console.log('carica_abilitato');
 		$( "select[name='fk_cariche_direttivo']" ).attr('disabled',false);
 		$( "input[name='carica_direttivo_dal']" ).attr('disabled',false);
 		$( "input[name='carica_direttivo_al']" ).attr('disabled',false);
-		//se sono in modifica
-		/*if(persona!=null)
-		{	//aggiungo gli id nascosti
-			if($('input[name="soci_cariche_direttivo_id"]').length == 0)
-			{ 
-				$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+((persona.soci_cariche_direttivo_id==null) ? "": persona.soci_cariche_direttivo_id)+'">');
-			}
-		}*/
 	}
 	else{
+		console.log('carica_disabilitato');
 		//disabilito gli input di carica direttivo e faccio clear dei valori
 		$( "select[name='fk_cariche_direttivo']" ).attr('disabled',true);
 		$( "select[name='fk_cariche_direttivo']" ).val('');
@@ -241,21 +147,15 @@ $('#carica_direttivo_checkbox').on('click',function(){
 $('#tessere_checkbox').on('click',function(){
 if(this.checked)//se checkbox tessere è abilitato
 {
+	console.log('tessere_abilitato');
 	//abilito gli input di tessere
 	$( "input[name='numero']" ).attr('disabled',false);
 	$( "input[name='tessere_dal']" ).attr('disabled',false);
 	$( "input[name='tessere_al']" ).attr('disabled',false);
 	$( "input[name='tessere_tipo']" ).attr('disabled',false);
-	//se sono in modifica
-	/*if(persona!=null)
-	{	//aggiungo gli id nascosti
-		if($('input[name="tessere_id"]').length == 0)
-			{
-				$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+((persona.tessere_id==null) ? "": persona.tessere_id)+'">');
-			}
-	}*/
 }
 else{
+	console.log('tessere_disabilitato');
 	//disabilito gli input di tessere e faccio clear dei valori
 	$( "input[name='numero']" ).attr('disabled',true);
 	$( "input[name='numero']" ).val('');
@@ -269,6 +169,7 @@ else{
 	/*$('#tessere_id').remove(); */
 }
 });
+
 $('#privacy_checkbox').on('click',function(e){
 	if(this.checked)
 	{
@@ -279,30 +180,54 @@ $('#privacy_checkbox').on('click',function(e){
 		$('#privacy_hidden').val('0');
 	}
 });
+
 $('#btn_aggiungi').on('click',function(){
+	form_reset();
 	$('#title').text('Aggiungi persona');
+	//popolo il select regioni con tutte
+	get_options('#select_regioni','regioni','Scegli la regione','nome');
+	//popolo il select province di nascita con tutte
+	get_options('#select_province_nascita','province','Scegli la provincia','nome');
+	//popolo il select tipo associato
+	get_options('#select_tipo','sociTipologie','*Tipo associato...','nome');
+	//popolo il select carica direttivo
+	get_options('#select_carica','caricheDirettivo','*Carica direttivo','nome');
+	//popolo il select responsabile
+	get_options('#select_responsabile','responsabili','Responsabile..','nome','cognome');
 });
+
 $('#btn_modifica').on('click',function()
 {
 	$('#title').text('Modifica persona');
 	//popolo il select tipo associato
-	get_soci_tipologie('#select_tipo');
+	get_options('#select_tipo','sociTipologie','*Tipo associato...','nome');
 	//popolo il select carica direttivo
-	get_cariche_direttivo('#select_carica');
+	get_options('#select_carica','caricheDirettivo','*Carica direttivo','nome');
 	//popolo il select responsabile
-	get_responsabili('#select_responsabile');
+	get_options('#select_responsabile','responsabili','Responsabile..','nome','cognome');
 	//popolo il select regioni con tutte
-	get_regioni('#select_regioni');
+	get_options('#select_regioni','regioni','Scegli la regione','nome');
 	//popolo il select province di nascita con tutte
-	get_province(null,'#select_province_nascita');
+	get_options('#select_province_nascita','province','Scegli la provincia','nome');
 	//popolo la persona
 	get_persona(row_selected_id);
 
 });
+
 $('#btn_elimina').on('click',function()
 {
-		delete_persona(row_selected_id);
+	UIkit.modal.confirm('Eliminare il record selezionato?').then(
+		function() {
+		remove(row_selected_id,'deletePerson');
+		//disabilito i btn
+		btn_disable(true);
+		row_selected_id = null;
+	}, 
+		function () {
+    console.log('Rejected.');
+	});
 });
+
 $('#btn_stampa_lista').on('click',function(){
 	table.download("pdf", "lista_ricevute.pdf", {
         orientation:"landscape", //set page orientation to portrait
@@ -315,10 +240,18 @@ $('#btn_stampa_lista').on('click',function(){
     	}
     });
 });
+
+$('#btn_annulla').on('click',function (e) {
+	checkbox_default()
+	form_reset();
+	//metto a null la var globale persona
+	persona = null;
+})
+
 $('#btn_stampa').on('click',function(){});
 
 //all submit del form
-$('#form_persona').on('submit',function(e){
+$('#form').on('submit',function(e){
 	e.preventDefault(); //blocco il comportamento di default
 	if($('#persona_id').length) //se l'elemento esiste sono in modifica
 	{
@@ -330,26 +263,164 @@ $('#form_persona').on('submit',function(e){
 
 })
 
-$('#btn_annulla').on('click',function (e) {
-	form_reset();
-	//metto a null la var globale persona
-	persona = null;
-})
 //alla selezione della provincia di nascita carico i corrispondenti comuni
 $('#select_province_nascita').on('change',function(){
-	get_comuni(this.value,'#select_comuni_nascita');
+	var tmp = {"provincia_select" : this.value};
+	get_options('#select_comuni_nascita','comuni','Scegli il comune','nome',null,tmp);
 });
 //alla selezione della regione di residenza carico le corrispondenti province
 $('#select_regioni').on('change',function(){
-	get_province(this.value,'#select_province');
+	var tmp = {"region_select" : this.value}
+	get_options('#select_province','province','Scegli la provincia','nome',null,tmp);
 });
 //alla selezione della provincia di residenza carico i corrispondenti comuni
 $('#select_province').on('change',function(){
-	get_comuni(this.value,'#select_comuni');
+	var tmp = {"provincia_select" : this.value};
+	get_options('#select_comuni','comuni','Scegli il comune','nome',null,tmp);
 });
+
+function checkbox_default()
+{
+	//metto a default i checkbox
+	console.log("checkbox default!");
+	if($('#privacy_checkbox')[0].checked){
+	$('#privacy_checkbox').click();}
+	if($('input[name=socio]')[0].checked){
+	$('#socio_checkbox')[0].click();}
+	if($('input[name=carica_direttivo]')[0].checked)
+	{$('#carica_direttivo_checkbox')[0].click();}
+	if($('input[name=tessere]')[0].checked)
+	{$('#tessere_checkbox')[0].click();}
+}
+
+//chiamata ajax per popolare il modifica
+function get_persona(id)
+{
+	$.ajax({
+             url: 'getPerson',
+             data: {"id" : id},
+             success: function(data){
+									console.log(data); 
+									persona = JSON.parse(data)[0];
+									//--persona
+									//aggiungo l'id persona
+									$('#form').append('<input id="persona_id" type="hidden" name="persona_id" value="'+persona.id+'">');
+									$('input[name=nome]').val(persona.nome);
+									$('input[name=cognome]').val(persona.cognome);
+									$('input[name=data_nascita]').val(persona.data_nascita);
+									//nascita
+									setTimeout(function(){$('#select_province_nascita').val(persona.fk_provincia_nascita).change();},250);
+									setTimeout(function(){$('#select_comuni_nascita').val(persona.fk_comuni_nascita);},500);
+									$('input[name=codice_fiscale]').val(persona.codice_fiscale);
+									$('input[name=partita_iva]').val(persona.partita_iva);
+									//residenza
+									setTimeout(function(){$('#select_regioni').val(persona.fk_regioni).change();},750);
+									setTimeout(function(){$('#select_province').val(persona.fk_province).change();},1000);
+									setTimeout(function(){$('#select_comuni').val(persona.fk_comuni);},1250);
+									$('input[name=indirizzo]').val(persona.indirizzo);
+									if(persona.privacy){ $('#privacy_checkbox')[0].click();}
+									$('input[name=telefono]').val(persona.telefono);
+									$('input[name=telefono_ext]').val(persona.telefono_ext);
+									$('input[name=email]').val(persona.email);
+									$('input[name=iban]').val(persona.iban);
+									$('input[name=banca]').val(persona.banca);
+									$('textarea[name=note]').val(persona.note)
+
+									//--socio
+									if(persona.socio_id != null)
+									{
+										//aggiungo l'id socio
+										$('#form').append('<input id="socio_id" type="hidden" name="socio_id" value="'+((persona.socio_id==null) ? "": persona.socio_id)+'">');
+										$('input[name=socio]')[0].click();
+										$('#select_tipo').val(persona.fk_soci_tipologie);
+										$('input[name=richiesta_data]').val(persona.richiesta_data);
+										$('input[name=approvazione_data]').val(persona.approvazione_data);
+										$('input[name=scadenza_data]').val(persona.scadenza_data);
+										$('input[name=certificato_scadenza_al]').val(persona.certificato_scadenza_al);
+									}
+									//--carica direttivo
+									if(persona.soci_cariche_direttivo_id != null)
+									{
+										//aggiungo l'id soci_cariche_direttivo
+										$('#form').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+((persona.soci_cariche_direttivo_id==null) ? "": persona.soci_cariche_direttivo_id)+'">');
+										$('input[name=carica_direttivo]')[0].click();
+										$('#select_carica').val(persona.fk_cariche_direttivo);
+										$('input[name=carica_direttivo_dal]').val(persona.carica_direttivo_dal);
+										$('input[name=carica_direttivo_al]').val(persona.carica_direttivo_al);
+									}
+									//--tessera
+									if(persona.tessere_id != null)
+									{
+										//aggiungo l'id tessera
+										$('#form').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+((persona.tessere_id==null) ? "": persona.tessere_id)+'">');
+										$('input[name=tessere]')[0].click();
+										$('input[name=numero]').val(persona.numero);
+										$('input[name=tessere_dal]').val(persona.tessere_dal);
+										$('input[name=tessere_al]').val(persona.tessere_al);
+										$('input[name=tessere_tipo]').val(persona.tessere_tipo);
+									}
+					
+				},
+             error: function(data) { 
+                  alert("get_persona: Errore nella chiamata ajax!");
+             }
+        });
+}
+//chiamata ajax per l'invio del form
+function submit(method)
+{
+	//recupero i valori del form
+	var data = $('#form').serialize();
+	console.log(data); //x debug
+	 $.ajax({
+		 	method: method,
+			 url: 'create',
+			 data: data,
+          success: function(data){
+								//metto a default il form
+								form_reset();
+								//metto a null la var globale persona
+								persona = null;
+								//stampo messaggio 
+								UIkit.notification({
+											message: data,
+											status: '',
+											pos: 'bottom-center',
+											timeout: 3000
+										});
+					//chiudo il modal
+					setTimeout(() => {
+						UIkit.modal($('#modal')).hide();
+						table.setData();
+					}, 2000);
+				  
+			 },
+             error: function(data) {
+							 //validazione fallita
+							if( data.status === 422 ) {
+										data = data.responseJSON;
+                    var errors = data.errors;
+										var message = data.message;
+										var messages = '';
+										$.each(errors, function (key, val) {
+											$(":input[name='"+key+"']").addClass('uk-form-danger');
+                        messages+="<p>"+val+"</p>";
+                    });
+										//stampo messaggio con errori
+										UIkit.notification({
+											message: messages,
+											status: '',
+											pos: 'bottom-center',
+											timeout: 3000
+										});
+							}
+						}
+});
+}
 
 //-- CHIAMATE AJAX ------
 //chiamata ajax per popolare il select delle regioni
+/*
 function get_regioni(id_element) {
     $.ajax({
         url: 'regioni',
@@ -473,151 +544,7 @@ function get_responsabili(id_element) {
              }
         });
 }
-//chiamata ajax per popolare il modifica
-function get_persona(id)
-{
-	$.ajax({
-             url: 'getPerson',
-             data: {"id" : id},
-             success: function(data){
-									console.log(data); 
-									persona = JSON.parse(data)[0];
-									//--persona
-									//aggiungo l'id persona
-									$('#form_persona').append('<input id="persona_id" type="hidden" name="persona_id" value="'+persona.id+'">');
-									$('input[name=nome]').val(persona.nome);
-									$('input[name=cognome]').val(persona.cognome);
-									$('input[name=data_nascita]').val(persona.data_nascita);
-									//nascita
-									setTimeout(function(){$('#select_province_nascita').val(persona.fk_provincia_nascita).change();},250);
-									setTimeout(function(){$('#select_comuni_nascita').val(persona.fk_comuni_nascita);},500);
-									$('input[name=codice_fiscale]').val(persona.codice_fiscale);
-									$('input[name=partita_iva]').val(persona.partita_iva);
-									//residenza
-									setTimeout(function(){$('#select_regioni').val(persona.fk_regioni).change();},750);
-									setTimeout(function(){$('#select_province').val(persona.fk_province).change();},1000);
-									setTimeout(function(){$('#select_comuni').val(persona.fk_comuni);},1250);
-									$('input[name=indirizzo]').val(persona.indirizzo);
-									if(persona.privacy){ $('#privacy_checkbox')[0].click();}
-									$('input[name=telefono]').val(persona.telefono);
-									$('input[name=telefono_ext]').val(persona.telefono_ext);
-									$('input[name=email]').val(persona.email);
-									$('input[name=iban]').val(persona.iban);
-									$('input[name=banca]').val(persona.banca);
-									$('textarea[name=note]').val(persona.note)
-
-									//--socio
-									if(persona.socio_id != null)
-									{
-										//aggiungo l'id socio
-										$('#form_persona').append('<input id="socio_id" type="hidden" name="socio_id" value="'+((persona.socio_id==null) ? "": persona.socio_id)+'">');
-										$('input[name=socio]')[0].click();
-										$('#select_tipo').val(persona.fk_soci_tipologie);
-										$('input[name=richiesta_data]').val(persona.richiesta_data);
-										$('input[name=approvazione_data]').val(persona.approvazione_data);
-										$('input[name=scadenza_data]').val(persona.scadenza_data);
-										$('input[name=certificato_scadenza_al]').val(persona.certificato_scadenza_al);
-									}
-									//--carica direttivo
-									if(persona.soci_cariche_direttivo_id != null)
-									{
-										//aggiungo l'id soci_cariche_direttivo
-										$('#form_persona').append('<input id="soci_cariche_direttivo_id" type="hidden" name="soci_cariche_direttivo_id" value="'+((persona.soci_cariche_direttivo_id==null) ? "": persona.soci_cariche_direttivo_id)+'">');
-										$('input[name=carica_direttivo]')[0].click();
-										$('#select_carica').val(persona.fk_cariche_direttivo);
-										$('input[name=carica_direttivo_dal]').val(persona.carica_direttivo_dal);
-										$('input[name=carica_direttivo_al]').val(persona.carica_direttivo_al);
-									}
-									//--tessera
-									if(persona.tessere_id != null)
-									{
-										//aggiungo l'id tessera
-										$('#form_persona').append('<input id="tessere_id" type="hidden" name="tessere_id" value="'+((persona.tessere_id==null) ? "": persona.tessere_id)+'">');
-										$('input[name=tessere]')[0].click();
-										$('input[name=numero]').val(persona.numero);
-										$('input[name=tessere_dal]').val(persona.tessere_dal);
-										$('input[name=tessere_al]').val(persona.tessere_al);
-										$('input[name=tessere_tipo]').val(persona.tessere_tipo);
-									}
-					
-				},
-             error: function(data) { 
-                  alert("get_persona: Errore nella chiamata ajax!");
-             }
-        });
-}
-//chiamata ajax per l'invio del form
-function submit(method)
-{
-	//recupero i valori del form
-	var data = $('#form_persona').serialize();
-	console.log(data); //x debug
-	 $.ajax({
-		 	method: method,
-			 url: 'create',
-			 data: data,
-          success: function(data){
-								//metto a default il form
-								form_reset();
-								//metto a null la var globale persona
-								persona = null;
-								//stampo messaggio 
-								UIkit.notification({
-											message: data,
-											status: '',
-											pos: 'bottom-center',
-											timeout: 3000
-										});
-					//chiudo il modal
-					setTimeout(() => {
-						UIkit.modal($('#modal')).hide();
-						table.setData();
-					}, 2000);
-				  
-			 },
-             error: function(data) {
-							 //validazione fallita
-							if( data.status === 422 ) {
-										data = data.responseJSON;
-                    var errors = data.errors;
-										var message = data.message;
-										var messages = '';
-										$.each(errors, function (key, val) {
-											$(":input[name='"+key+"']").addClass('uk-form-danger');
-                        messages+="<p>"+val+"</p>";
-                    });
-										//stampo messaggio con errori
-										UIkit.notification({
-											message: messages,
-											status: '',
-											pos: 'bottom-center',
-											timeout: 3000
-										});
-							}
-						}
-});
-}
-
-//chiamata ajax per popolare il modifica
-function delete_persona(id)
-{
-	$.ajax({
-             url: 'deletePerson',
-						 method : "DELETE",
-             data: {"id" : id},
-             success: function(data){
-							 	//stampo messaggio 
-								 UIkit.notification({
-											message: data,
-											status: '',
-											pos: 'bottom-center',
-											timeout: 3000
-										});
-						 },
-						 error:function (data) { alert('delete_persona errore chiamata ajax!');}
-	});
-}
-
+*/
 </script>
 
 @endsection

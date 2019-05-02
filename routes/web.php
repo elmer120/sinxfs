@@ -20,6 +20,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth']],function(){
 
     Route::get('/','DashboardController@Home')->name('dashboard');
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
     //------------ ANAGRAFICA ---------------------------
     Route::prefix('anagrafica')->group(function () {
@@ -38,7 +39,7 @@ Route::group(['middleware' => ['auth']],function(){
         Route::post('create','AnagraficaController@create');
         Route::put('create','AnagraficaController@create');
         Route::delete('deletePerson','AnagraficaController@deletePerson');
-        Route::post('getList','AnagraficaController@getList')->name('getList');
+        Route::post('getList','AnagraficaController@getList')->name('getListAnagrafica');
         Route::post('getPerson','AnagraficaController@getPerson')->name('getPerson');
         Route::get('getPerson','AnagraficaController@getPerson')->name('getPerson');
 
@@ -65,9 +66,10 @@ Route::group(['middleware' => ['auth']],function(){
     Route::prefix('contabilita')->group(function () {
     
         Route::get('ricevuta','RicevutaController@ricevuta')->name('ricevuta');
+        Route::get('fattura','fatturaController@fattura')->name('fattura');
 
         //chiamate ajax ricevuta
-        //Route::post('getList','RicevutaController@getList')->name('getList');
+        Route::post('getList','RicevutaController@getList')->name('getList');
         Route::post('persone','RicevutaController@persone');
         Route::post('fondi','RicevutaController@fondi');
         Route::post('vociContoEconomico','RicevutaController@vociContoEconomico');

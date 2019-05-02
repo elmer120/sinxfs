@@ -5,8 +5,8 @@
 			<button id="btn_aggiungi" class="uk-button uk-button-primary uk-button-small" uk-toggle="target: #modal" type="button">Aggiungi <span class="uk-margin-small-left" uk-icon="plus-circle"></span></button>
 			<button id="btn_modifica" class="uk-button uk-button-primary uk-button-small" uk-toggle="target: #modal" type="button" disabled>Modifica<span class="uk-margin-small-left" uk-icon="pencil"></span></button>
 			<button id="btn_elimina" class="uk-button uk-button-primary uk-button-small" disabled>Elimina<span class="uk-margin-small-left" uk-icon="trash"></button>	
+			<button id="btn_stampa" class="uk-button uk-button-primary uk-button-small" disabled>Stampa<span class="uk-margin-small-left" uk-icon="print"></button>	
 			<button id="btn_stampa_lista" class="uk-button uk-button-primary uk-button-small">Stampa lista<span class="uk-margin-small-left" uk-icon="print"></button>	
-			<button id="btn_stampa" class="uk-button uk-button-primary uk-button-small" disabled>Stampa ricevuta<span class="uk-margin-small-left" uk-icon="print"></button>	
 		</div>
 		<div class="uk-search uk-search-default">
 			<span class="uk-search-icon-flip" uk-search-icon></span>

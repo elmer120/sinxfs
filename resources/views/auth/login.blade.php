@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
+@section('page_content')
 <div class="uk-grid-small" uk-grid> <!-- inizio griglia small gutter-->
 
     <div class="uk-width-1-4"> 
     </div>
 
-
     <div class="uk-width-1-2"> 
-    <img class="uk-background-contain uk-background-center-center" src="<? // echo base_url("assets/img/login_background.svg");?>" alt="Sinx"/>
+    <img class="uk-background-contain uk-background-center-center" src="{{ asset('storage/images/login_background.svg') }}" alt="background"/>
         <div class="uk-container uk-position-center">
             <div class="uk-card uk-card-default ">
-                <div class="uk-card-badge uk-label uk-text-lowercase"><? //php echo lang('version');?></div>
+                <div class="uk-card-badge uk-label uk-text-lowercase">@lang('navbar.version')</div>
                 <div class="uk-card-media-top">
-                    <img class="uk-height-small uk-height-max-small" src="<? // echo base_url("assets/img/logo.png");?>" alt="Sinx"/>
+                    <img class="uk-height-small uk-height-max-small" src="{{ asset('storage/images/logo.png') }}" alt="Sinx"/>
                 </div>
                 <div class="uk-card-body">
                 <form class="uk-form-horizontal" method="POST" action="{{ route('login') }}">
@@ -63,3 +63,5 @@
     </div>
 
 </div>
+
+@endsection

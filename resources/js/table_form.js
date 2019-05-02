@@ -11,9 +11,9 @@ window.create_table = function create_table(columns_config){
 	pagination:"local", //imposto la paginazione
 	paginationSize:20, //per ogni pagina mostro n righe
 	selectable:1, //righe selezionabili
-	rowSelected:row_selected, //callback riga selezionata
-	rowDeselected:row_deselected, //callback riga deselezionata
-	rowSelectionChanged: row_selection_changed, //callback al cambio selezione riga
+	rowSelected: window.rowSelected, //callback riga selezionata
+	rowDeselected: window.row_deselected, //callback riga deselezionata
+	rowSelectionChanged: window.row_selection_changed, //callback al cambio selezione riga
   	tooltips:true,
   	columnVertAlign:"bottom", 
  	columns: columns_config,
@@ -82,4 +82,120 @@ window.btn_disable = function btn_disable(state)
     $('#btn_stampa').attr('disabled',state);
 }
 
+/*chiamata ajax per popolare i select con le options
+* @param {string} id select
+* @param {string} url ajax
+* @param {string} data dati da inviare
+* @param {string} placeholder
+* @param {string} campo dell'array da utilizzare
+*/
+window.get_options = function get_options(id_element,url,placeholder,field,field_ext = null,data = null) {
+	if($(id_element).length) {
+    $.ajax({
+        url: url,
+        data: data,
+        success: function(data){
+					$(id_element).html('<option value="" disabled selected>'+placeholder+'</option>');
+          for (let i = 0; i < data.length; i++) {
+            var id = data[i].id;
+						var text = data[i][field];
+						(field_ext!=null)? text+=' '+data[i][field_ext] : '';
+            var option = "<option value='"+id+"'>"+text+"</option>"; 
+            $(id_element).append(option);
+          }
+        },
+        error: function(data) { 
+             alert("get_options: Errore nella chiamata ajax!"+data);
+        }
+	 });
+	}else
+	{
+		alert("L'id "+id_element+" non esiste.")
+	}
+}
 
+/** chiamata ajax per popolare gli input
+* @param {string} attributo name input
+* @param {url} url ajax
+*/
+window.get_input_value = function get_input_value(name_input,url)
+{
+	if($('input[name="'+name_input+'"]').length)
+	{
+		$.ajax({
+        url: url,
+        data: '',
+        success: function(data){
+					$('input[name="'+name_input+'"]')[0].value=data;
+					$('#modal_loading').toggleClass('uk-hidden',true);
+        },
+        error: function(data) { 
+             alert("get_options: Errore nella chiamata ajax!"+data);
+        }
+	 });
+	}
+	else
+	{
+		alert("L'input con name= "+name_input+" non esiste.")
+	}
+	
+}
+
+/** alla selezione di un riga
+*  @param {object} riga
+*/ 
+window.rowSelected = function row_selected(row){
+	//recupero l'id (del database)
+	row_selected_id = row.getData()['id'];
+	if(row_selected_id != null)
+	{	//abilito i pulsanti
+		btn_disable(false);
+	}
+};
+/** alla deselezione di un riga
+*  @param {object} riga
+*/
+window.row_deselected = function row_deselected(row){
+	row_selected_id = null;
+	//disabilito i pulsanti
+	btn_disable(true);
+}
+/** al cambio selezione di un riga
+*  @param {object} data
+* @param {object} riga
+*/
+window.row_selection_changed = function row_selection_changed(data, rows){
+	if(data.length > 0)
+	{
+		row_selected_id = data[0].id;
+		btn_disable(false);
+	}
+}
+
+/** chiamata ajax per rimuovere un elemento
+*  @param {Number} id id del database
+*  @param {String} url url su cui effettuare la chiamata
+*/
+window.remove = function remove(id,url)
+{ 
+	$.ajax({
+             url: url,
+			 method : "DELETE",
+             data: {"id" : id},
+             success: function(data){
+					//stampo messaggio 
+					UIkit.notification({
+											message: data,
+											status: '',
+											pos: 'bottom-center',
+											timeout: 3000
+										});
+										//chiudo il modal
+						setTimeout(() => {
+							UIkit.modal($('#modal')).hide();
+							table.setData();
+						}, 2000);
+				},
+			error:function (data) { alert('delete_persona errore chiamata ajax!');}
+	});
+}
