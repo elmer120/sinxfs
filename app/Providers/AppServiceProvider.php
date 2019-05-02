@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+use DB;
 use App\Models\Associazione;
 use App\Models\Regione;
 use App\Models\Provincia;
@@ -29,9 +30,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        if(DB::connection()->getDatabaseName()!=null)
+        {
         //il database esiste??
-        if (Schema::hasTable('utenti')) {
+        
         //x migrazioni su database old
         //errore SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes
         Schema::defaultStringLength(191);
@@ -50,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
         
         
         View::share('associazione',$associazione);
+            
         }
-       
     }
 }
