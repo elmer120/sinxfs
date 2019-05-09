@@ -3,7 +3,15 @@
 @section('page_title',$page_title) <!-- titolo pagina/sezione -->
 @section('page_content')
 
-@component('components.actions_bar')		
+@component('components.actions_bar',[
+		'btn_visualizza' => 1,
+		'btn_aggiungi' => 1,
+    'btn_modifica' => 1,
+    'btn_elimina' => 1,
+    'btn_stampa' => 1,
+    'btn_stampa_lista' => 1,
+    'input_search' => 1,
+])		
 @endcomponent
 
 @component('components.modal',[
@@ -36,20 +44,20 @@ var columns_config = [
 		{	//creo gruppo persona
 			title: 'Persona',
 			columns:[
-			{ title:"Nome", field:"nome"},
-			{ title:"Cognome", field:"cognome"},
-			{ title:"Comune nascita", field:"comune_nascita"},
-			{ title:"Comune residenza", field:"comune_residenza"},
-			{ title:"Data nascita", field:"data_nascita"},
+			{ title:"Nome", field:"nome", accessorDownload:notNull},
+			{ title:"Cognome", field:"cognome", accessorDownload:notNull},
+			{ title:"Comune nascita", field:"comune_nascita", accessorDownload:notNull},
+			{ title:"Comune residenza", field:"comune_residenza", accessorDownload:notNull},
+			{ title:"Data nascita", field:"data_nascita", accessorDownload:notNull},
 			],
 		},
-		{ title:"Tipo socio", field:"soci_tipologia"},
-		{ title:"Carica direttivo", field:"carica_direttivo"},
-		{ title:"Tessera n°", field:"tessera_numero"},
-		{ title:"Certificato scadenza", field:"certificato_scadenza_al"},
-		{ title:"Approvato", field:"approvazione_data"},
-		{ title:"Quota scadenza", field:"quota_scadenza"}];
-
+		{ title:"Tipo socio", field:"soci_tipologia", accessorDownload:notNull},
+		{ title:"Carica direttivo", field:"carica_direttivo", accessorDownload:notNull},
+		{ title:"Tessera n°", field:"tessera_numero", accessorDownload:notNull},
+		{ title:"Certificato scadenza", field:"certificato_scadenza_al", accessorDownload:notNull},
+		{ title:"Approvato", field:"approvazione_data", accessorDownload:notNull},
+		{ title:"Quota scadenza", field:"quota_scadenza", accessorDownload:notNull}];
+		var associazione = {!! json_encode($associazione->toArray()) !!};
 
 
 //al caricamento della pagina
@@ -229,16 +237,38 @@ $('#btn_elimina').on('click',function()
 });
 
 $('#btn_stampa_lista').on('click',function(){
-	table.download("pdf", "lista_ricevute.pdf", {
-        orientation:"landscape", //set page orientation to portrait
-				title:"Lista Ricevute", //add title to report
-				autoTable:function(doc){
-        //doc - the jsPDF document object
-
-        //add some text to the top left corner of the PDF
-        doc.text("SOME TEXT", 35, 35);
-    	}
-    });
+	
+	let d = new Date();
+    let data = '_'+d.getDate()+'_'+(d.getMonth()+1)+'_'+d.getFullYear();
+	    table.download("pdf", "Anagrafica"+data+".pdf", {
+            orientation:"landscape", //set page orientation to portrait
+            jsPDF:{}, 
+            autoTable:function(doc){
+                    var width = doc.internal.pageSize.getWidth();
+                    doc.setFontSize(10);
+                    var header_title =  associazione.nome+"\n";
+                    doc.text(header_title, 10, 10);
+                    doc.setFontSize(8);
+                    doc.setFont("times", "italic");
+                    var header_text  =  associazione.indirizzo+","+associazione.cap+"- "+associazione.comune+"\n" +
+                                        "Tel: " + associazione.telefono + " Tel: " + associazione.telefono_ext + " - " + "Email: "+associazione.email+"\n" +
+                                        "Cf: " + associazione.codice_fiscale +" - " + "Pi: " + associazione.partita_iva;
+                    doc.text(header_text, 10, 20);
+                    doc.setFontSize(14);
+                    doc.setFont("times", "normal");
+                    doc.text("Anagrafica",(width/2)-50,20,);
+                
+                            return {
+                                theme: 'grid',
+                                styles: {cellPadding: 0.1, fontSize: 7},
+                                margin: {right: 5,left: 5,bottom: 10},
+                                valign: 'left',
+                                lineWidth: 1,
+                                lineColor: [255, 0, 0],
+                                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50
+                            }
+            }
+        });
 });
 
 $('#btn_annulla').on('click',function (e) {

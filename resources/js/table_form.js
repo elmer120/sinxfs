@@ -14,8 +14,8 @@ window.create_table = function create_table(columns_config){
 	rowSelected: window.rowSelected, //callback riga selezionata
 	rowDeselected: window.row_deselected, //callback riga deselezionata
 	rowSelectionChanged: window.row_selection_changed, //callback al cambio selezione riga
-  	tooltips:true,
-  	columnVertAlign:"bottom", 
+	tooltips:true,
+  columnVertAlign:"bottom", 
  	columns: columns_config,
 });
 }
@@ -78,8 +78,8 @@ window.btn_disable = function btn_disable(state)
     //disabilito i pulsanti
 	$('#btn_modifica').attr('disabled',state);
 	$('#btn_elimina').attr('disabled',state);
-    $('#btn_visualizza').attr('disabled',state);
-    $('#btn_stampa').attr('disabled',state);
+  $('#btn_visualizza').attr('disabled',state);
+  $('#btn_stampa').attr('disabled',state);
 }
 
 /*chiamata ajax per popolare i select con le options
@@ -199,3 +199,9 @@ window.remove = function remove(id,url)
 			error:function (data) { alert('delete_persona errore chiamata ajax!');}
 	});
 }
+/** funzione per rimuovere i valori null nella generazione del pdf
+ * 
+ */
+window.notNull = function (value, data, type, params, column){
+	return (value==null)? "" : value;
+};

@@ -4,12 +4,16 @@
 @section('page_content')
 
 	<!-- barra azioni -->
-	<div class="uk-placeholder uk-display-inline-block uk-background-default uk-margin-remove">
-		<div class="uk-form-custom uk-search uk-search-default">
-			<a href="#" id="a_search" class="uk-search-icon-flip uk-search-icon uk-icon" uk-search-icon=""></a>
-			<input id="input_search" class="uk-search-input" type="search" name="text_search" value="" placeholder="Cerca...">
-		</div>
-	</div>
+	@component('components.actions_bar',[
+		'btn_visualizza' => 0,
+		'btn_aggiungi' => 0,
+		'btn_modifica' => 0,
+		'btn_elimina' => 0,
+		'btn_stampa' => 0,
+		'btn_stampa_lista' => 0,
+		'input_search' => 1,
+	])		
+	@endcomponent
 
 <!-- tabella-->
 <div id="table"></div>

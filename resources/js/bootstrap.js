@@ -17,6 +17,9 @@ window.jsPDF = require("jspdf");
 //importo jsPdf autotable
 import 'jspdf-autotable';
 
+//importo html2canvas
+window.html2canvas = require('html2canvas');
+
 //importo jquery
 window.$ = window.jQuery = require('jquery');
 

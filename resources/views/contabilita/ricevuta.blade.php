@@ -3,7 +3,15 @@
 @section('page_title',$page_title) <!-- titolo pagina/sezione -->
 @section('page_content')
 
-@component('components.actions_bar')
+@component('components.actions_bar',[
+	'btn_visualizza' => 1,
+	'btn_aggiungi' => 1,
+    'btn_modifica' => 1,
+    'btn_elimina' => 1,
+    'btn_stampa' => 1,
+    'btn_stampa_lista' => 1,
+    'input_search' => 1,
+])		
 @endcomponent
 
 @component('components.modal',[
@@ -47,7 +55,7 @@ var columns_config = [ //definisco le colonne
             ],
         }
     ];
-
+	var associazione = {!! json_encode($associazione->toArray()) !!};
 
 
 //al caricamento della pagina
@@ -133,26 +141,76 @@ $('#btn_elimina').on('click',function()
 		
 });
 $('#btn_stampa_lista').on('click',function(){
-	table.download("pdf", "lista_ricevute.pdf", {
-        orientation:"landscape", //set page orientation to portrait
-				title:"Lista Ricevute", //add title to report
-				autoTable:function(doc){
-        //doc - the jsPDF document object
-
-        //add some text to the top left corner of the PDF
-        doc.text("SOME TEXT", 35, 35);
-
-        //return the autoTable config options object
-        return {
-            styles: {
-                fillColor: [200, 00, 00]
-            },
-        };
-    	}
-    });
+	let d = new Date();
+    let data = '_'+d.getDate()+'_'+(d.getMonth()+1)+'_'+d.getFullYear();
+	    table.download("pdf", "lista_ricevute_"+data+".pdf", {
+            orientation:"landscape", //set page orientation to portrait
+            jsPDF:{}, 
+            autoTable:function(doc){
+                    var width = doc.internal.pageSize.getWidth();
+                    doc.setFontSize(10);
+                    var header_title =  associazione.nome+"\n";
+                    doc.text(header_title, 10, 10);
+                    doc.setFontSize(8);
+                    doc.setFont("times", "italic");
+                    var header_text  =  associazione.indirizzo+","+associazione.cap+"- "+associazione.comune+"\n" +
+                                        "Tel: " + associazione.telefono + " Tel: " + associazione.telefono_ext + " - " + "Email: "+associazione.email+"\n" +
+                                        "Cf: " + associazione.codice_fiscale +" - " + "Pi: " + associazione.partita_iva;
+                    doc.text(header_text, 10, 20);
+                    doc.setFontSize(14);
+                    doc.setFont("times", "normal");
+                    doc.text("Lista ricevute",(width/2)-50,20,);
+                
+                            return {
+                                theme: 'grid',
+                                styles: {cellPadding: 0.1, fontSize: 7},
+                                margin: {right: 5,left: 5,bottom: 10},
+                                valign: 'left',
+                                lineWidth: 1,
+                                lineColor: [255, 0, 0],
+                                startY: doc.pageCount > 1? doc.autoTableEndPosY() + 20 : 50
+                            }
+            }
+        });
 });
 
-$('#btn_stampa').on('click',function(){});
+$('#btn_stampa').on('click',function(){
+	if(row_selected_id != null)
+	{var row = table.getRow(row_selected_id); //recupero l'oggetto della riga selezionata
+	//recupero l'oggetto json della riga {field:value}
+	var rowData = row.getData();
+	//recupero i titoli delle colonne
+	var title = new Array();
+	table.getColumns().forEach(element => {
+		title.push(element.getDefinition().title);
+	});
+	//recupero i valori della riga
+	var values = Object.values(rowData);
+	values.shift();
+	//rimuovo gli elementi non necessari
+	values.splice((values.length-2), 2);
+	title.splice((title.length-2), 2);
+	//istanzio l'oggetto che conterra i titoli (coretti!) e i valori della riga
+	var obj = {};
+	for (let i = 0; i < title.length; i++) {
+		obj[title[i]]=values[i];
+	}
+	//console.log(obj);
+	var header = '<h3>' + associazione.nome + '</h3>' +
+				'<small>'+associazione.indirizzo + ', - ' +associazione.cap + ' ' + associazione.comune +'(' + associazione.provincia_sigla + ')</small> <br>'+
+				'<small>Tel: ' + associazione.telefono + '- Tel: ' + associazione.telefono_ext + '-' +'Email: ' + associazione.email + '</small><br>'+
+				'<small>Cf: ' + associazione.codice_fiscale +' - Pi: ' + associazione.partita_iva + '</small><hr>';
+	printJS({
+		documentTitle: 'Ricevuta',
+		printable: [obj],
+		type: 'json',
+		properties: title,
+		header: header,
+		headerStyle: 'font-weight: 200;',
+		style: 'td { text-align: center; }'
+	  })
+	}
+});
 
 //all submit del form
 $('#form').on('submit',function(e){
