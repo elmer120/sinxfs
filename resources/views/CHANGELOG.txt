@@ -3,8 +3,8 @@ x sviluppo
 ** GUIDA INSTALLAZIONE **
 
 Clonare il repository (il commit "base")
-1 composer install
-2 npm install
+1 composer install -- installa composer (librerie php) globalmente
+2 npm install 
 3 npm run dev 
         se errore in uikit (es.3.0.3) è ancora presente:
 
@@ -59,11 +59,11 @@ soluzione: composer dump-autoload
 ** DA FARE: **
 
 gestione anagrafica:
-        Manca anche visuallizza al doppio click
+        Manca anche visuallizza al doppio click -- FATTO
         ottimizzare modifica lato server
         elimina persona (deve eliminare anche socio carica e tessera) -- FATTO
         messaggi errore cambiare fk_xxx 
-        elimina chiedere conferma --FATTO
+        elimina chiedere conferma -- FATTO
         riordinare il codice con script esterno 
         eliminazione persona con pagamenti?!?
 ridurre indirizzo in tabella associazioni
@@ -73,8 +73,8 @@ ricevute numero caricare con ajax -- FATTO
 auth: 
         login -- FATTO
         logout -- FATTO 
-        registrazione nuovi utenti
-
+        gestione utenti
+        
 ricevute: stampa singola ricevuta + aggiungere header stampa lista esempio generazione pdf da html = http://jsfiddle.net/xzZ7n/4861/ | https://stackoverflow.com/questions/16858954/how-to-properly-use-jspdf-library
 libro soci: stampa con jsPDF
 fare fatture

@@ -14,22 +14,25 @@ window.create_table = function create_table(columns_config){
 	rowSelected: window.rowSelected, //callback riga selezionata
 	rowDeselected: window.row_deselected, //callback riga deselezionata
 	rowSelectionChanged: window.row_selection_changed, //callback al cambio selezione riga
+	rowDblClick: window.row_dbl_click,//callback al doppio click sulla riga
 	tooltips:true,
-  columnVertAlign:"bottom", 
+  	columnVertAlign:"bottom", 
  	columns: columns_config,
 });
 }
 /** carica i dati in tabella con ajax
  * @param  {} url url ajax
  * @param  {} token token laravel
+ * @param  {} obj_parameters parametri ajax
  */
-window.load_table = function load_table(url,token) {
+window.load_table = function load_table(url,token,obj_parameters = null) {
 	//carico i dati in tabella via ajax
 	var ajaxConfig = {
     	method:"POST", //set request type to Position
     	headers: {'X-CSRF-Token': token,},
 	};
-	table.setData( url, {}, ajaxConfig);
+	console.info(obj_parameters);
+	table.setData( url, obj_parameters, ajaxConfig);
 }
 
 /** 
@@ -71,6 +74,17 @@ window.form_reset = function form_reset() {
 	console.log('Reset form ok');								
 }
 /**
+ * reset form
+ * @return {null} nothing
+ */
+window.form_read_only = function form_read_only(setta) {
+	$('#form *').prop('disabled', setta);
+	//riabilito il btn submit
+	$('#btn_submit').prop('disabled',setta);				
+	console.info('Form in sola lettura: '+setta);								
+}
+
+/**
  * @param  {boolean} state true per disabilitare
  */
 window.btn_disable = function btn_disable(state)
@@ -78,8 +92,8 @@ window.btn_disable = function btn_disable(state)
     //disabilito i pulsanti
 	$('#btn_modifica').attr('disabled',state);
 	$('#btn_elimina').attr('disabled',state);
-  $('#btn_visualizza').attr('disabled',state);
-  $('#btn_stampa').attr('disabled',state);
+  	$('#btn_visualizza').attr('disabled',state);
+  	$('#btn_stampa').attr('disabled',state);
 }
 
 /*chiamata ajax per popolare i select con le options
@@ -171,6 +185,21 @@ window.row_selection_changed = function row_selection_changed(data, rows){
 		btn_disable(false);
 	}
 }
+/** al doppio click sulla riga 
+*  @param {object} data
+* @param {object} riga
+*/
+window.row_dbl_click = function row_dbl_click(e, row){
+	
+	//recupero l'id (del database)
+	row_selected_id = row.getData()['id'];
+	if(row_selected_id != null && row_selected_id > 0)
+	{
+		$("#btn_visualizza").trigger("click");
+		UIkit.modal($("#modal")[0]).show();
+	}
+}
+
 
 /** chiamata ajax per rimuovere un elemento
 *  @param {Number} id id del database

@@ -1,20 +1,51 @@
 <?php
-
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Utente extends Model
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+class Utente extends Authenticatable
 {
-    public $timestamps = false; 
-    protected $table  = "utenti";
-
-
+    protected $table = "utenti";
+    use Notifiable;
     /**
-     * Get the phone record associated with the user.
+     * The attributes that are mass assignable.
+     *
+     * @var array
      */
-    public function associazione()
+    protected $fillable = [
+        'nome','username', /*'email'*/ 'password','livello',
+    ];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function isAdmin()
     {
-        //return $this->belongsTo(App\associazione::class,'fk_associazioni');
+        return $this->livello === 'admin';
+    }
+    public function isPowerUser()
+    {
+        return $this->livello === 'poweruser';
+    }
+    public function isUser()
+    {
+        return $this->livello === 'user';
+    }
+    public function isGuest()
+    {
+        return $this->livello === 'guest';
     }
 }

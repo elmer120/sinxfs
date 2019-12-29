@@ -21,8 +21,8 @@ class CreateAssociazioniTable extends Migration {
 			$table->string('indirizzo', 100)->nullable();
 			$table->string('codice_fiscale', 50)->nullable();
 			$table->string('vat', 45)->nullable();
-			$table->string('telefono', 15)->nullable();
-			$table->string('telefono_ext', 15)->nullable();
+			$table->string('telefono', 20)->nullable();
+			$table->string('telefono_ext', 20)->nullable();
 			$table->string('logo', 45)->nullable();
 			$table->string('email')->nullable();
 			$table->string('email_pec')->nullable();

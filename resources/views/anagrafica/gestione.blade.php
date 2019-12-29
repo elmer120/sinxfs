@@ -6,11 +6,11 @@
 @component('components.actions_bar',[
 		'btn_visualizza' => 1,
 		'btn_aggiungi' => 1,
-    'btn_modifica' => 1,
-    'btn_elimina' => 1,
-    'btn_stampa' => 1,
-    'btn_stampa_lista' => 1,
-    'input_search' => 1,
+    	'btn_modifica' => 1,
+    	'btn_elimina' => 1,
+    	'btn_stampa' => 1,
+    	'btn_stampa_lista' => 1,
+    	'input_search' => 1,
 ])		
 @endcomponent
 
@@ -69,8 +69,8 @@ $(document).ready(function(){
 	//setto le impostazioni ajax comuni
 	$.ajaxSetup({
 		type: 'POST',
-    cache: false,  
-    headers: { 'X-CSRF-Token': token,}
+		cache: false,  
+		headers: { 'X-CSRF-Token': token,}
 	});
 });
 // ---- FUNZIONI ----
@@ -189,6 +189,28 @@ $('#privacy_checkbox').on('click',function(e){
 	}
 });
 
+$('#btn_visualizza').on('click',function (){
+	if (row_selected_id > 0)
+	{
+		$('#title').text('Visualizza persona');
+		//popolo il select tipo associato
+		get_options('#select_tipo','sociTipologie','*Tipo associato...','nome');
+		//popolo il select carica direttivo
+		get_options('#select_carica','caricheDirettivo','*Carica direttivo','nome');
+		//popolo il select responsabile
+		get_options('#select_responsabile','responsabili','Responsabile..','nome','cognome');
+		//popolo il select regioni con tutte
+		get_options('#select_regioni','regioni','Scegli la regione','nome');
+		//popolo il select province di nascita con tutte
+		get_options('#select_province_nascita','province','Scegli la provincia','nome');
+		//popolo la persona
+		get_persona(row_selected_id,true);
+	}
+	else{
+		console.error("Id selezionato non valido! id:"+row_selected_id);
+	}
+});
+
 $('#btn_aggiungi').on('click',function(){
 	form_reset();
 	$('#title').text('Aggiungi persona');
@@ -218,7 +240,7 @@ $('#btn_modifica').on('click',function()
 	//popolo il select province di nascita con tutte
 	get_options('#select_province_nascita','province','Scegli la provincia','nome');
 	//popolo la persona
-	get_persona(row_selected_id);
+	get_persona(row_selected_id,false);
 
 });
 
@@ -272,6 +294,7 @@ $('#btn_stampa_lista').on('click',function(){
 });
 
 $('#btn_annulla').on('click',function (e) {
+	form_read_only(false);
 	checkbox_default()
 	form_reset();
 	//metto a null la var globale persona
@@ -312,7 +335,7 @@ $('#select_province').on('change',function(){
 function checkbox_default()
 {
 	//metto a default i checkbox
-	console.log("checkbox default!");
+	console.info("checkbox default!");
 	if($('#privacy_checkbox')[0].checked){
 	$('#privacy_checkbox').click();}
 	if($('input[name=socio]')[0].checked){
@@ -324,7 +347,7 @@ function checkbox_default()
 }
 
 //chiamata ajax per popolare il modifica
-function get_persona(id)
+function get_persona(id,solaLettura)
 {
 	$.ajax({
              url: 'getPerson',
@@ -389,6 +412,10 @@ function get_persona(id)
 										$('input[name=tessere_al]').val(persona.tessere_al);
 										$('input[name=tessere_tipo]').val(persona.tessere_tipo);
 									}
+									if (solaLettura)
+									{
+										form_read_only(solaLettura);
+									}
 					
 				},
              error: function(data) { 
@@ -401,19 +428,20 @@ function submit(method)
 {
 	//recupero i valori del form
 	var data = $('#form').serialize();
-	console.log(data); //x debug
+	console.debug(data); //x debug
 	 $.ajax({
 		 	method: method,
 			 url: 'create',
 			 data: data,
           success: function(data){
+			  					data = JSON.parse(data);
 								//metto a default il form
 								form_reset();
 								//metto a null la var globale persona
 								persona = null;
 								//stampo messaggio 
 								UIkit.notification({
-											message: data,
+											message: data.risultato.messaggio,
 											status: '',
 											pos: 'bottom-center',
 											timeout: 3000
@@ -421,7 +449,15 @@ function submit(method)
 					//chiudo il modal
 					setTimeout(() => {
 						UIkit.modal($('#modal')).hide();
-						table.setData();
+						//aggiorno i dati in tabella
+						table.setData();	
+						setTimeout(
+							()=>{
+							//vado alla pagina dove c'è la nuova riga
+							table.setPageToRow(data.persona.id);
+							//seleziono la nuova riga
+							table.selectRow(data.persona.id);
+							},500);
 					}, 2000);
 				  
 			 },

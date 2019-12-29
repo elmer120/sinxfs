@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class SeedSocioTipologiaTable extends Seeder
+class SeedUtenteLivelloTable extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,33 +11,30 @@ class SeedSocioTipologiaTable extends Seeder
      */
     public function run()
     {
-        //factory(App\Models\SocioTipologia::class,3)->create();
-
-        \DB::table('soci_tipologie')->delete();
+        \DB::table('utenti_livelli')->delete();
         
-        \DB::table('soci_tipologie')->insert(array (
+        \DB::table('utenti_livelli')->insert(array (
                     0 => 
                     array (
                         'id' => 1,
-                        'descrizione' => 'direttivo',
+                        'descrizione' => 'admin',
                     ),
                     1 => 
                     array (
                         'id' => 2,
-                        'descrizione' => 'associato',
+                        'descrizione' => 'superuser',
                     ),
                     2 => 
                     array (
                         'id' => 3,
-                        'descrizione' => 'tesserato',
+                        'descrizione' => 'user',
                     ),
                     3 => 
                     array (
                         'id' => 4,
-                        'descrizione' => 'collaboratore',
+                        'descrizione' => 'guest',
                     ),
             )
             );
-        
     }
 }

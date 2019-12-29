@@ -18,6 +18,7 @@ class CreateRicevuteTable extends Migration {
 			$table->integer('numero');
 			$table->date('data');
 			$table->float('importo', 10, 0);
+			$table->string('causale', 75);
 			$table->integer('fk_persone')->index('fk_ricevute_persone1_idx');
 		});
 	}

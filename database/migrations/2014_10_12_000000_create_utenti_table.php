@@ -20,7 +20,7 @@ class CreateUtentiTable extends Migration
             $table->string('password',255);
             //$table->string('email')->unique();
             //$table->timestamp('email_verified_at')->nullable();
-            $table->string('livello',16);
+            $table->integer('fk_utenti_livelli')->index('fk_utenti_utenti_livelli_idx');
             $table->string('immagine',255)->nullable();
             $table->timestamp('ultimo_accesso')->nullable();
             $table->rememberToken();

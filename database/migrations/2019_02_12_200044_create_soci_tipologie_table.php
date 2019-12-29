@@ -15,7 +15,7 @@ class CreateSociTipologieTable extends Migration {
 		Schema::create('soci_tipologie', function(Blueprint $table)
 		{
 			$table->integer('id', true);
-			$table->string('nome', 45)->nullable();
+			$table->string('descrizione', 45)->nullable();
 		});
 	}
 

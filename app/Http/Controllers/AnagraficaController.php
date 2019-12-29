@@ -18,6 +18,7 @@ use App\Models\Socio;
 use App\Models\SocioCaricaDirettivo;
 use App\Models\Tessera;
 use PHPUnit\Framework\Error\Error;
+
 class AnagraficaController extends Controller
 {
     public function gestione()
@@ -58,7 +59,7 @@ class AnagraficaController extends Controller
                 on comuni.fk_province = province.id
                 WHERE comuni.id = persone.fk_comuni_nascita) as comune_nascita"),
         DB::raw('DATE_FORMAT(persone.data_nascita, "%d/%m/%Y") as data_nascita'),
-        'soci_tipologie.nome as soci_tipologia',
+        'soci_tipologie.descrizione as soci_tipologia',
         'cariche_direttivo.nome as carica_direttivo',
         'tessere.numero as tessera_numero',
         DB::raw('DATE_FORMAT(soci.certificato_scadenza_al, "%d/%m/%Y") as certificato_scadenza_al'),
@@ -418,7 +419,17 @@ class AnagraficaController extends Controller
 
             if($persona->save())
             {
-                return "Inserimento avvenuto con successo!";
+                $risposta = new \stdClass();
+
+                $risultato = new \stdClass();
+                $risultato->stato = true;
+                $risultato->messaggio = "Inserimento avvenuto con successo!";
+                
+                $risposta->risultato =$risultato;
+                $risposta->persona = $persona;
+                return json_encode($risposta,JSON_PRETTY_PRINT);
+                
+                
             }
 
         }elseif($request->method('PUT'))
@@ -451,7 +462,16 @@ class AnagraficaController extends Controller
              $persona->fill($persona_values);
              if($persona->save())
              {
-                 return "Aggiornamento avvenuto con successo";
+                $risposta = new \stdClass();
+
+                $risultato = new \stdClass();
+                $risultato->stato = true;
+                $risultato->messaggio = "Aggiornamento avvenuto con successo";
+                
+                $risposta->risultato =$risultato;
+                $risposta->persona = $persona;
+                return json_encode($risposta,JSON_PRETTY_PRINT);
+                
              }
         }
     }

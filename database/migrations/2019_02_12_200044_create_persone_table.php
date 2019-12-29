@@ -19,8 +19,8 @@ class CreatePersoneTable extends Migration {
 			$table->string('cognome', 45);
 			$table->date('data_nascita')->nullable();
 			$table->string('indirizzo', 100)->nullable();
-			$table->string('telefono', 15)->nullable();
-			$table->string('telefono_ext', 15)->nullable();
+			$table->string('telefono', 20)->nullable();
+			$table->string('telefono_ext', 20)->nullable();
 			$table->string('email')->nullable();
 			$table->string('codice_fiscale', 50)->nullable();
 			$table->string('note')->nullable();

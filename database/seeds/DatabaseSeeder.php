@@ -22,16 +22,16 @@ class DatabaseSeeder extends Seeder //classe chiamata di default quando si fa ph
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0'); //Evito il controllo sulle chiavi esterne
         
-        AssociazioneLinks::truncate(); //svuolto la tabella
-        Associazione::truncate(); //svuolto la tabella
-        //Utente::truncate(); //svuolto la tabella
-        Persona::truncate(); //svuolto la tabella
-        Socio::truncate(); //svuolto la tabella
-        SocioTipologia::truncate(); //svuolto la tabella
+        AssociazioneLinks::truncate(); //svuoto la tabella
+        Associazione::truncate(); //svuoto la tabella
+        Utente::truncate(); //svuoto la tabella
+        Persona::truncate(); //svuoto la tabella
+        Socio::truncate(); //svuoto la tabella
+        SocioTipologia::truncate(); //svuoto la tabella
         
-        Comune::truncate(); //svuolto la tabella
-        Provincia::truncate(); //svuolto la tabella
-        Regione::truncate(); //svuolto la tabella
+        Comune::truncate(); //svuoto la tabella
+        Provincia::truncate(); //svuoto la tabella
+        Regione::truncate(); //svuoto la tabella
        
         $this->call(RegioniTableSeeder::class);
         $this->call(ProvinceTableSeeder::class);
@@ -39,7 +39,8 @@ class DatabaseSeeder extends Seeder //classe chiamata di default quando si fa ph
         
         $this->call(SeedAssociazioneLinksTable::class);
         $this->call(SeedAssociazioneTable::class); //immetto i dati usando la classe SeedAssociazioneTable
-        //$this->call(SeedUtenteTable::class); 
+        $this->call(SeedUtenteTable::class); 
+        $this->call(SeedUtenteLivelloTable::class); 
         $this->call(SeedSocioTipologiaTable::class);
         $this->call(SeedSocioTable::class);
         $this->call(SeedPersonaTable::class);

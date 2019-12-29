@@ -36,7 +36,7 @@ class StampaController extends Controller
 
                     'comuni.nome as comune_residenza','province.sigla as provincia_sigla_residenza','persone.codice_fiscale',
                     'persone.email','persone.telefono',
-                    DB::raw('DATE_FORMAT(soci.approvazione_data, "%d/%m/%Y") as socio_approvazione_data'),'soci_tipologie.nome as soci_tipologia','cariche_direttivo.nome as carica_direttivo'
+                    DB::raw('DATE_FORMAT(soci.approvazione_data, "%d/%m/%Y") as socio_approvazione_data'),'soci_tipologie.descrizione as soci_tipologia','cariche_direttivo.nome as carica_direttivo'
         )
         ->distinct()
         ->get()
