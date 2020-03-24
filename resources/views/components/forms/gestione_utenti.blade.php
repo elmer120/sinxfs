@@ -22,33 +22,28 @@
     
     <div class="uk-width-1-6@m">
         <label class="uk-form-label uk-text-danger">Username *</label>
-        <input class="uk-input uk-form-small" class="uk-input" type="text" name="Username" pattern="[A-Za-z]+" value="" placeholder="Rossi">
+        <input class="uk-input uk-form-small" class="uk-input" type="text" name="username" pattern="[A-Za-z]+" value="" placeholder="Rossi">
         
     </div>
 
     <div class="uk-width-1-6@m">
-        <label class="uk-form-label">Data di nascita</label>
-        <input class="uk-input uk-form-small" type="date" name="data_nascita" value="" placeholder="01/07/1975">
-    </div>
-            
-    <div class="uk-width-1-6@m">
         <label class="uk-form-label">Livello</label>
-        <select class="uk-select uk-form-small" id="select_livello">
+        <select class="uk-select uk-form-small" id="select_livello" name="fk_utenti_livelli" data-url="livelliutenti">
                 <option value="" selected>Livello</option>
         </select>
     </div>
 
     <div class="uk-width-1-6@m">
         <label class="uk-form-label">Data creazione</label>
-        <input class="uk-input uk-form-small" type="date" name="created_at" value="" placeholder="nd" disabled>
+        <input class="uk-input uk-form-small" type="date" name="created_at" value="" placeholder="nd" readonly>
     </div>
 
     <div class="uk-width-1-6@m">
         <label class="uk-form-label">Ultimo accesso</label>
-        <input class="uk-input uk-form-small" type="date" name="ultimo_accesso" value="" placeholder="nd" disabled>
+        <input class="uk-input uk-form-small" type="date" name="ultimo_accesso" value="" placeholder="nd">
     </div>
 
     <div class="uk-width-1-6@m">
         <label class="uk-form-label">Ultimo aggiornamento</label>
-        <input class="uk-input uk-form-small" type="date" name="updated_at" value="" placeholder="nd" disabled>
+        <input class="uk-input uk-form-small" type="date" name="updated_at" value="" placeholder="nd">
     </div>

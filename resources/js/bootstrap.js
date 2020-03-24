@@ -23,6 +23,8 @@ window.html2canvas = require('html2canvas');
 //importo jquery
 window.$ = window.jQuery = require('jquery');
 
+window.moment = require('moment');
+
 UIkit.use(window.Icons);
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

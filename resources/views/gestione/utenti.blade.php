@@ -33,7 +33,7 @@
 
 
 //var globali
-var token = '{{ csrf_token() }}';
+var token = $('meta[name="csrf-token"]').attr('content');
 var table;
 var row_selected_id;
 var data_obj;
@@ -48,9 +48,15 @@ var columns_config = [
                         { title:"Username", field:"username", accessorDownload:notNull},
                         { title:"Livello", field:"livello", accessorDownload:notNull},
                         { title:"Immagine", field:"immagine", accessorDownload:notNull},
-                        { title:"Data creazione", field:"created_at", accessorDownload:notNull},
-                        { title:"Ultimo accesso", field:"ultimo_accesso", accessorDownload:notNull},
-                        { title:"Ultimo aggiornamento", field:"updated_at", accessorDownload:notNull},
+                        { title:"Data creazione", field:"created_at", accessorDownload:notNull,formatter:"datetime",
+                            formatterParams:{inputFormat:"YYYY-MM-DD hh:mm:ss",outputFormat:"DD/MM/YYYY hh:mm:ss",invalidPlaceholder:true}
+                            },
+                        { title:"Ultimo accesso", field:"ultimo_accesso", accessorDownload:notNull,formatter:"datetime",
+                            formatterParams:{inputFormat:"YYYY-MM-DD hh:mm:ss",outputFormat:"DD/MM/YYYY hh:mm:ss",invalidPlaceholder:true}
+                        },
+                        { title:"Ultimo aggiornamento", field:"updated_at", accessorDownload:notNull,formatter:"datetime",
+                            formatterParams:{inputFormat:"YYYY-MM-DD hh:mm:ss",outputFormat:"DD/MM/YYYY hh:mm:ss",invalidPlaceholder:true}
+                        },
 			],
 		},
         ];
@@ -72,6 +78,8 @@ $(document).ready(function(){
 });
 // ---- FUNZIONI ----
 
+
+
 //---- EVENTI -----
 
 //ricerca istantanea
@@ -79,52 +87,56 @@ $("#input_search").keyup(function(){
 	search(this.value);
 });
 
-
+//visualizza
 $('#btn_visualizza').on('click',function (){
-	if (row_selected_id > 0)
+	if (row_selected_id >= 0)
 	{
-		$('#title').text('Utente');
-		//popolo il select livello
-		get_options('#select_livello','livelliutenti','livello','fk_utenti_livelli');
-		//popolo la persona
-		get_persona(row_selected_id,true);
+		$('#title').text('Visualizza utente');
+		//popolo il form
+		get_element(row_selected_id,true);
 	}
 	else{
 		console.error("Id selezionato non valido! id:"+row_selected_id);
 	}
 });
 
+//aggiungi
 $('#btn_aggiungi').on('click',function(){
 	form_reset();
-	$('#title').text('Aggiungi persona');
-	//popolo il select livello
-    get_options('#select_livello','livelliutenti','livello','fk_utenti_livelli');
+	$('#title').text('Nuovo utente');
+    //popolo il select livello
+    get_options( $("[name='fk_utenti_livelli']") ,"fk_utenti_livelli");
+    
 });
 
+//modifica
 $('#btn_modifica').on('click',function()
 {
-	$('#title').text('Modifica persona');
-	//popolo il select livello
-    get_options('#select_livello','livelliutenti','livello','fk_utenti_livelli');
-	//popolo la persona
-	get_persona(row_selected_id,false);
+	$('#title').text('Modifica utente');
+	//popolo il form
+	get_element(row_selected_id,false);
 
 });
 
+//elimina
 $('#btn_elimina').on('click',function()
 {
 	UIkit.modal.confirm('Eliminare il record selezionato?').then(
 		function() {
-		remove(row_selected_id,'deletePerson');
-		//disabilito i btn
-		btn_disable(true);
-		row_selected_id = null;
+            remove(row_selected_id,'deletePerson');
+            //disabilito i btn
+            btn_disable(true);
+            row_selected_id = null;
 	}, 
 		function () {
     console.log('Rejected.');
 	});
 });
 
+//stampa
+$('#btn_stampa').on('click',function(){});
+
+//stampa lista
 $('#btn_stampa_lista').on('click',function(){
 	
 	let d = new Date();
@@ -160,6 +172,8 @@ $('#btn_stampa_lista').on('click',function(){
         });
 });
 
+//EVENTI FORM 
+
 $('#btn_annulla').on('click',function (e) {
 	form_read_only(false);
 	checkbox_default()
@@ -167,8 +181,6 @@ $('#btn_annulla').on('click',function (e) {
 	//metto a null la var globale persona
 	persona = null;
 })
-
-$('#btn_stampa').on('click',function(){});
 
 //all submit del form
 $('#form').on('submit',function(e){
@@ -183,50 +195,6 @@ $('#form').on('submit',function(e){
 
 })
 
-//chiamata ajax per popolare il modifica
-function get_persona(id,solaLettura)
-{
-	$.ajax({
-             url: 'getPerson',
-             data: {"id" : id},
-             success: function(data){
-									console.log(data); 
-									persona = JSON.parse(data)[0];
-									//--persona
-									//aggiungo l'id persona
-									$('#form').append('<input id="persona_id" type="hidden" name="persona_id" value="'+persona.id+'">');
-									$('input[name=nome]').val(persona.nome);
-									$('input[name=cognome]').val(persona.cognome);
-									$('input[name=data_nascita]').val(persona.data_nascita);
-									//nascita
-									setTimeout(function(){$('#select_province_nascita').val(persona.fk_provincia_nascita).change();},250);
-									setTimeout(function(){$('#select_comuni_nascita').val(persona.fk_comuni_nascita);},500);
-									$('input[name=codice_fiscale]').val(persona.codice_fiscale);
-									$('input[name=partita_iva]').val(persona.partita_iva);
-									//residenza
-									setTimeout(function(){$('#select_regioni').val(persona.fk_regioni).change();},750);
-									setTimeout(function(){$('#select_province').val(persona.fk_province).change();},1000);
-									setTimeout(function(){$('#select_comuni').val(persona.fk_comuni);},1250);
-									$('input[name=indirizzo]').val(persona.indirizzo);
-									if(persona.privacy){ $('#privacy_checkbox')[0].click();}
-									$('input[name=telefono]').val(persona.telefono);
-									$('input[name=telefono_ext]').val(persona.telefono_ext);
-									$('input[name=email]').val(persona.email);
-									$('input[name=iban]').val(persona.iban);
-									$('input[name=banca]').val(persona.banca);
-                                    $('textarea[name=note]').val(persona.note)
-                                    
-									if (solaLettura)
-									{
-										form_read_only(solaLettura);
-									}
-					
-				},
-             error: function(data) { 
-                  alert("get_persona: Errore nella chiamata ajax!");
-             }
-        });
-}
 //chiamata ajax per l'invio del form
 function submit(method)
 {

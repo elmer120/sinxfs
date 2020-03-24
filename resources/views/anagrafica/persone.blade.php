@@ -19,7 +19,7 @@
 	'title' => "Aggiungi persona/socio",
 	'btn_text' => 'Inserisci'
 ]) 
-	@component('components.forms.anagrafica_gestione')
+	@component('components.forms.anagrafica_persona')
 	@endcomponent
 @endcomponent
 
@@ -46,30 +46,52 @@ var columns_config = [
 			columns:[
 			{ title:"Nome", field:"nome", accessorDownload:notNull},
 			{ title:"Cognome", field:"cognome", accessorDownload:notNull},
+			{ title:"Indirizzo", field:"indirizzo", accessorDownload:notNull},
 			{ title:"Comune nascita", field:"comune_nascita", accessorDownload:notNull},
 			{ title:"Comune residenza", field:"comune_residenza", accessorDownload:notNull},
+			{ title:"Cod fiscale", field:"codice_fiscale", accessorDownload:notNull},
+			{ title:"Partita_iva", field:"partita_iva", accessorDownload:notNull},
 			{ title:"Data nascita", field:"data_nascita", accessorDownload:notNull,formatter:"datetime",
 					formatterParams:{inputFormat:"YYYY-MM-DD",outputFormat:"DD/MM/YYYY",invalidPlaceholder:true}
 				},
 			],
 		},
-		{ title:"Tipo socio", field:"soci_tipologia", accessorDownload:notNull},
-		{ title:"Carica direttivo", field:"carica_direttivo", accessorDownload:notNull},
-		{ title:"Tessera n°", field:"tessera_numero", accessorDownload:notNull},
-		{ title:"Certificato scadenza", field:"certificato_scadenza_al", accessorDownload:notNull,formatter:"datetime",
-				formatterParams:{inputFormat:"YYYY-MM-DD",outputFormat:"DD/MM/YYYY",invalidPlaceholder:true}
-			},
-		{ title:"Approvato", field:"approvazione_data", accessorDownload:notNull,formatter:"datetime",
-				formatterParams:{inputFormat:"YYYY-MM-DD",outputFormat:"DD/MM/YYYY",invalidPlaceholder:true}
-			},
-		{ title:"Quota scadenza", field:"quota_scadenza", accessorDownload:notNull,formatter:"datetime",
-				formatterParams:{inputFormat:"YYYY-MM-DD",outputFormat:"DD/MM/YYYY",invalidPlaceholder:true}}
+		
 	];
 		//TODO serve??
 		var associazione = {!! json_encode($associazione->toArray()) !!};
 
 /*
-"id": 2,
+
+id: 2
+image: "sed"
+nome: "Thea"
+cognome: "Testa"
+data_nascita: "1993-05-17"
+regione_nascita: "Lazio"
+id_regione_nascita: 7
+id_provincia_nascita: 30
+provincia_nascita: "Frosinone"
+comune_nascita: "Atina"
+id_comune_nascita: 1966
+codice_fiscale: "ICKWKI55M86A728L"
+partita_iva: "IT25693690379"
+id_regione_residenza: 3
+regione_residenza: "Calabria"
+id_provincia_residenza: 10
+provincia_residenza: "Reggio di Calabria"
+id_comune_residenza: 784
+comune_residenza: "Seminara"
+indirizzo: "Rotonda Kristel 26 Appartamento 21"
+privacy: 0
+telefono: "+86 98 4684220"
+telefono_ext: "373 453 070"
+email: "zconte@yahoo.it"
+responsabile: null
+id_responsabile: 4
+iban: "IT36N987455623267F41U806001"
+banca: "animi"
+note: "Quia quis qui velit."
         
 
 */
@@ -78,7 +100,7 @@ $(document).ready(function(){
 	//creo la tabella
 	create_table(columns_config);
 	//carica i dati
-	load_table( '{{ route('getListAnagrafica') }}',token);
+	load_table( '{{ route('elenco') }}',token);
 	//setto le impostazioni ajax comuni
 	$.ajaxSetup({
 		type: 'POST',

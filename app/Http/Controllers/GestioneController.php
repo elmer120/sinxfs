@@ -50,10 +50,10 @@ class GestioneController extends Controller
 
     public function ListaUtenti(Request $request)
     {
-        if(!empty($request->input('fk_associazioni')))
+        if(!empty($request->input('id')))
         {
             $lista = DB::table('utenti')
-                            ->where('fk_associazioni',$request->input('fk_associazioni'))
+                            ->where('fk_associazioni',$request->input('id'))
                             ->get()->toJson(JSON_PRETTY_PRINT);
             return $lista;
         }
@@ -63,7 +63,7 @@ class GestioneController extends Controller
         
             return UtenteLivello::all();
 
-            dd($lista);
+            //dd($lista);
         
     }
 

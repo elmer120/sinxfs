@@ -54,17 +54,21 @@ Route::group(['middleware' => ['auth']],function(){
     //------------ ANAGRAFICA ---------------------------------------------------------------
     Route::prefix('anagrafica')->group(function () {
         //pagine
+        Route::get('persone','PersonaController@mostra')->name('persone');
         Route::get('gestione','AnagraficaController@Gestione')->name('gestione');
         Route::get('libro_soci','AnagraficaController@LibroSoci')->name('libro_soci');
         Route::get('rubrica','AnagraficaController@Rubrica')->name('rubrica');
 
         //chiamate ajax
-        Route::post('regioni','AnagraficaController@regioni');
-        Route::post('province','AnagraficaController@province');
-        Route::post('comuni','AnagraficaController@comuni');
-        Route::post('sociTipologie','AnagraficaController@sociTipologie');
-        Route::post('caricheDirettivo','AnagraficaController@caricheDirettivo');
-        Route::post('responsabili','AnagraficaController@responsabili');
+        Route::post('regioni','AnagraficaController@regioni')->name('regioni');
+        Route::post('province','AnagraficaController@province')->name('province');
+        Route::post('comuni','AnagraficaController@comuni')->name('comuni');
+       
+        Route::post('elenco','PersonaController@elenco')->name('elenco');
+
+        Route::post('sociTipologie','AnagraficaController@sociTipologie')->name('soci_tipologie');
+        Route::post('caricheDirettivo','AnagraficaController@caricheDirettivo')->name('cariche_direttivo');
+        Route::post('responsabili','AnagraficaController@responsabili')->name('responsabile');
         Route::post('create','AnagraficaController@create');
         Route::put('create','AnagraficaController@create');
         Route::delete('deletePerson','AnagraficaController@deletePerson');
@@ -118,10 +122,9 @@ Route::group(['middleware' => ['auth']],function(){
 
         //chiamate ajax
         //TODO Commentare get lista utenti
-        Route::get('listaUtenti','GestioneController@listaUtenti')->name('listaUtenti');
         Route::post('listaUtenti','GestioneController@listaUtenti')->name('listaUtenti');
-        Route::get('livelliutenti','GestioneController@livelliutenti')->name('livelliutenti');
         Route::post('livelliutenti','GestioneController@livelliutenti')->name('livelliutenti');
+        Route::post('utente','GestioneController@utente')->name('utente');
     });
     
     //------------- VARIE DA CONTROLLARE E ORDINARE -----------------------------------------------

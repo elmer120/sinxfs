@@ -93,6 +93,8 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 /**
  * crea tabella con tabulator.js 
  * @param columns_config configurazione colonne
@@ -141,14 +143,153 @@ window.load_table = function load_table(url, token) {
     headers: {
       'X-CSRF-Token': token
     }
-  };
-  console.info(obj_parameters);
+  }; //console.info(obj_parameters);
+
   table.setData(url, obj_parameters, ajaxConfig);
+}; //per popolare il form
+
+
+window.get_element = function get_element(id, solaLettura) {
+  //recupero i dati la riga corretta
+  data_row = table.searchRows("id", "=", id)[0].getData(); //per ogni controllo input,select e textare all'interno del form
+
+  var ctrls = $(':input,select,textarea', $('#form'));
+  $.each(ctrls, function (index, ctrl) {
+    //c'è il name come key all'interno della riga
+    if (data_row.hasOwnProperty(ctrl.name)) {
+      var value = data_row[ctrl.name]; //console.log($(ctrl).prop("type"));
+      //guardo il tipo
+
+      switch (ctrl.type) {
+        case "select-one":
+          //definire i select con gli attributi name="chiave della tabella" e data-url="url ajax da chiamare"
+          //popolo i select 
+          var elemento = ctrl; //valore dell'attributo data-url del select come url da chiamare 
+
+          var url = elemento.dataset.url;
+          value = data_row["id_" + ctrl.name];
+          var valoreSelezionato = value;
+          var datiDaInviare = null;
+
+          switch (ctrl.name) {
+            case "comune_nascita":
+              datiDaInviare = {
+                "provincia_select": $('[name="provincia_nascita"]')[0].value
+              };
+              break;
+
+            case "comune_residenza":
+              datiDaInviare = {
+                "provincia_select": $('[name="provincia_residenza"]')[0].value
+              };
+              break;
+          }
+
+          get_options(elemento, url, valoreSelezionato, datiDaInviare);
+          break;
+
+        case "select-multiple":
+          console.log("select-multiple non implementato!");
+          break;
+
+        case "date":
+          //converto la data nel formato accettato dal ctrl
+          //se la data non è valida
+          if (!moment(value, 'YYYY-MM-DD', true).isValid()) {}
+
+          ctrl.value = moment(value).format('YYYY-MM-DD');
+          break;
+
+        case "radio":
+        case "checkbox":
+          //ctrl.each(function() {
+          if ($(ctrl).prop("checked") != value) {
+            $(ctrl).prop("checked", value); //forzo l'evento change sul checkbox
+
+            $(ctrl).trigger("change");
+          } // });   
+
+
+          break;
+
+        case "text":
+          ctrl.value = value;
+          break;
+
+        case "email":
+          ctrl.value = value;
+          break;
+      }
+    } else {
+      //non c'è il name come key nella riga
+      console.log("Attenzione il control: " + ctrl.tagName + " con attributo name: " + ctrl.name + " non è mappato nella tabella");
+      return;
+    }
+  });
+};
+/*chiamata ajax per popolare i select con le options
+ * @param {string}||{object} id select o elemento
+ * @param {string} url ajax
+ * @param {int} id da selezionare
+ * @param {string} data dati da inviare
+ */
+
+
+window.get_options = function get_options(elemento, url) {
+  var valoreSelezionato = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var datiDaInviare = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+  if (_typeof(elemento) === "object") {
+    if (elemento.length) {
+      //TODO SERVE??
+      var valoreSel = null;
+      valoreSel = valoreSelezionato;
+      $.ajax({
+        async: false,
+        url: url,
+        data: datiDaInviare,
+        success: function success(data) {
+          /*imposto placeholder*/
+          var label_text = $(elemento).prev().text();
+          $(elemento).html('<option value="" disabled selected>' + label_text + '</option>');
+          /*ciclo l'array ritornato*/
+
+          for (var i = 0; i < data.length; i++) {
+            var id = "";
+            var field1 = "";
+            var field2 = "";
+            var fields = Object.values(data[i]);
+            id = fields[0];
+            field1 = fields[1];
+            field2 = fields[2] != undefined ? "-" + fields[2] : "";
+            /*creo il tag <option></option>*/
+
+            var option = "<option value='" + id + "'>" + field1 + field2 + "</option>";
+            /*lo aggiungo al tag <select></select>*/
+
+            $(elemento).append(option);
+          }
+
+          if (valoreSelezionato != undefined && valoreSelezionato != null) {
+            //seleziono l'elemento corretto
+            elemento.value = valoreSelezionato;
+          }
+        },
+        error: function error(data) {
+          alert("get_options: Errore nella chiamata ajax!" + data);
+        }
+      });
+    } else {
+      alert("L'id " + id_element + " non esiste.");
+    }
+  } else {
+    alert("get_options: Tipo elemento errato " + _typeof(elemento));
+  }
 };
 /** 
-* Ricerca una stringa nella tabella 
-* @param {string} str da ricercare
-*/
+ * Ricerca una stringa nella tabella 
+ * @param {string} str da ricercare
+ */
 
 
 window.search = function search(str) {
@@ -190,7 +331,7 @@ window.form_reset = function form_reset() {
 
 
 window.form_read_only = function form_read_only(setta) {
-  $('#form *').prop('disabled', setta); //riabilito il btn submit
+  $('#form *').prop('readonly', setta); //riabilito il btn submit
 
   $('#btn_submit').prop('disabled', setta);
   console.info('Form in sola lettura: ' + setta);
@@ -207,46 +348,10 @@ window.btn_disable = function btn_disable(state) {
   $('#btn_visualizza').attr('disabled', state);
   $('#btn_stampa').attr('disabled', state);
 };
-/*chiamata ajax per popolare i select con le options
-* @param {string} id select
-* @param {string} url ajax
-* @param {string} data dati da inviare
-* @param {string} placeholder
-* @param {string} campo dell'array da utilizzare
-*/
-
-
-window.get_options = function get_options(id_element, url, placeholder, field) {
-  var field_ext = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
-  var data = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
-
-  if ($(id_element).length) {
-    $.ajax({
-      url: url,
-      data: data,
-      success: function success(data) {
-        $(id_element).html('<option value="" disabled selected>' + placeholder + '</option>');
-
-        for (var i = 0; i < data.length; i++) {
-          var id = data[i].id;
-          var text = data[i][field];
-          field_ext != null ? text += ' ' + data[i][field_ext] : '';
-          var option = "<option value='" + id + "'>" + text + "</option>";
-          $(id_element).append(option);
-        }
-      },
-      error: function error(data) {
-        alert("get_options: Errore nella chiamata ajax!" + data);
-      }
-    });
-  } else {
-    alert("L'id " + id_element + " non esiste.");
-  }
-};
 /** chiamata ajax per popolare gli input
-* @param {string} attributo name input
-* @param {url} url ajax
-*/
+ * @param {string} attributo name input
+ * @param {url} url ajax
+ */
 
 
 window.get_input_value = function get_input_value(name_input, url) {
@@ -267,8 +372,8 @@ window.get_input_value = function get_input_value(name_input, url) {
   }
 };
 /** alla selezione di un riga
-*  @param {object} riga
-*/
+ *  @param {object} riga
+ */
 
 
 window.rowSelected = function row_selected(row) {
@@ -281,8 +386,8 @@ window.rowSelected = function row_selected(row) {
   }
 };
 /** alla deselezione di un riga
-*  @param {object} riga
-*/
+ *  @param {object} riga
+ */
 
 
 window.row_deselected = function row_deselected(row) {
@@ -291,9 +396,9 @@ window.row_deselected = function row_deselected(row) {
   btn_disable(true);
 };
 /** al cambio selezione di un riga
-*  @param {object} data
-* @param {object} riga
-*/
+ *  @param {object} data
+ * @param {object} riga
+ */
 
 
 window.row_selection_changed = function row_selection_changed(data, rows) {
@@ -303,9 +408,9 @@ window.row_selection_changed = function row_selection_changed(data, rows) {
   }
 };
 /** al doppio click sulla riga 
-*  @param {object} data
-* @param {object} riga
-*/
+ *  @param {object} data
+ * @param {object} riga
+ */
 
 
 window.row_dbl_click = function row_dbl_click(e, row) {
@@ -318,9 +423,9 @@ window.row_dbl_click = function row_dbl_click(e, row) {
   }
 };
 /** chiamata ajax per rimuovere un elemento
-*  @param {Number} id id del database
-*  @param {String} url url su cui effettuare la chiamata
-*/
+ *  @param {Number} id id del database
+ *  @param {String} url url su cui effettuare la chiamata
+ */
 
 
 window.remove = function remove(id, url) {
@@ -345,7 +450,7 @@ window.remove = function remove(id, url) {
       }, 2000);
     },
     error: function error(data) {
-      alert('delete_persona errore chiamata ajax!');
+      alert('Remove: Errore chiamata ajax!');
     }
   });
 };
@@ -367,7 +472,7 @@ window.notNull = function (value, data, type, params, column) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! F:\Backup pc_fisso\Marco Dati\Programmazione\Php\Programmi\sinxfs\resources\js\table_form.js */"./resources/js/table_form.js");
+module.exports = __webpack_require__(/*! I:\Archivio Dati\Marco\Programmazione\Web\sinxfs\Src\resources\js\table_form.js */"./resources/js/table_form.js");
 
 
 /***/ })

@@ -19,13 +19,20 @@ use App\Models\SocioCaricaDirettivo;
 use App\Models\Tessera;
 use PHPUnit\Framework\Error\Error;
 
-class AnagraficaController extends Controller
+class PersonaController extends Controller
 {
-    public function gestione()
+/*
+    CREATE
+    READ
+    UPDATE
+    DELETE
+*/
+
+    public function mostra()
     {
-        return view('anagrafica.gestione')
-            ->with('tab_title',"Gestione anagrafica")
-            ->with('page_title' , "Gestione anagrafica");
+        return view('anagrafica.persone')
+            ->with('tab_title',"Persone")
+            ->with('page_title' , "Persone");
 
         //{{ dd(get_defined_vars()['__data']) }} x vedere var passate a view
 
@@ -35,19 +42,37 @@ class AnagraficaController extends Controller
         print_r($queries);*/
     }
 
+    public function nuova()
+    {
+        return view('anagrafica.persone')
+            ->with('tab_title',"Persone")
+            ->with('page_title' , "Persone");
+    }
+
+    public function modifica()
+    {
+        return view('anagrafica.persone')
+            ->with('tab_title',"Persone")
+            ->with('page_title' , "Persone");
+    }
+
+    public function elimina()
+    {
+        return view('anagrafica.persone')
+            ->with('tab_title',"Persone")
+            ->with('page_title' , "Persone");
+    }
+
+
+
     //ajax
-    public function getList()
+    public function elenco()
     {
         
          $lista = DB::table('persone')
         ->join('comuni', 'persone.fk_comuni', '=', 'comuni.id')
         ->join('province','comuni.fk_province','=','province.id')
         ->join('regioni','province.fk_regioni', '=', 'regioni.id')
-        ->leftJoin('soci','persone.fk_soci','=','soci.id')
-        ->leftJoin('soci_tipologie','soci.fk_soci_tipologie','=','soci_tipologie.id')
-        ->leftJoin('tessere','tessere.fk_soci','=','soci.id')
-        ->leftJoin('soci_cariche_direttivo','soci_cariche_direttivo.fk_soci','=','soci.id')
-        ->leftJoin('cariche_direttivo','cariche_direttivo.id','=','soci_cariche_direttivo.fk_cariche_direttivo')
         ->select('persone.id',
                 'persone.image',
                 'persone.nome',
@@ -123,25 +148,7 @@ class AnagraficaController extends Controller
                 'persone.fk_responsabile as id_responsabile',
                 'persone.iban',
                 'persone.banca',
-                'persone.note',
-        //SOCIO
-                DB::raw('IF(persone.fk_soci IS NULL,0,1) as socio'),
-                'soci_tipologie.id as id_soci_tipologia',
-                'soci_tipologie.descrizione as soci_tipologia',
-                'soci.richiesta_data',
-                'soci.approvazione_data as approvazione_data',
-                'soci.scadenza_data',
-                'soci.certificato_scadenza_al as certificato_scadenza_al',
-                'soci.quota_scadenza_al as quota_scadenza',
-        //CARICA SOCIALE
-                DB::raw('IF(cariche_direttivo.id IS NULL,0,1) as carica_sociale'),
-        //tipo carica direttivo
-                'cariche_direttivo.id as id_carica_direttivo',
-                'cariche_direttivo.nome as carica_direttivo',
-        //SOCIO TESSERATO
-                DB::raw('IF(tessere.id IS NULL,0,1) as tessera'),
-                'tessere.id as id_tessera_numero',
-                'tessere.numero as tessera_numero')
+                'persone.note')
         ->distinct()
         ->get()->toJson(JSON_PRETTY_PRINT);
         return $lista;

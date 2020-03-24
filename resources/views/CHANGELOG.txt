@@ -45,6 +45,7 @@ per generare factory da model funziona solo con laravel<= 5.5: https://github.co
 stampa printjs https://printjs.crabbly.com/
 generazione pdf jsPDF https://rawgit.com/MrRio/jsPDF/master/docs/
 generazione pdf auto table https://github.com/simonbengtsson/jsPDF-AutoTable
+date in javascript moment https://momentjs.com/
 
 ** SOLUZIONE ERRORI: ** 
 php artisan db:seed
